@@ -1,0 +1,98 @@
+{% use "form_div_layout.html.twig" %}
+
+{% block radio_widget -%}
+    {%- set parent_label_class = parent_label_class|default(label_attr.class|default('')) -%}
+    {%- set attr = attr|merge({class: (attr.class|default('') ~ ' custom-control-input')|trim}) -%}
+    {{- form_label(form, null, { widget: parent() }) -}}
+{%- endblock radio_widget %}
+
+{% block radio_label -%}
+    {%- if widget is defined -%}
+        {%- set label_attr = label_attr|merge({for: id, class: (label_attr.class|default('') ~ ' custom-control custom-radio')|trim}) -%}
+
+        {%- if required -%}
+            {%- set label_attr = label_attr|merge({class: (label_attr.class|default('') ~ ' required')|trim}) -%}
+        {%- endif -%}
+
+        {%- if parent_label_class is defined -%}
+            {%- set label_attr = label_attr|merge({class: (label_attr.class|default('') ~ ' ' ~ parent_label_class)|trim}) -%}
+        {%- endif -%}
+
+        {%- if label is not same as(false) and label is empty -%}
+            {%- if label_format is not empty -%}
+                {%- set label = label_format|replace({'%name%': name, '%id%': id}) -%}
+            {%- else -%}
+                {%- set label = name|humanize -%}
+            {%- endif -%}
+        {%- endif -%}
+
+        <label{% for attrname, attrvalue in label_attr %} {{ attrname }}="{{ attrvalue }}"{% endfor %}>
+        {{- widget|raw }}
+        <span class="custom-control-indicator"></span>
+        {% if label is not same as(false) -%}
+            <span class="custom-control-description">{{ translation_domain is same as(false) ? label : label|trans({}, translation_domain) }}</span>
+        {%- endif %}
+        </label>
+    {%- endif -%}
+{%- endblock radio_label %}
+
+{% block checkbox_widget -%}
+    {%- set attr = attr|merge({'class': (attr.class|default('') ~ ' custom-control-input')|trim}) -%}
+    {%- set parent_label_class = parent_label_class|default(label_attr.class|default('')) -%}
+    {{- form_label(form, null, { widget: parent() }) -}}
+{%- endblock checkbox_widget %}
+
+{% block checkbox_label -%}
+    {%- if widget is defined -%}
+        {%- set label_attr = label_attr|merge({for: id, class: (label_attr.class|default('') ~ ' custom-control custom-checkbox')|trim}) -%}
+
+        {%- if required -%}
+            {%- set label_attr = label_attr|merge({class: (label_attr.class|default('') ~ ' required')|trim}) -%}
+        {%- endif -%}
+
+        {%- if parent_label_class is defined -%}
+            {%- set label_attr = label_attr|merge({class: (label_attr.class|default('') ~ ' ' ~ parent_label_class)|trim}) -%}
+        {%- endif -%}
+
+        {%- if label is not same as(false) and label is empty -%}
+            {%- if label_format is not empty -%}
+                {%- set label = label_format|replace({'%name%': name, '%id%': id}) -%}
+            {%- else -%}
+                {%- set label = name|humanize -%}
+            {%- endif -%}
+        {%- endif -%}
+
+        <label{% for attrname, attrvalue in label_attr %} {{ attrname }}="{{ attrvalue }}"{% endfor %}>
+        {{ widget|raw }}
+        <span class="custom-control-indicator"></span>
+        {% if label is not same as(false) -%}
+            <span class="custom-control-description">{{ translation_domain is same as(false) ? label : label|trans({}, translation_domain) }}</span>
+        {%- endif %}
+        </label>
+    {% endif %}
+{%- endblock checkbox_label %}
+
+{% block form_row -%}
+    <div class="form-group{% if (not compound or force_error|default(false)) and not valid %} has-error{% endif %}">
+        {{- form_label(form) -}}
+        {{- form_widget(form) -}}
+        {{- form_errors(form) -}}
+    </div>
+{%- endblock form_row %}
+
+{% block button_row -%}
+    <div class="form-group form-group-button-cir">
+        {{- form_widget(form) -}}
+    </div>
+{%- endblock button_row %}
+
+{%- block button_attributes -%}
+    id="{{ id }}"{% if disabled %} disabled="disabled"{% endif -%}
+    {{ block('attributes') }}
+{%- endblock button_attributes -%}
+
+{%- block choice_widget_collapsed -%}
+    {%- set attr = attr|merge({class: (attr.class|default('') ~ ' custom-select')|trim}) -%}
+
+    {{ parent() }}
+{%- endblock choice_widget_collapsed -%}

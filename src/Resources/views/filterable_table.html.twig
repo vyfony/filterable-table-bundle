@@ -1,0 +1,48 @@
+{% macro render_table(table) %}
+    <table class="table table-striped table-sm">
+        <thead>
+            <tr>
+                {% for columnMetadata in table.columnMetadataCollection %}
+                    <th
+                        {% if columnMetadata.isSortable %}data-vyfony-filterable-table-sortable{% endif %}
+                        {% if table.queryParameters.sortBy is same as(columnMetadata.name) %}data-vyfony-filterable-table-sort-order="{{ table.queryParameters.sortOrder }}"{% endif %}
+                    >
+                        {% if columnMetadata.isSortable %}
+                            <a href="{{ path(table.listRoute, columnMetadata.sortParameters) }}">
+                                {{ columnMetadata.label|trans }}
+                            </a>
+                        {% else %}
+                            <span>{{ columnMetadata.label|trans }}</span>
+                        {% endif %}
+                    </th>
+                {% endfor %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for rowData in table.rowDataCollection %}
+                <tr>
+                    {% for columnMetadata in table.columnMetadataCollection %}
+                        {% if columnMetadata.isIdentifier %}
+                            <th scope="row">
+                                {% set routeParameters = {} %}
+                                {% for parameterName, attributeName in table.showRouteParameters %}
+                                    {% set routeParameters = routeParameters|merge({(parameterName): attribute(rowData, attributeName)}) %}
+                                {% endfor %}
+                                <a href="{{ path(table.showRoute, routeParameters) }}">{{ attribute(rowData, columnMetadata.name) }}</a>
+                            </th>
+                        {% else %}
+                            <td>
+                                <span>{{ attribute(rowData, columnMetadata.name) }}</span>
+                            </td>
+                        {% endif %}
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endmacro %}
+
+{% macro render_filter() %}
+    {% form_theme filterForm '@Vyfony/filterable_table_form_layout.html.twig' %}
+    {{ form(filterForm) }}
+{% endmacro %}

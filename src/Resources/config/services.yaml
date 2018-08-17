@@ -1,0 +1,33 @@
+services:
+  vyfony_filterable_table.data_collector:
+    class: Vyfony\Bundle\FilterableTableBundle\DataCollector\DataCollector
+    arguments:
+      - '@doctrine'
+      - ~
+
+  Vyfony\Bundle\FilterableTableBundle\DataCollector\DataCollectorInterface: '@vyfony_filterable_table.data_collector'
+
+  vyfony_filterable_table.data_collector_interface:
+    public: true
+    alias: Vyfony\Bundle\FilterableTableBundle\DataCollector\DataCollectorInterface
+
+  vyfony_filterable_table.table:
+    class: Vyfony\Bundle\FilterableTableBundle\Table\Table
+    arguments:
+      - '@request_stack'
+      - '@form.factory'
+      - ~
+      - ~
+      - ~
+
+  Vyfony\Bundle\FilterableTableBundle\Table\TableInterface: '@vyfony_filterable_table.table'
+
+  vyfony_filterable_table.table_interface:
+    public: true
+    alias: Vyfony\Bundle\FilterableTableBundle\Table\TableInterface
+
+  vyfony_filterable_table.form.filterable_table_type:
+    class: Vyfony\Bundle\FilterableTableBundle\Form\Type\FilterableTableType
+    arguments:
+      - ~
+    tags: ['form.type']

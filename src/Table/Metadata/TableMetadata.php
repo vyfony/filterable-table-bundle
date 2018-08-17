@@ -1,0 +1,172 @@
+<?php
+
+declare(strict_types=1);
+
+/*
+ * This file is part of VyfonyFilterableTableBundle project.
+ *
+ * (c) Anton Dyshkant <vyshkant@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+namespace Vyfony\Bundle\FilterableTableBundle\Table\Metadata;
+
+use Vyfony\Bundle\FilterableTableBundle\Table\Metadata\Column\ColumnMetadataInterface;
+
+/**
+ * @author Anton Dyshkant <vyshkant@gmail.com>
+ */
+final class TableMetadata implements TableMetadataInterface
+{
+    /**
+     * @var ColumnMetadataInterface[]
+     */
+    private $columnMetadataCollection;
+
+    /**
+     * @var array
+     */
+    private $rowDataCollection;
+
+    /**
+     * @var string
+     */
+    private $listRoute;
+
+    /**
+     * @var string
+     */
+    private $showRoute;
+
+    /**
+     * @var array
+     */
+    private $showRouteParameters;
+
+    /**
+     * @var array
+     */
+    private $queryParameters;
+
+    /**
+     * @return ColumnMetadataInterface[]
+     */
+    public function getColumnMetadataCollection(): array
+    {
+        return $this->columnMetadataCollection;
+    }
+
+    /**
+     * @param ColumnMetadataInterface[] $columnMetadataCollection
+     *
+     * @return TableMetadata
+     */
+    public function setColumnMetadataCollection(array $columnMetadataCollection): self
+    {
+        $this->columnMetadataCollection = $columnMetadataCollection;
+
+        return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getRowDataCollection(): array
+    {
+        return $this->rowDataCollection;
+    }
+
+    /**
+     * @param array $rowDataCollection
+     *
+     * @return TableMetadata
+     */
+    public function setRowDataCollection(array $rowDataCollection): self
+    {
+        $this->rowDataCollection = $rowDataCollection;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getListRoute(): string
+    {
+        return $this->listRoute;
+    }
+
+    /**
+     * @param string $listRoute
+     *
+     * @return TableMetadata
+     */
+    public function setListRoute(string $listRoute): self
+    {
+        $this->listRoute = $listRoute;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getShowRoute(): string
+    {
+        return $this->showRoute;
+    }
+
+    /**
+     * @param string $showRoute
+     *
+     * @return TableMetadata
+     */
+    public function setShowRoute(string $showRoute): self
+    {
+        $this->showRoute = $showRoute;
+
+        return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getShowRouteParameters(): array
+    {
+        return $this->showRouteParameters;
+    }
+
+    /**
+     * @param array $showRouteParameters
+     *
+     * @return TableMetadata
+     */
+    public function setShowRouteParameters(array $showRouteParameters): self
+    {
+        $this->showRouteParameters = $showRouteParameters;
+
+        return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getQueryParameters(): array
+    {
+        return $this->queryParameters;
+    }
+
+    /**
+     * @param array $queryParameters
+     *
+     * @return TableMetadata
+     */
+    public function setQueryParameters(array $queryParameters): self
+    {
+        $this->queryParameters = $queryParameters;
+
+        return $this;
+    }
+}
