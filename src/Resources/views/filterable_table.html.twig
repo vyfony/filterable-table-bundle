@@ -32,7 +32,7 @@
                             </th>
                         {% else %}
                             <td>
-                                <span>{{ attribute(rowData, columnMetadata.name) }}</span>
+                                <span>{{ columnMetadata.getValue(rowData) }}</span>
                             </td>
                         {% endif %}
                     {% endfor %}

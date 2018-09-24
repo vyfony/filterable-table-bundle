@@ -133,7 +133,7 @@ abstract class AbstractTableConfigurator implements TableConfiguratorInterface
             $filterDependentColumnMetadataCollection[] = $tableParameter->getColumnMetadataCollection($queryParameters);
         }
 
-        if (count($filterDependentColumnMetadataCollection) > 0) {
+        if (\count($filterDependentColumnMetadataCollection) > 0) {
             return array_merge(...$filterDependentColumnMetadataCollection);
         }
 

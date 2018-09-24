@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Vyfony\Bundle\FilterableTableBundle\Table\Metadata\Column;
 
 use Doctrine\Common\Collections\Collection;
+use Symfony\Component\PropertyAccess\PropertyAccessor;
 
 /**
  * @author Anton Dyshkant <vyshkant@gmail.com>
@@ -24,6 +25,11 @@ final class ColumnMetadata implements ColumnMetadataInterface
      * @var string
      */
     private $name;
+
+    /**
+     * @var callable
+     */
+    private $valueExtractor;
 
     /**
      * @var string
@@ -63,6 +69,34 @@ final class ColumnMetadata implements ColumnMetadataInterface
     public function getName(): string
     {
         return $this->name;
+    }
+
+    /**
+     * @param callable $valueExtractor
+     *
+     * @return ColumnMetadata
+     */
+    public function setValueExtractor(callable $valueExtractor): self
+    {
+        $this->valueExtractor = $valueExtractor;
+
+        return $this;
+    }
+
+    /**
+     * @param $rowData
+     *
+     * @return string
+     */
+    public function getValue(object $rowData): string
+    {
+        if (null === $this->valueExtractor) {
+            $this->valueExtractor = function ($rowData) {
+                return (new PropertyAccessor())->getValue($rowData, $this->name);
+            };
+        }
+
+        return \call_user_func_array($this->valueExtractor, [$rowData]);
     }
 
     /**

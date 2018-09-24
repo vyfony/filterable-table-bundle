@@ -44,4 +44,11 @@ interface ColumnMetadataInterface
      * @return array|null
      */
     public function getSortParameters(): ?array;
+
+    /**
+     * @param object $rowData
+     *
+     * @return string
+     */
+    public function getValue(object $rowData): string;
 }

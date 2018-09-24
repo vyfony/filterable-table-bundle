@@ -59,7 +59,7 @@ final class DataCollector implements DataCollectorInterface
         $repository = $this->doctrine->getRepository($entityClass);
 
         if (!$repository instanceof EntityRepository) {
-            throw new RuntimeException(sprintf('Unexpected repository class "%s"', get_class($repository)));
+            throw new RuntimeException(sprintf('Unexpected repository class "%s"', \get_class($repository)));
         }
 
         $entityAlias = 'entity';
@@ -84,8 +84,8 @@ final class DataCollector implements DataCollectorInterface
             }
         }
 
-        if (count($whereArguments) > 0) {
-            $queryBuilder->where(call_user_func_array([$queryBuilder->expr(), 'andX'], $whereArguments));
+        if (\count($whereArguments) > 0) {
+            $queryBuilder->where(\call_user_func_array([$queryBuilder->expr(), 'andX'], $whereArguments));
         }
 
         $queryBuilder->orderBy($entityAlias.'.'.$formData['sortBy'], $formData['sortOrder']);

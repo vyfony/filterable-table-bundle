@@ -46,7 +46,7 @@ final class EntityChoiceParameter extends AbstractEntityChoiceParameter
      */
     public function buildWhereExpression(QueryBuilder $queryBuilder, array $formData, string $entityAlias): ?string
     {
-        if (0 === count($formData[$this->getPropertyName()])) {
+        if (0 === \count($formData[$this->getPropertyName()])) {
             return null;
         }
 
