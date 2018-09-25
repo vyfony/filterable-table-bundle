@@ -42,7 +42,7 @@
     </table>
 {% endmacro %}
 
-{% macro render_filter() %}
-    {% form_theme filterForm '@Vyfony/filterable_table_form_layout.html.twig' %}
+{% macro render_filter(filterForm) %}
+    {% form_theme filterForm '@VyfonyFilterableTable/filterable_table_form_layout.html.twig' %}
     {{ form(filterForm) }}
 {% endmacro %}

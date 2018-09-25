@@ -82,7 +82,7 @@ final class BooleanPropertyChoiceParameter extends AbstractFilterParameter imple
             $values[] = $value;
         }
 
-        return $queryBuilder->expr()->in($entityAlias.'.'.$this->getPropertyName(), $values);
+        return (string) $queryBuilder->expr()->in($entityAlias.'.'.$this->getPropertyName(), $values);
     }
 
     /**

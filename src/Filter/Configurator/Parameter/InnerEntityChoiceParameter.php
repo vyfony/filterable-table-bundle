@@ -77,7 +77,7 @@ final class InnerEntityChoiceParameter extends AbstractEntityChoiceParameter
 
         $queryBuilder->join($entityAlias.'.'.$this->getPropertyName(), $innerEntityAlias);
 
-        return $queryBuilder->expr()->in($innerEntityAlias.'.'.$this->innerPropertyName, $ids);
+        return (string) $queryBuilder->expr()->in($innerEntityAlias.'.'.$this->innerPropertyName, $ids);
     }
 
     /**

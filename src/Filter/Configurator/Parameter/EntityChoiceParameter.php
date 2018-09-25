@@ -56,7 +56,7 @@ final class EntityChoiceParameter extends AbstractEntityChoiceParameter
             $ids[] = $entity->getId();
         }
 
-        return $queryBuilder->expr()->in($entityAlias.'.'.$this->getPropertyName(), $ids);
+        return (string) $queryBuilder->expr()->in($entityAlias.'.'.$this->getPropertyName(), $ids);
     }
 
     /**
