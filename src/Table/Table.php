@@ -135,7 +135,7 @@ final class Table implements TableInterface
     private function getDefaultQueryParameters(): array
     {
         return array_merge(
-            $this->tableConfigurator->getDefaultSortParameters(),
+            $this->tableConfigurator->getDefaultTableParameters(),
             $this->filterConfigurator->getDefaultTableParameters()
         );
     }

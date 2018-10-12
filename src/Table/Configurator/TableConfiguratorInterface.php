@@ -36,5 +36,5 @@ interface TableConfiguratorInterface
     /**
      * @return array
      */
-    public function getDefaultSortParameters(): array;
+    public function getDefaultTableParameters(): array;
 }

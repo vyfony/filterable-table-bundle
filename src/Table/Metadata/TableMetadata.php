@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Vyfony\Bundle\FilterableTableBundle\Table\Metadata;
 
 use Vyfony\Bundle\FilterableTableBundle\Table\Metadata\Column\ColumnMetadataInterface;
+use Vyfony\Bundle\FilterableTableBundle\Table\Paginator\PaginatorInterface;
 
 /**
  * @author Anton Dyshkant <vyshkant@gmail.com>
@@ -26,7 +27,7 @@ final class TableMetadata implements TableMetadataInterface
     private $columnMetadataCollection;
 
     /**
-     * @var array
+     * @var iterable
      */
     private $rowDataCollection;
 
@@ -51,6 +52,11 @@ final class TableMetadata implements TableMetadataInterface
     private $queryParameters;
 
     /**
+     * @var PaginatorInterface
+     */
+    private $paginator;
+
+    /**
      * @return ColumnMetadataInterface[]
      */
     public function getColumnMetadataCollection(): array
@@ -71,21 +77,41 @@ final class TableMetadata implements TableMetadataInterface
     }
 
     /**
-     * @return array
+     * @return iterable
      */
-    public function getRowDataCollection(): array
+    public function getRowDataCollection(): iterable
     {
         return $this->rowDataCollection;
     }
 
     /**
-     * @param array $rowDataCollection
+     * @param iterable $rowDataCollection
      *
      * @return TableMetadata
      */
-    public function setRowDataCollection(array $rowDataCollection): self
+    public function setRowDataCollection(iterable $rowDataCollection): self
     {
         $this->rowDataCollection = $rowDataCollection;
+
+        return $this;
+    }
+
+    /**
+     * @return PaginatorInterface
+     */
+    public function getPaginator(): PaginatorInterface
+    {
+        return $this->paginator;
+    }
+
+    /**
+     * @param PaginatorInterface $paginator
+     *
+     * @return TableMetadata
+     */
+    public function setPaginator(PaginatorInterface $paginator): self
+    {
+        $this->paginator = $paginator;
 
         return $this;
     }
