@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Vyfony\Bundle\FilterableTableBundle\DataCollector;
 
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\Tools\Pagination\Paginator as DoctrinePaginator;
 use RuntimeException;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 use Vyfony\Bundle\FilterableTableBundle\Filter\Configurator\FilterConfiguratorInterface;
@@ -52,9 +53,9 @@ final class DataCollector implements DataCollectorInterface
      *
      * @throws RuntimeException
      *
-     * @return array
+     * @return DoctrinePaginator
      */
-    public function getRowsData(array $formData, string $entityClass): array
+    public function getRowDataPaginator(array $formData, string $entityClass): DoctrinePaginator
     {
         $repository = $this->doctrine->getRepository($entityClass);
 
@@ -88,8 +89,12 @@ final class DataCollector implements DataCollectorInterface
             $queryBuilder->where(\call_user_func_array([$queryBuilder->expr(), 'andX'], $whereArguments));
         }
 
-        $queryBuilder->orderBy($entityAlias.'.'.$formData['sortBy'], $formData['sortOrder']);
+        $queryBuilder
+            ->orderBy($entityAlias.'.'.$formData['sortBy'], $formData['sortOrder'])
+            ->setFirstResult($formData['offset'])
+            ->setMaxResults($formData['limit'])
+        ;
 
-        return $queryBuilder->getQuery()->getResult();
+        return new DoctrinePaginator($queryBuilder->getQuery(), $fetchJoinCollection = true);
     }
 }

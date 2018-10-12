@@ -13,17 +13,28 @@ declare(strict_types=1);
 
 namespace Vyfony\Bundle\FilterableTableBundle\Table\Configurator;
 
+use Countable;
+use Symfony\Component\Routing\RouterInterface;
 use Vyfony\Bundle\FilterableTableBundle\DataCollector\DataCollectorInterface;
 use Vyfony\Bundle\FilterableTableBundle\Filter\Configurator\FilterConfiguratorInterface;
 use Vyfony\Bundle\FilterableTableBundle\Table\Metadata\Column\ColumnMetadataInterface;
 use Vyfony\Bundle\FilterableTableBundle\Table\Metadata\TableMetadata;
 use Vyfony\Bundle\FilterableTableBundle\Table\Metadata\TableMetadataInterface;
+use Vyfony\Bundle\FilterableTableBundle\Table\Paginator\Page\Page;
+use Vyfony\Bundle\FilterableTableBundle\Table\Paginator\Page\PageInterface;
+use Vyfony\Bundle\FilterableTableBundle\Table\Paginator\Paginator;
+use Vyfony\Bundle\FilterableTableBundle\Table\Paginator\PaginatorInterface;
 
 /**
  * @author Anton Dyshkant <vyshkant@gmail.com>
  */
 abstract class AbstractTableConfigurator implements TableConfiguratorInterface
 {
+    /**
+     * @var RouterInterface
+     */
+    private $router;
+
     /**
      * @var DataCollectorInterface
      */
@@ -35,11 +46,16 @@ abstract class AbstractTableConfigurator implements TableConfiguratorInterface
     private $filterConfigurator;
 
     /**
+     * @param RouterInterface             $router
      * @param DataCollectorInterface      $dataCollector
      * @param FilterConfiguratorInterface $filterConfigurator
      */
-    public function __construct(DataCollectorInterface $dataCollector, FilterConfiguratorInterface $filterConfigurator)
-    {
+    public function __construct(
+        RouterInterface $router,
+        DataCollectorInterface $dataCollector,
+        FilterConfiguratorInterface $filterConfigurator
+    ) {
+        $this->router = $router;
         $this->dataCollector = $dataCollector;
         $this->filterConfigurator = $filterConfigurator;
     }
@@ -56,21 +72,30 @@ abstract class AbstractTableConfigurator implements TableConfiguratorInterface
         array $queryParameters,
         string $entityClass
     ): TableMetadataInterface {
+        $doctrinePaginator = $this->dataCollector->getRowDataPaginator($formData, $entityClass);
+
         return (new TableMetadata())
             ->setColumnMetadataCollection($this->getColumnMetadataCollection($queryParameters))
-            ->setRowDataCollection($this->dataCollector->getRowsData($formData, $entityClass))
+            ->setRowDataCollection($doctrinePaginator)
+            ->setPaginator($this->createPaginator($doctrinePaginator, $formData))
             ->setListRoute($this->getListRoute())
             ->setShowRoute($this->getShowRoute())
             ->setShowRouteParameters($this->getShowRouteParameters())
-            ->setQueryParameters($queryParameters);
+            ->setQueryParameters($queryParameters)
+        ;
     }
 
     /**
      * @return array
      */
-    public function getDefaultSortParameters(): array
+    public function getDefaultTableParameters(): array
     {
-        return $this->fillSortParametersTemplate($this->getDefaultSortBy(), $this->getDefaultSortOrder());
+        return [
+            'sortBy' => $this->getDefaultSortBy(),
+            'sortOrder' => $this->getDefaultSortOrder(),
+            'limit' => $this->getDefaultLimit(),
+            'offset' => $this->getDefaultOffset(),
+        ];
     }
 
     /**
@@ -97,6 +122,21 @@ abstract class AbstractTableConfigurator implements TableConfiguratorInterface
      * @return string
      */
     abstract protected function getDefaultSortOrder(): string;
+
+    /**
+     * @return int
+     */
+    abstract protected function getDefaultLimit(): int;
+
+    /**
+     * @return int
+     */
+    abstract protected function getDefaultOffset(): int;
+
+    /**
+     * @return int
+     */
+    abstract protected function getPaginatorTailLength(): int;
 
     /**
      * @return string[]
@@ -173,16 +213,60 @@ abstract class AbstractTableConfigurator implements TableConfiguratorInterface
     }
 
     /**
-     * @param string $sortBy
-     * @param string $sortOrder
+     * @param Countable $rows
+     * @param array     $formData
      *
-     * @return string[]
+     * @return PaginatorInterface
      */
-    private function fillSortParametersTemplate(string $sortBy, string $sortOrder): array
+    private function createPaginator(Countable $rows, array $formData): PaginatorInterface
     {
-        return [
-            'sortBy' => $sortBy,
-            'sortOrder' => $sortOrder,
-        ];
+        $pageSize = $this->getDefaultLimit();
+
+        $pagesCount = (int) ceil(\count($rows) / $pageSize);
+
+        $currentPageIndex = $formData['offset'] / $pageSize;
+
+        $pages = array_fill(0, $pagesCount, null);
+
+        array_walk($pages, function (&$page, int $pageIndex, array $queryParameters) use ($pageSize): void {
+            $page = $this->createPage($pageIndex, $pageSize, $queryParameters);
+        }, $formData);
+
+        return new Paginator($this->getPaginatorTailLength(), $currentPageIndex, $pages);
+    }
+
+    /**
+     * @param int   $pageIndex
+     * @param int   $pageSize
+     * @param array $formData
+     *
+     * @return PageInterface
+     */
+    private function createPage(int $pageIndex, int $pageSize, array $formData): PageInterface
+    {
+        return new Page(
+            $pageIndex,
+            $this->router->generate(
+                $this->getListRoute(),
+                $this->createPageQueryParameters($pageIndex, $pageSize, $formData)
+            )
+        );
+    }
+
+    /**
+     * @param int   $pageIndex
+     * @param int   $pageSize
+     * @param array $formData
+     *
+     * @return array
+     */
+    private function createPageQueryParameters(int $pageIndex, int $pageSize, array $formData): array
+    {
+        $queryParameters = $formData;
+
+        $queryParameters['limit'] = $pageSize;
+        $queryParameters['offset'] = $pageIndex * $pageSize;
+
+        return $queryParameters;
     }
 }

@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Vyfony\Bundle\FilterableTableBundle\Table\Metadata;
 
 use Vyfony\Bundle\FilterableTableBundle\Table\Metadata\Column\ColumnMetadataInterface;
+use Vyfony\Bundle\FilterableTableBundle\Table\Paginator\PaginatorInterface;
 
 /**
  * @author Anton Dyshkant <vyshkant@gmail.com>
@@ -26,9 +27,14 @@ interface TableMetadataInterface
     public function getColumnMetadataCollection(): array;
 
     /**
-     * @return array
+     * @return iterable
      */
-    public function getRowDataCollection(): array;
+    public function getRowDataCollection(): iterable;
+
+    /**
+     * @return PaginatorInterface
+     */
+    public function getPaginator(): PaginatorInterface;
 
     /**
      * @return string

@@ -40,6 +40,25 @@
             {% endfor %}
         </tbody>
     </table>
+    <ul class="pagination justify-content-center">
+
+        {% set lastRenderedPageIndex = null %}
+
+        {% for page in table.paginator.visiblePages %}
+
+            {% if lastRenderedPageIndex is not null and page.index is not same as(lastRenderedPageIndex + 1) %}
+                <li class="page-item disabled">
+                    <a class="page-link" href="#">..</a>
+                </li>
+            {% endif %}
+
+            <li class="page-item{% if table.paginator.isPageCurrent(page) %} active{% endif %}">
+                <a class="page-link" href="{{ page.url }}">{{ page.index + 1 }}</a>
+            </li>
+
+            {% set lastRenderedPageIndex = page.index %}
+        {% endfor %}
+    </ul>
 {% endmacro %}
 
 {% macro render_filter(filterForm) %}
