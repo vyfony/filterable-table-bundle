@@ -19,6 +19,7 @@ use Symfony\Component\Form\FormView;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\OptionsResolver\Exception\InvalidOptionsException;
+use Vyfony\Bundle\FilterableTableBundle\DataCollector\DataCollectorInterface;
 use Vyfony\Bundle\FilterableTableBundle\Filter\Configurator\FilterConfiguratorInterface;
 use Vyfony\Bundle\FilterableTableBundle\Form\Type\FilterableTableType;
 use Vyfony\Bundle\FilterableTableBundle\Table\Configurator\TableConfiguratorInterface;
@@ -33,6 +34,11 @@ final class Table implements TableInterface
      * @var Request
      */
     private $request;
+
+    /**
+     * @var DataCollectorInterface
+     */
+    private $dataCollector;
 
     /**
      * @var FormFactoryInterface
@@ -61,6 +67,7 @@ final class Table implements TableInterface
 
     /**
      * @param RequestStack                $requestStack
+     * @param DataCollectorInterface      $dataCollector
      * @param FormFactoryInterface        $formFactory
      * @param TableConfiguratorInterface  $tableConfigurator
      * @param FilterConfiguratorInterface $filterConfigurator
@@ -68,12 +75,14 @@ final class Table implements TableInterface
      */
     public function __construct(
         RequestStack $requestStack,
+        DataCollectorInterface $dataCollector,
         FormFactoryInterface $formFactory,
         TableConfiguratorInterface $tableConfigurator,
         FilterConfiguratorInterface $filterConfigurator,
         string $entityClass
     ) {
         $this->request = $requestStack->getCurrentRequest();
+        $this->dataCollector = $dataCollector;
         $this->formFactory = $formFactory;
         $this->tableConfigurator = $tableConfigurator;
         $this->filterConfigurator = $filterConfigurator;
@@ -98,9 +107,11 @@ final class Table implements TableInterface
     public function getTableMetadata(): TableMetadataInterface
     {
         return $this->tableConfigurator->getTableMetadata(
-            $this->getForm()->getData(),
-            $this->getQueryParameters(),
-            $this->entityClass
+            $this->dataCollector->getRowDataPaginator(
+                $this->transformFormDataForDataCollection($this->getForm()->getData()),
+                $this->entityClass
+            ),
+            $this->getQueryParameters()
         );
     }
 
@@ -112,13 +123,37 @@ final class Table implements TableInterface
     private function getForm(): FormInterface
     {
         if (null === $this->form) {
-            $this->form = $this
-                ->formFactory
+            $this->form = $this->formFactory
                 ->create(FilterableTableType::class, $this->getDefaultQueryParameters())
-                ->handleRequest($this->request);
+                ->submit($this->transformQueryParametersForFormSubmission($this->getQueryParameters()));
         }
 
         return $this->form;
+    }
+
+    /**
+     * @param $queryParameters
+     *
+     * @return array
+     */
+    private function transformQueryParametersForFormSubmission(array $queryParameters): array
+    {
+        $defaultQueryParameters = $this->getDefaultQueryParameters();
+
+        $queryParameters['limit'] = $defaultQueryParameters['limit'];
+        $queryParameters['offset'] = $defaultQueryParameters['offset'];
+
+        return $queryParameters;
+    }
+
+    private function transformFormDataForDataCollection(array $queryParameters): array
+    {
+        $requestParameters = $this->request->query->all();
+
+        $queryParameters['limit'] = $requestParameters['limit'];
+        $queryParameters['offset'] = $requestParameters['offset'];
+
+        return $queryParameters;
     }
 
     /**

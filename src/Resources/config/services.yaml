@@ -15,6 +15,7 @@ services:
     class: Vyfony\Bundle\FilterableTableBundle\Table\Table
     arguments:
       - '@request_stack'
+      - '@Vyfony\Bundle\FilterableTableBundle\DataCollector\DataCollectorInterface'
       - '@form.factory'
       - ~
       - ~

@@ -14,8 +14,8 @@ declare(strict_types=1);
 namespace Vyfony\Bundle\FilterableTableBundle\Table\Configurator;
 
 use Countable;
+use Doctrine\ORM\Tools\Pagination\Paginator as DoctrinePaginator;
 use Symfony\Component\Routing\RouterInterface;
-use Vyfony\Bundle\FilterableTableBundle\DataCollector\DataCollectorInterface;
 use Vyfony\Bundle\FilterableTableBundle\Filter\Configurator\FilterConfiguratorInterface;
 use Vyfony\Bundle\FilterableTableBundle\Table\Metadata\Column\ColumnMetadataInterface;
 use Vyfony\Bundle\FilterableTableBundle\Table\Metadata\TableMetadata;
@@ -36,48 +36,36 @@ abstract class AbstractTableConfigurator implements TableConfiguratorInterface
     private $router;
 
     /**
-     * @var DataCollectorInterface
-     */
-    private $dataCollector;
-
-    /**
      * @var FilterConfiguratorInterface
      */
     private $filterConfigurator;
 
     /**
      * @param RouterInterface             $router
-     * @param DataCollectorInterface      $dataCollector
      * @param FilterConfiguratorInterface $filterConfigurator
      */
     public function __construct(
         RouterInterface $router,
-        DataCollectorInterface $dataCollector,
         FilterConfiguratorInterface $filterConfigurator
     ) {
         $this->router = $router;
-        $this->dataCollector = $dataCollector;
         $this->filterConfigurator = $filterConfigurator;
     }
 
     /**
-     * @param array  $formData
-     * @param array  $queryParameters
-     * @param string $entityClass
+     * @param DoctrinePaginator $doctrinePaginator
+     * @param array             $queryParameters
      *
      * @return TableMetadataInterface
      */
     public function getTableMetadata(
-        array $formData,
-        array $queryParameters,
-        string $entityClass
+        DoctrinePaginator $doctrinePaginator,
+        array $queryParameters
     ): TableMetadataInterface {
-        $doctrinePaginator = $this->dataCollector->getRowDataPaginator($formData, $entityClass);
-
         return (new TableMetadata())
             ->setColumnMetadataCollection($this->getColumnMetadataCollection($queryParameters))
             ->setRowDataCollection($doctrinePaginator)
-            ->setPaginator($this->createPaginator($doctrinePaginator, $formData))
+            ->setPaginator($this->createPaginator($doctrinePaginator, $queryParameters))
             ->setListRoute($this->getListRoute())
             ->setShowRoute($this->getShowRoute())
             ->setShowRouteParameters($this->getShowRouteParameters())
@@ -214,23 +202,23 @@ abstract class AbstractTableConfigurator implements TableConfiguratorInterface
 
     /**
      * @param Countable $rows
-     * @param array     $formData
+     * @param array     $queryParameters
      *
      * @return PaginatorInterface
      */
-    private function createPaginator(Countable $rows, array $formData): PaginatorInterface
+    private function createPaginator(Countable $rows, array $queryParameters): PaginatorInterface
     {
         $pageSize = $this->getDefaultLimit();
 
         $pagesCount = (int) ceil(\count($rows) / $pageSize);
 
-        $currentPageIndex = $formData['offset'] / $pageSize;
+        $currentPageIndex = $queryParameters['offset'] / $pageSize;
 
         $pages = array_fill(0, $pagesCount, null);
 
         array_walk($pages, function (&$page, int $pageIndex, array $queryParameters) use ($pageSize): void {
             $page = $this->createPage($pageIndex, $pageSize, $queryParameters);
-        }, $formData);
+        }, $queryParameters);
 
         return new Paginator($this->getPaginatorTailLength(), $currentPageIndex, $pages);
     }

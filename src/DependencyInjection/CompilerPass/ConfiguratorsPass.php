@@ -41,9 +41,9 @@ final class ConfiguratorsPass implements CompilerPassInterface
 
         $container
             ->getDefinition('vyfony_filterable_table.table')
-            ->setArgument(2, $tableConfiguratorServiceDefinition)
-            ->setArgument(3, $filterConfiguratorServiceDefinition)
-            ->setArgument(4, $entityClass)
+            ->setArgument(3, $tableConfiguratorServiceDefinition)
+            ->setArgument(4, $filterConfiguratorServiceDefinition)
+            ->setArgument(5, $entityClass)
         ;
 
         $container
