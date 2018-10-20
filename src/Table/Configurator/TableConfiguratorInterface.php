@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Vyfony\Bundle\FilterableTableBundle\Table\Configurator;
 
+use Doctrine\ORM\Tools\Pagination\Paginator;
 use Vyfony\Bundle\FilterableTableBundle\Table\Metadata\TableMetadataInterface;
 
 /**
@@ -21,16 +22,14 @@ use Vyfony\Bundle\FilterableTableBundle\Table\Metadata\TableMetadataInterface;
 interface TableConfiguratorInterface
 {
     /**
-     * @param array  $formData
-     * @param array  $queryParameters
-     * @param string $entityClass
+     * @param Paginator $doctrinePaginator
+     * @param array     $queryParameters
      *
      * @return TableMetadataInterface
      */
     public function getTableMetadata(
-        array $formData,
-        array $queryParameters,
-        string $entityClass
+        Paginator $doctrinePaginator,
+        array $queryParameters
     ): TableMetadataInterface;
 
     /**
