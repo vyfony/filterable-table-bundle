@@ -21,6 +21,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\OptionsResolver\Exception\InvalidOptionsException;
 use Vyfony\Bundle\FilterableTableBundle\DataCollector\DataCollectorInterface;
 use Vyfony\Bundle\FilterableTableBundle\Filter\Configurator\FilterConfiguratorInterface;
+use Vyfony\Bundle\FilterableTableBundle\Form\Transformer\QueryParametersTransformerInterface;
 use Vyfony\Bundle\FilterableTableBundle\Form\Type\FilterableTableType;
 use Vyfony\Bundle\FilterableTableBundle\Table\Configurator\TableConfiguratorInterface;
 use Vyfony\Bundle\FilterableTableBundle\Table\Metadata\TableMetadataInterface;
@@ -51,6 +52,11 @@ final class Table implements TableInterface
     private $form;
 
     /**
+     * @var QueryParametersTransformerInterface
+     */
+    private $queryParametersTransformer;
+
+    /**
      * @var TableConfiguratorInterface
      */
     private $tableConfigurator;
@@ -66,17 +72,19 @@ final class Table implements TableInterface
     private $entityClass;
 
     /**
-     * @param RequestStack                $requestStack
-     * @param DataCollectorInterface      $dataCollector
-     * @param FormFactoryInterface        $formFactory
-     * @param TableConfiguratorInterface  $tableConfigurator
-     * @param FilterConfiguratorInterface $filterConfigurator
-     * @param string                      $entityClass
+     * @param RequestStack                        $requestStack
+     * @param DataCollectorInterface              $dataCollector
+     * @param FormFactoryInterface                $formFactory
+     * @param QueryParametersTransformerInterface $queryParametersTransformer
+     * @param TableConfiguratorInterface          $tableConfigurator
+     * @param FilterConfiguratorInterface         $filterConfigurator
+     * @param string                              $entityClass
      */
     public function __construct(
         RequestStack $requestStack,
         DataCollectorInterface $dataCollector,
         FormFactoryInterface $formFactory,
+        QueryParametersTransformerInterface $queryParametersTransformer,
         TableConfiguratorInterface $tableConfigurator,
         FilterConfiguratorInterface $filterConfigurator,
         string $entityClass
@@ -84,6 +92,7 @@ final class Table implements TableInterface
         $this->request = $requestStack->getCurrentRequest();
         $this->dataCollector = $dataCollector;
         $this->formFactory = $formFactory;
+        $this->queryParametersTransformer = $queryParametersTransformer;
         $this->tableConfigurator = $tableConfigurator;
         $this->filterConfigurator = $filterConfigurator;
         $this->entityClass = $entityClass;
@@ -108,7 +117,10 @@ final class Table implements TableInterface
     {
         return $this->tableConfigurator->getTableMetadata(
             $this->dataCollector->getRowDataPaginator(
-                $this->transformFormDataForDataCollection($this->getForm()->getData()),
+                $this->queryParametersTransformer->transformFormDataForDataCollection(
+                    $this->getForm()->getData(),
+                    $this->request->query->all()
+                ),
                 $this->entityClass
             ),
             $this->getQueryParameters()
@@ -125,35 +137,15 @@ final class Table implements TableInterface
         if (null === $this->form) {
             $this->form = $this->formFactory
                 ->create(FilterableTableType::class, $this->getDefaultQueryParameters())
-                ->submit($this->transformQueryParametersForFormSubmission($this->getQueryParameters()));
+                ->submit(
+                    $this->queryParametersTransformer->transformQueryParametersForFormSubmission(
+                        $this->getQueryParameters(),
+                        $this->getDefaultQueryParameters()
+                    )
+                );
         }
 
         return $this->form;
-    }
-
-    /**
-     * @param $queryParameters
-     *
-     * @return array
-     */
-    private function transformQueryParametersForFormSubmission(array $queryParameters): array
-    {
-        $defaultQueryParameters = $this->getDefaultQueryParameters();
-
-        $queryParameters['limit'] = $defaultQueryParameters['limit'];
-        $queryParameters['offset'] = $defaultQueryParameters['offset'];
-
-        return $queryParameters;
-    }
-
-    private function transformFormDataForDataCollection(array $queryParameters): array
-    {
-        $requestParameters = $this->request->query->all();
-
-        $queryParameters['limit'] = $requestParameters['limit'];
-        $queryParameters['offset'] = $requestParameters['offset'];
-
-        return $queryParameters;
     }
 
     /**
