@@ -4,6 +4,7 @@ services:
     arguments:
       - '@doctrine'
       - ~
+      - ~
 
   Vyfony\Bundle\FilterableTableBundle\DataCollector\DataCollectorInterface: '@vyfony_filterable_table.data_collector'
 

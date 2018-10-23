@@ -73,8 +73,8 @@ final class Paginator implements PaginatorInterface
         return array_filter($this->pages, function (PageInterface $page) use ($pagesCount) {
             $pageIndex = $page->getIndex();
 
-            $isOneOfFirstPages = $pageIndex < $this->tailLength;
-            $isOneOfLastPages = $pageIndex > $pagesCount - $this->tailLength - 1;
+            $isOneOfFirstPages = $pageIndex <= $this->tailLength;
+            $isOneOfLastPages = $pageIndex > $pagesCount - $this->tailLength;
             $isNearCurrentPage =
                 $pageIndex < $this->currentPageIndex + $this->tailLength &&
                 $pageIndex > $this->currentPageIndex - $this->tailLength;

@@ -47,11 +47,6 @@ final class Table implements TableInterface
     private $formFactory;
 
     /**
-     * @var FormInterface
-     */
-    private $form;
-
-    /**
      * @var QueryParametersTransformerInterface
      */
     private $queryParametersTransformer;
@@ -70,6 +65,11 @@ final class Table implements TableInterface
      * @var string
      */
     private $entityClass;
+
+    /**
+     * @var FormInterface
+     */
+    private $form;
 
     /**
      * @param RequestStack                        $requestStack

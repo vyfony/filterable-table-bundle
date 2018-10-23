@@ -25,12 +25,8 @@ class QueryParametersTransformer implements QueryParametersTransformerInterface
         array $queryParameters,
         array $defaultQueryParameters
     ): array {
-        if (array_key_exists('limit', $defaultQueryParameters)) {
-            $queryParameters['limit'] = $defaultQueryParameters['limit'];
-        }
-
-        if (array_key_exists('offset', $defaultQueryParameters)) {
-            $queryParameters['offset'] = $defaultQueryParameters['offset'];
+        if (array_key_exists('page', $defaultQueryParameters)) {
+            $queryParameters['page'] = $defaultQueryParameters['page'];
         }
 
         return $queryParameters;
@@ -43,12 +39,8 @@ class QueryParametersTransformer implements QueryParametersTransformerInterface
      */
     public function transformFormDataForDataCollection(array $formData, array $requestParameters): array
     {
-        if (array_key_exists('limit', $requestParameters)) {
-            $formData['limit'] = $requestParameters['limit'];
-        }
-
-        if (array_key_exists('offset', $requestParameters)) {
-            $formData['offset'] = $requestParameters['offset'];
+        if (array_key_exists('page', $requestParameters)) {
+            $formData['page'] = $requestParameters['page'];
         }
 
         return $formData;

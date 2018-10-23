@@ -34,6 +34,13 @@ final class Configuration implements ConfigurationInterface
                     ->scalarNode('table_configurator')->isRequired()->cannotBeEmpty()->end()
                     ->scalarNode('filter_configurator')->isRequired()->cannotBeEmpty()->end()
                     ->scalarNode('entity_class')->isRequired()->cannotBeEmpty()->end()
+                    ->scalarNode('default_sort_by')->isRequired()->cannotBeEmpty()->end()
+                    ->scalarNode('default_sort_order')->isRequired()->cannotBeEmpty()->end()
+                    ->scalarNode('list_route')->isRequired()->cannotBeEmpty()->end()
+                    ->scalarNode('show_route')->isRequired()->cannotBeEmpty()->end()
+                    ->variableNode('show_route_parameters')->isRequired()->cannotBeEmpty()->end()
+                    ->integerNode('page_size')->isRequired()->min(0)->end()
+                    ->integerNode('paginator_tail_length')->isRequired()->min(0)->end()
                 ->end()
         ;
 
