@@ -49,8 +49,7 @@ final class FilterableTableType extends AbstractType
         $builder
             ->add('sortBy', HiddenType::class)
             ->add('sortOrder', HiddenType::class)
-            ->add('limit', HiddenType::class)
-            ->add('offset', HiddenType::class)
+            ->add('page', HiddenType::class)
         ;
 
         foreach ($this->filterConfigurator->getFilterParameters() as $filterParameter) {

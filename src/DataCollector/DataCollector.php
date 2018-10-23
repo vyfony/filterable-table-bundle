@@ -26,25 +26,33 @@ use Vyfony\Bundle\FilterableTableBundle\Filter\Configurator\Parameter\Expression
 final class DataCollector implements DataCollectorInterface
 {
     /**
-     * @var FilterConfiguratorInterface
-     */
-    private $filterConfigurator;
-
-    /**
      * @var RegistryInterface
      */
     private $doctrine;
 
     /**
+     * @var FilterConfiguratorInterface
+     */
+    private $filterConfigurator;
+
+    /**
+     * @var int
+     */
+    private $pageSize;
+
+    /**
      * @param RegistryInterface           $registry
      * @param FilterConfiguratorInterface $filterConfigurator
+     * @param int                         $pageSize
      */
     public function __construct(
         RegistryInterface $registry,
-        FilterConfiguratorInterface $filterConfigurator
+        FilterConfiguratorInterface $filterConfigurator,
+        int $pageSize
     ) {
         $this->doctrine = $registry;
         $this->filterConfigurator = $filterConfigurator;
+        $this->pageSize = $pageSize;
     }
 
     /**
@@ -91,8 +99,8 @@ final class DataCollector implements DataCollectorInterface
 
         $queryBuilder
             ->orderBy($entityAlias.'.'.$formData['sortBy'], $formData['sortOrder'])
-            ->setFirstResult($formData['offset'])
-            ->setMaxResults($formData['limit'])
+            ->setFirstResult($this->pageSize * ($formData['page'] - 1))
+            ->setMaxResults($this->pageSize)
         ;
 
         return new DoctrinePaginator($queryBuilder->getQuery(), $fetchJoinCollection = true);

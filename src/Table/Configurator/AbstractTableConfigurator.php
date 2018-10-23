@@ -41,15 +41,71 @@ abstract class AbstractTableConfigurator implements TableConfiguratorInterface
     private $filterConfigurator;
 
     /**
+     * @var string
+     */
+    private $defaultSortBy;
+
+    /**
+     * @var string
+     */
+    private $defaultSortOrder;
+
+    /**
+     * @var string
+     */
+    private $listRoute;
+
+    /**
+     * @var string
+     */
+    private $showRoute;
+
+    /**
+     * @var array
+     */
+    private $showRouteParameters;
+
+    /**
+     * @var int
+     */
+    private $pageSize;
+
+    /**
+     * @var int
+     */
+    private $paginatorTailLength;
+
+    /**
      * @param RouterInterface             $router
      * @param FilterConfiguratorInterface $filterConfigurator
+     * @param string                      $defaultSortBy
+     * @param string                      $defaultSortOrder
+     * @param string                      $listRoute
+     * @param string                      $showRoute
+     * @param array                       $showRouteParameters
+     * @param int                         $pageSize
+     * @param int                         $paginatorTailLength
      */
-    public function __construct(
+    final public function __construct(
         RouterInterface $router,
-        FilterConfiguratorInterface $filterConfigurator
+        FilterConfiguratorInterface $filterConfigurator,
+        string $defaultSortBy,
+        string $defaultSortOrder,
+        string $listRoute,
+        string $showRoute,
+        array $showRouteParameters,
+        int $pageSize,
+        int $paginatorTailLength
     ) {
         $this->router = $router;
         $this->filterConfigurator = $filterConfigurator;
+        $this->defaultSortBy = $defaultSortBy;
+        $this->defaultSortOrder = $defaultSortOrder;
+        $this->listRoute = $listRoute;
+        $this->showRoute = $showRoute;
+        $this->showRouteParameters = $showRouteParameters;
+        $this->pageSize = $pageSize;
+        $this->paginatorTailLength = $paginatorTailLength;
     }
 
     /**
@@ -66,9 +122,9 @@ abstract class AbstractTableConfigurator implements TableConfiguratorInterface
             ->setColumnMetadataCollection($this->getColumnMetadataCollection($queryParameters))
             ->setRowDataCollection($doctrinePaginator)
             ->setPaginator($this->createPaginator($doctrinePaginator, $queryParameters))
-            ->setListRoute($this->getListRoute())
-            ->setShowRoute($this->getShowRoute())
-            ->setShowRouteParameters($this->getShowRouteParameters())
+            ->setListRoute($this->listRoute)
+            ->setShowRoute($this->showRoute)
+            ->setShowRouteParameters($this->showRouteParameters)
             ->setQueryParameters($queryParameters)
         ;
     }
@@ -79,10 +135,9 @@ abstract class AbstractTableConfigurator implements TableConfiguratorInterface
     public function getDefaultTableParameters(): array
     {
         return [
-            'sortBy' => $this->getDefaultSortBy(),
-            'sortOrder' => $this->getDefaultSortOrder(),
-            'limit' => $this->getDefaultLimit(),
-            'offset' => $this->getDefaultOffset(),
+            'sortBy' => $this->defaultSortBy,
+            'sortOrder' => $this->defaultSortOrder,
+            'page' => 1,
         ];
     }
 
@@ -90,46 +145,6 @@ abstract class AbstractTableConfigurator implements TableConfiguratorInterface
      * @return ColumnMetadataInterface[]
      */
     abstract protected function factoryColumnMetadataCollection(): array;
-
-    /**
-     * @return string
-     */
-    abstract protected function getListRoute(): string;
-
-    /**
-     * @return string
-     */
-    abstract protected function getShowRoute(): string;
-
-    /**
-     * @return string
-     */
-    abstract protected function getDefaultSortBy(): string;
-
-    /**
-     * @return string
-     */
-    abstract protected function getDefaultSortOrder(): string;
-
-    /**
-     * @return int
-     */
-    abstract protected function getDefaultLimit(): int;
-
-    /**
-     * @return int
-     */
-    abstract protected function getDefaultOffset(): int;
-
-    /**
-     * @return int
-     */
-    abstract protected function getPaginatorTailLength(): int;
-
-    /**
-     * @return string[]
-     */
-    abstract protected function getShowRouteParameters(): array;
 
     /**
      * @param array $queryParameters
@@ -208,53 +223,30 @@ abstract class AbstractTableConfigurator implements TableConfiguratorInterface
      */
     private function createPaginator(Countable $rows, array $queryParameters): PaginatorInterface
     {
-        $pageSize = $this->getDefaultLimit();
+        $pagesCount = (int) ceil(\count($rows) / $this->pageSize);
 
-        $pagesCount = (int) ceil(\count($rows) / $pageSize);
+        $pages = array_fill(1, $pagesCount, null);
 
-        $currentPageIndex = $queryParameters['offset'] / $pageSize;
-
-        $pages = array_fill(0, $pagesCount, null);
-
-        array_walk($pages, function (&$page, int $pageIndex, array $queryParameters) use ($pageSize): void {
-            $page = $this->createPage($pageIndex, $pageSize, $queryParameters);
+        array_walk($pages, function (&$page, int $pageIndex, array $queryParameters): void {
+            $page = $this->createPage($pageIndex, $queryParameters);
         }, $queryParameters);
 
-        return new Paginator($this->getPaginatorTailLength(), $currentPageIndex, $pages);
+        return new Paginator($this->paginatorTailLength, (int) $queryParameters['page'], $pages);
     }
 
     /**
      * @param int   $pageIndex
-     * @param int   $pageSize
      * @param array $formData
      *
      * @return PageInterface
      */
-    private function createPage(int $pageIndex, int $pageSize, array $formData): PageInterface
+    private function createPage(int $pageIndex, array $formData): PageInterface
     {
+        $formData['page'] = $pageIndex;
+
         return new Page(
             $pageIndex,
-            $this->router->generate(
-                $this->getListRoute(),
-                $this->createPageQueryParameters($pageIndex, $pageSize, $formData)
-            )
+            $this->router->generate($this->listRoute, $formData)
         );
-    }
-
-    /**
-     * @param int   $pageIndex
-     * @param int   $pageSize
-     * @param array $formData
-     *
-     * @return array
-     */
-    private function createPageQueryParameters(int $pageIndex, int $pageSize, array $formData): array
-    {
-        $queryParameters = $formData;
-
-        $queryParameters['limit'] = $pageSize;
-        $queryParameters['offset'] = $pageIndex * $pageSize;
-
-        return $queryParameters;
     }
 }
