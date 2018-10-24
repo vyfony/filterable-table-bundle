@@ -34,4 +34,5 @@ services:
     class: Vyfony\Bundle\FilterableTableBundle\Form\Type\FilterableTableType
     arguments:
       - ~
+      - ~
     tags: ['form.type']

@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Vyfony\Bundle\FilterableTableBundle\Filter\Configurator\Parameter;
 
+use Doctrine\ORM\EntityRepository;
+
 /**
  * @author Anton Dyshkant <vyshkant@gmail.com>
  */
@@ -41,26 +43,20 @@ abstract class AbstractFilterParameter implements FilterParameterInterface
     /**
      * @return string
      */
-    public function getPropertyName(): string
+    final public function getPropertyName(): string
     {
         return $this->propertyName;
     }
 
     /**
-     * @param array $commonOptions
-     */
-    public function applyCommonOptions(array $commonOptions): void
-    {
-        $this->options = array_merge($commonOptions, $this->getOptions());
-    }
-
-    /**
+     * @param EntityRepository $repository
+     *
      * @return array
      */
-    public function getOptions(): array
+    final public function getOptions(EntityRepository $repository): array
     {
         if (null === $this->options) {
-            $this->options = array_merge($this->factoryOptions(), $this->factoryAdditionalOptions());
+            $this->options = $this->createOptions($repository);
         }
 
         return $this->options;
@@ -71,7 +67,7 @@ abstract class AbstractFilterParameter implements FilterParameterInterface
      *
      * @return AbstractFilterParameter
      */
-    public function setPropertyName(string $propertyName): self
+    final public function setPropertyName(string $propertyName): self
     {
         $this->propertyName = $propertyName;
 
@@ -83,7 +79,7 @@ abstract class AbstractFilterParameter implements FilterParameterInterface
      *
      * @return AbstractFilterParameter
      */
-    public function setLabel(string $label): self
+    final public function setLabel(string $label): self
     {
         $this->label = $label;
 
@@ -95,7 +91,7 @@ abstract class AbstractFilterParameter implements FilterParameterInterface
      *
      * @return AbstractFilterParameter
      */
-    public function addCssClass(string $cssClass): self
+    final public function addCssClass(string $cssClass): self
     {
         $this->cssClasses[] = $cssClass;
 
@@ -103,14 +99,11 @@ abstract class AbstractFilterParameter implements FilterParameterInterface
     }
 
     /**
+     * @param EntityRepository $repository
+     *
      * @return array
      */
-    abstract protected function factoryAdditionalOptions(): array;
-
-    /**
-     * @return array
-     */
-    private function factoryOptions(): array
+    protected function createOptions(EntityRepository $repository): array
     {
         return [
             'label' => $this->label,

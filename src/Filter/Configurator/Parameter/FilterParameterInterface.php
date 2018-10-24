@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Vyfony\Bundle\FilterableTableBundle\Filter\Configurator\Parameter;
 
+use Doctrine\ORM\EntityRepository;
+
 /**
  * @author Anton Dyshkant <vyshkant@gmail.com>
  */
@@ -29,12 +31,9 @@ interface FilterParameterInterface
     public function getType(): string;
 
     /**
+     * @param EntityRepository $repository
+     *
      * @return array
      */
-    public function getOptions(): array;
-
-    /**
-     * @param array $commonOptions
-     */
-    public function applyCommonOptions(array $commonOptions): void;
+    public function getOptions(EntityRepository $repository): array;
 }

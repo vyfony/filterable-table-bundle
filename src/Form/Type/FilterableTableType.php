@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Vyfony\Bundle\FilterableTableBundle\Form\Type;
 
+use Doctrine\ORM\EntityRepository;
+use Symfony\Bridge\Doctrine\RegistryInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\ResetType;
@@ -33,11 +35,22 @@ final class FilterableTableType extends AbstractType
     private $filterConfigurator;
 
     /**
-     * @param FilterConfiguratorInterface $filterConfigurator
+     * @var EntityRepository
      */
-    public function __construct(FilterConfiguratorInterface $filterConfigurator)
-    {
+    private $repository;
+
+    /**
+     * @param FilterConfiguratorInterface $filterConfigurator
+     * @param RegistryInterface           $doctrine
+     * @param string                      $entityClass
+     */
+    public function __construct(
+        FilterConfiguratorInterface $filterConfigurator,
+        RegistryInterface $doctrine,
+        string $entityClass
+    ) {
         $this->filterConfigurator = $filterConfigurator;
+        $this->repository = $doctrine->getRepository($entityClass);
     }
 
     /**
@@ -56,7 +69,7 @@ final class FilterableTableType extends AbstractType
             $builder->add(
                 $filterParameter->getPropertyName(),
                 $filterParameter->getType(),
-                $filterParameter->getOptions()
+                $filterParameter->getOptions($this->repository)
             );
         }
 
@@ -64,16 +77,16 @@ final class FilterableTableType extends AbstractType
             $builder->add(
                 $tableParameter->getPropertyName(),
                 $tableParameter->getType(),
-                $tableParameter->getOptions()
+                $tableParameter->getOptions($this->repository)
             );
         }
 
         $builder
-            ->add('submit', SubmitType::class, $this->filterConfigurator->factorySubmitButtonOptions())
+            ->add('submit', SubmitType::class, $this->filterConfigurator->createSubmitButtonOptions())
         ;
 
         $builder
-            ->add('reset', ResetType::class, $this->filterConfigurator->factoryResetButtonOptions())
+            ->add('reset', ResetType::class, $this->filterConfigurator->createResetButtonOptions())
         ;
     }
 
@@ -84,7 +97,7 @@ final class FilterableTableType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver): void
     {
-        $resolver->setDefaults($this->filterConfigurator->factoryDefaultOptions());
+        $resolver->setDefaults($this->filterConfigurator->createDefaults());
     }
 
     /**
