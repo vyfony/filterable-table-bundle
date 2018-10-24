@@ -13,15 +13,15 @@ declare(strict_types=1);
 
 namespace Vyfony\Bundle\FilterableTableBundle\Filter\Configurator\Parameter\TableParameter;
 
+use Doctrine\ORM\EntityRepository;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Vyfony\Bundle\FilterableTableBundle\Filter\Configurator\Parameter\AbstractFilterParameter;
 use Vyfony\Bundle\FilterableTableBundle\Filter\Configurator\Parameter\TableParameter\RadioOption\RadioOptionInterface;
 use Vyfony\Bundle\FilterableTableBundle\Table\Metadata\Column\ColumnMetadataInterface;
 
 /**
  * @author Anton Dyshkant <vyshkant@gmail.com>
  */
-final class RadioColumnChoiceTableParameter extends AbstractFilterParameter implements TableParameterInterface
+final class RadioColumnChoiceTableParameter extends AbstractTableParameter
 {
     /**
      * @var RadioOptionInterface[]
@@ -69,19 +69,21 @@ final class RadioColumnChoiceTableParameter extends AbstractFilterParameter impl
     }
 
     /**
+     * @param EntityRepository $repository
+     *
      * @return array
      */
-    protected function factoryAdditionalOptions(): array
+    protected function createOptions(EntityRepository $repository): array
     {
         $choices = [];
         foreach ($this->radioOptions as $radioOption) {
             $choices[$radioOption->getLabel()] = $radioOption->getName();
         }
 
-        return [
+        return array_merge(parent::createOptions($repository), [
             'multiple' => false,
             'expanded' => true,
             'choices' => $choices,
-        ];
+        ]);
     }
 }

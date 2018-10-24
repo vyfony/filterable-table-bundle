@@ -15,53 +15,19 @@ namespace Vyfony\Bundle\FilterableTableBundle\Filter\Configurator\Parameter;
 
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
-use Vyfony\Bundle\FilterableTableBundle\Form\Type\BooleanExclusiveChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 /**
  * @author Anton Dyshkant <vyshkant@gmail.com>
  */
-final class BooleanPropertyChoiceParameter extends AbstractFilterParameter implements ExpressionBuilderInterface
+final class IntegerChoiceParameter extends AbstractFilterParameter implements ExpressionBuilderInterface
 {
-    /**
-     * @var string
-     */
-    private $trueValueLabel;
-
-    /**
-     * @var string
-     */
-    private $falseValueLabel;
-
-    /**
-     * @param string $trueValueLabel
-     *
-     * @return BooleanPropertyChoiceParameter
-     */
-    public function setTrueValueLabel(string $trueValueLabel): self
-    {
-        $this->trueValueLabel = $trueValueLabel;
-
-        return $this;
-    }
-
-    /**
-     * @param string $falseValueLabel
-     *
-     * @return BooleanPropertyChoiceParameter
-     */
-    public function setFalseValueLabel(string $falseValueLabel): self
-    {
-        $this->falseValueLabel = $falseValueLabel;
-
-        return $this;
-    }
-
     /**
      * @return string
      */
     public function getType(): string
     {
-        return BooleanExclusiveChoiceType::class;
+        return ChoiceType::class;
     }
 
     /**
@@ -93,10 +59,23 @@ final class BooleanPropertyChoiceParameter extends AbstractFilterParameter imple
      */
     protected function createOptions(EntityRepository $repository): array
     {
+        $entityCollection = $repository
+            ->createQueryBuilder('entity')
+            ->select('entity.'.$this->getPropertyName())
+            ->distinct()
+            ->getQuery()
+            ->getResult();
+
+        $convertEntityToPropertyValue = function (array $entity): int {
+            return $entity[$this->getPropertyName()];
+        };
+
+        $properties = array_map($convertEntityToPropertyValue, $entityCollection);
+
         return array_merge(parent::createOptions($repository), [
-            'expanded' => true,
-            'choice_value_false_label' => $this->falseValueLabel,
-            'choice_value_true_label' => $this->trueValueLabel,
+            'expanded' => false,
+            'multiple' => true,
+            'choices' => array_combine($properties, $properties),
         ]);
     }
 }

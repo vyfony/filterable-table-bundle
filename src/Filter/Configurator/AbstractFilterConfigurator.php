@@ -40,10 +40,10 @@ abstract class AbstractFilterConfigurator implements FilterConfiguratorInterface
     /**
      * @return FilterRestrictionInterface[]
      */
-    public function getFilterRestrictions(): array
+    final public function getFilterRestrictions(): array
     {
         if (null === $this->filterRestrictions) {
-            $this->filterRestrictions = $this->factoryFilterRestrictions();
+            $this->filterRestrictions = $this->createFilterRestrictions();
         }
 
         return $this->filterRestrictions;
@@ -52,14 +52,10 @@ abstract class AbstractFilterConfigurator implements FilterConfiguratorInterface
     /**
      * @return FilterParameterInterface[]
      */
-    public function getFilterParameters(): array
+    final public function getFilterParameters(): array
     {
         if (null === $this->filterParameters) {
-            $this->filterParameters = $this->factoryFilterParameters();
-
-            foreach ($this->filterParameters as $filterParameter) {
-                $filterParameter->applyCommonOptions($this->factoryCommonFilterParameterOptions());
-            }
+            $this->filterParameters = $this->createFilterParameters();
         }
 
         return $this->filterParameters;
@@ -68,14 +64,10 @@ abstract class AbstractFilterConfigurator implements FilterConfiguratorInterface
     /**
      * @return TableParameterInterface[]
      */
-    public function getTableParameters(): array
+    final public function getTableParameters(): array
     {
         if (null === $this->tableParameters) {
-            $this->tableParameters = $this->factoryTableParameters();
-
-            foreach ($this->tableParameters as $tableParameter) {
-                $tableParameter->applyCommonOptions($this->factoryCommonTableParameterOptions());
-            }
+            $this->tableParameters = $this->createTableParameters();
         }
 
         return $this->tableParameters;
@@ -84,7 +76,7 @@ abstract class AbstractFilterConfigurator implements FilterConfiguratorInterface
     /**
      * @return array
      */
-    public function getDefaultTableParameters(): array
+    final public function getDefaultTableParameters(): array
     {
         $defaultTableParameters = [];
         foreach ($this->getTableParameters() as $tableParameter) {
@@ -97,25 +89,15 @@ abstract class AbstractFilterConfigurator implements FilterConfiguratorInterface
     /**
      * @return FilterRestrictionInterface[]
      */
-    abstract protected function factoryFilterRestrictions(): array;
+    abstract protected function createFilterRestrictions(): array;
 
     /**
      * @return FilterParameterInterface[]
      */
-    abstract protected function factoryFilterParameters(): array;
+    abstract protected function createFilterParameters(): array;
 
     /**
      * @return TableParameterInterface[]
      */
-    abstract protected function factoryTableParameters(): array;
-
-    /**
-     * @return array
-     */
-    abstract protected function factoryCommonFilterParameterOptions(): array;
-
-    /**
-     * @return array
-     */
-    abstract protected function factoryCommonTableParameterOptions(): array;
+    abstract protected function createTableParameters(): array;
 }

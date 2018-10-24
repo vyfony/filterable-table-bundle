@@ -40,17 +40,17 @@ interface FilterConfiguratorInterface
     /**
      * @return array
      */
-    public function factorySubmitButtonOptions(): array;
+    public function createSubmitButtonOptions(): array;
 
     /**
      * @return array
      */
-    public function factoryResetButtonOptions(): array;
+    public function createResetButtonOptions(): array;
 
     /**
      * @return array
      */
-    public function factoryDefaultOptions(): array;
+    public function createDefaults(): array;
 
     /**
      * @return array

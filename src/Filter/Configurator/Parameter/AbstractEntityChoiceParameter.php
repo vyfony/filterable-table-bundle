@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Vyfony\Bundle\FilterableTableBundle\Filter\Configurator\Parameter;
 
+use Doctrine\ORM\EntityRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
 /**
@@ -33,9 +34,9 @@ abstract class AbstractEntityChoiceParameter extends AbstractFilterParameter imp
     /**
      * @param string $choiceLabel
      *
-     * @return InnerEntityChoiceParameter
+     * @return AbstractEntityChoiceParameter
      */
-    public function setChoiceLabel(string $choiceLabel): self
+    final public function setChoiceLabel(string $choiceLabel): self
     {
         $this->choiceLabel = $choiceLabel;
 
@@ -47,7 +48,7 @@ abstract class AbstractEntityChoiceParameter extends AbstractFilterParameter imp
      *
      * @return AbstractEntityChoiceParameter
      */
-    public function setIsExpanded(bool $isExpanded): self
+    final public function setIsExpanded(bool $isExpanded): self
     {
         $this->isExpanded = $isExpanded;
 
@@ -57,7 +58,7 @@ abstract class AbstractEntityChoiceParameter extends AbstractFilterParameter imp
     /**
      * @return string
      */
-    public function getType(): string
+    final public function getType(): string
     {
         return EntityType::class;
     }
@@ -68,15 +69,17 @@ abstract class AbstractEntityChoiceParameter extends AbstractFilterParameter imp
     abstract protected function getClass(): string;
 
     /**
+     * @param EntityRepository $repository
+     *
      * @return array
      */
-    protected function factoryAdditionalOptions(): array
+    protected function createOptions(EntityRepository $repository): array
     {
-        return [
+        return array_merge(parent::createOptions($repository), [
             'class' => $this->getClass(),
             'choice_label' => $this->choiceLabel,
             'multiple' => true,
             'expanded' => $this->isExpanded,
-        ];
+        ]);
     }
 }

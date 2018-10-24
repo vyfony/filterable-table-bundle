@@ -44,12 +44,4 @@ final class NotNullCheckboxParameter extends AbstractFilterParameter implements 
 
         return null;
     }
-
-    /**
-     * @return array
-     */
-    protected function factoryAdditionalOptions(): array
-    {
-        return [];
-    }
 }

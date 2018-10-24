@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Vyfony\Bundle\FilterableTableBundle\Form\Transformer;
 
-class QueryParametersTransformer implements QueryParametersTransformerInterface
+final class QueryParametersTransformer implements QueryParametersTransformerInterface
 {
     /**
      * @param array $queryParameters
