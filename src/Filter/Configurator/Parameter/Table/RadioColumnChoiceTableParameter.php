@@ -11,11 +11,11 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace Vyfony\Bundle\FilterableTableBundle\Filter\Configurator\Parameter\TableParameter;
+namespace Vyfony\Bundle\FilterableTableBundle\Filter\Configurator\Parameter\Table;
 
-use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\EntityManager;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Vyfony\Bundle\FilterableTableBundle\Filter\Configurator\Parameter\TableParameter\RadioOption\RadioOptionInterface;
+use Vyfony\Bundle\FilterableTableBundle\Filter\Configurator\Parameter\Table\RadioOption\RadioOptionInterface;
 use Vyfony\Bundle\FilterableTableBundle\Table\Metadata\Column\ColumnMetadataInterface;
 
 /**
@@ -55,7 +55,7 @@ final class RadioColumnChoiceTableParameter extends AbstractTableParameter
      */
     public function getColumnMetadataCollection(array $queryParameters): array
     {
-        return [$this->radioOptions[$queryParameters[$this->getPropertyName()]]->getColumnMetadata()];
+        return [$this->radioOptions[$queryParameters[$this->getQueryParameterName()]]->getColumnMetadata()];
     }
 
     /**
@@ -69,18 +69,18 @@ final class RadioColumnChoiceTableParameter extends AbstractTableParameter
     }
 
     /**
-     * @param EntityRepository $repository
+     * @param EntityManager $entityManager
      *
      * @return array
      */
-    protected function createOptions(EntityRepository $repository): array
+    protected function createOptions(EntityManager $entityManager): array
     {
         $choices = [];
         foreach ($this->radioOptions as $radioOption) {
             $choices[$radioOption->getLabel()] = $radioOption->getName();
         }
 
-        return array_merge(parent::createOptions($repository), [
+        return array_merge(parent::createOptions($entityManager), [
             'multiple' => false,
             'expanded' => true,
             'choices' => $choices,

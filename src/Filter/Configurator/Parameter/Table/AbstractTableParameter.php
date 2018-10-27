@@ -11,9 +11,9 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace Vyfony\Bundle\FilterableTableBundle\Filter\Configurator\Parameter\TableParameter;
+namespace Vyfony\Bundle\FilterableTableBundle\Filter\Configurator\Parameter\Table;
 
-use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\EntityManager;
 use Vyfony\Bundle\FilterableTableBundle\Filter\Configurator\Parameter\AbstractFilterParameter;
 
 /**
@@ -22,13 +22,13 @@ use Vyfony\Bundle\FilterableTableBundle\Filter\Configurator\Parameter\AbstractFi
 abstract class AbstractTableParameter extends AbstractFilterParameter implements TableParameterInterface
 {
     /**
-     * @param EntityRepository $repository
+     * @param EntityManager $entityManager
      *
      * @return array
      */
-    protected function createOptions(EntityRepository $repository): array
+    protected function createOptions(EntityManager $entityManager): array
     {
-        return array_merge(parent::createOptions($repository), [
+        return array_merge(parent::createOptions($entityManager), [
             'label_attr' => ['class' => ''],
             'required' => true,
         ]);

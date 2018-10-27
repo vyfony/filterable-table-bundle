@@ -13,8 +13,7 @@ declare(strict_types=1);
 
 namespace Vyfony\Bundle\FilterableTableBundle\Form\Type;
 
-use Doctrine\ORM\EntityRepository;
-use Symfony\Bridge\Doctrine\RegistryInterface;
+use Doctrine\ORM\EntityManager;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\ResetType;
@@ -35,22 +34,20 @@ final class FilterableTableType extends AbstractType
     private $filterConfigurator;
 
     /**
-     * @var EntityRepository
+     * @var EntityManager
      */
-    private $repository;
+    private $entityManager;
 
     /**
      * @param FilterConfiguratorInterface $filterConfigurator
-     * @param RegistryInterface           $doctrine
-     * @param string                      $entityClass
+     * @param EntityManager               $entityManager
      */
     public function __construct(
         FilterConfiguratorInterface $filterConfigurator,
-        RegistryInterface $doctrine,
-        string $entityClass
+        EntityManager $entityManager
     ) {
         $this->filterConfigurator = $filterConfigurator;
-        $this->repository = $doctrine->getRepository($entityClass);
+        $this->entityManager = $entityManager;
     }
 
     /**
@@ -67,17 +64,17 @@ final class FilterableTableType extends AbstractType
 
         foreach ($this->filterConfigurator->getFilterParameters() as $filterParameter) {
             $builder->add(
-                $filterParameter->getPropertyName(),
+                $filterParameter->getQueryParameterName(),
                 $filterParameter->getType(),
-                $filterParameter->getOptions($this->repository)
+                $filterParameter->getOptions($this->entityManager)
             );
         }
 
         foreach ($this->filterConfigurator->getTableParameters() as $tableParameter) {
             $builder->add(
-                $tableParameter->getPropertyName(),
+                $tableParameter->getQueryParameterName(),
                 $tableParameter->getType(),
-                $tableParameter->getOptions($this->repository)
+                $tableParameter->getOptions($this->entityManager)
             );
         }
 

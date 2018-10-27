@@ -96,7 +96,7 @@ final class ColumnMetadata implements ColumnMetadataInterface
             };
         }
 
-        return \call_user_func_array($this->valueExtractor, [$rowData]);
+        return \call_user_func($this->valueExtractor, $rowData);
     }
 
     /**

@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Vyfony\Bundle\FilterableTableBundle\Filter\Configurator;
 
 use Vyfony\Bundle\FilterableTableBundle\Filter\Configurator\Parameter\FilterParameterInterface;
-use Vyfony\Bundle\FilterableTableBundle\Filter\Configurator\Parameter\TableParameter\TableParameterInterface;
+use Vyfony\Bundle\FilterableTableBundle\Filter\Configurator\Parameter\Table\TableParameterInterface;
 use Vyfony\Bundle\FilterableTableBundle\Filter\Configurator\Restriction\FilterRestrictionInterface;
 
 /**
@@ -80,7 +80,7 @@ abstract class AbstractFilterConfigurator implements FilterConfiguratorInterface
     {
         $defaultTableParameters = [];
         foreach ($this->getTableParameters() as $tableParameter) {
-            $defaultTableParameters[$tableParameter->getPropertyName()] = $tableParameter->getDefaultValue();
+            $defaultTableParameters[$tableParameter->getQueryParameterName()] = $tableParameter->getDefaultValue();
         }
 
         return $defaultTableParameters;
