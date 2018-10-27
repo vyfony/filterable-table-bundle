@@ -80,6 +80,7 @@ final class IntegerChoiceParameter extends AbstractFilterParameter implements Ex
             ->createQueryBuilder('entity')
             ->select('entity.'.$this->getQueryParameterName())
             ->distinct()
+            ->orderBy('entity.'.$this->getQueryParameterName(), 'ASC')
             ->getQuery()
             ->getResult();
 
