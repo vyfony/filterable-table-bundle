@@ -45,7 +45,7 @@
 {%- endblock checkbox_and_radion_label %}
 
 {% block form_row -%}
-    <div class="form-group{% if (not compound or force_error|default(false)) and not valid %} has-error{% endif %}">
+    <div class="form-group vyfony-filterable-table-bundle--form-group{% if (not compound or force_error|default(false)) and not valid %} has-error{% endif %}">
         {{- form_label(form) -}}
         {{- form_widget(form) -}}
         {{- form_errors(form) -}}
@@ -53,7 +53,7 @@
 {%- endblock form_row %}
 
 {% block button_row -%}
-    <div class="form-group form-group-button-cir">
+    <div class="form-group form-group vyfony-filterable-table-bundle--button-form-group">
         {{- form_widget(form) -}}
     </div>
 {%- endblock button_row %}
