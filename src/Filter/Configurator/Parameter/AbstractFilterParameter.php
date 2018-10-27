@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Vyfony\Bundle\FilterableTableBundle\Filter\Configurator\Parameter;
 
-use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\EntityManager;
 
 /**
  * @author Anton Dyshkant <vyshkant@gmail.com>
@@ -23,7 +23,7 @@ abstract class AbstractFilterParameter implements FilterParameterInterface
     /**
      * @var string
      */
-    private $propertyName;
+    private $queryParameterName;
 
     /**
      * @var string
@@ -43,33 +43,33 @@ abstract class AbstractFilterParameter implements FilterParameterInterface
     /**
      * @return string
      */
-    final public function getPropertyName(): string
+    final public function getQueryParameterName(): string
     {
-        return $this->propertyName;
+        return $this->queryParameterName;
     }
 
     /**
-     * @param EntityRepository $repository
+     * @param EntityManager $entityManager
      *
      * @return array
      */
-    final public function getOptions(EntityRepository $repository): array
+    final public function getOptions(EntityManager $entityManager): array
     {
         if (null === $this->options) {
-            $this->options = $this->createOptions($repository);
+            $this->options = $this->createOptions($entityManager);
         }
 
         return $this->options;
     }
 
     /**
-     * @param string $propertyName
+     * @param string $queryParameterName
      *
      * @return AbstractFilterParameter
      */
-    final public function setPropertyName(string $propertyName): self
+    final public function setQueryParameterName(string $queryParameterName): self
     {
-        $this->propertyName = $propertyName;
+        $this->queryParameterName = $queryParameterName;
 
         return $this;
     }
@@ -99,11 +99,11 @@ abstract class AbstractFilterParameter implements FilterParameterInterface
     }
 
     /**
-     * @param EntityRepository $repository
+     * @param EntityManager $entityManager
      *
      * @return array
      */
-    protected function createOptions(EntityRepository $repository): array
+    protected function createOptions(EntityManager $entityManager): array
     {
         return [
             'label' => $this->label,

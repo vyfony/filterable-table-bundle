@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Vyfony\Bundle\FilterableTableBundle\Filter\Configurator\Parameter;
 
-use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\QueryBuilder;
 use Vyfony\Bundle\FilterableTableBundle\Form\Type\BooleanExclusiveChoiceType;
 
@@ -73,27 +73,27 @@ final class BooleanPropertyChoiceParameter extends AbstractFilterParameter imple
      */
     public function buildWhereExpression(QueryBuilder $queryBuilder, array $formData, string $entityAlias): ?string
     {
-        if (0 === \count($formData[$this->getPropertyName()])) {
+        if (0 === \count($formData[$this->getQueryParameterName()])) {
             return null;
         }
 
         $values = [];
 
-        foreach ($formData[$this->getPropertyName()] as $value) {
+        foreach ($formData[$this->getQueryParameterName()] as $value) {
             $values[] = $value;
         }
 
-        return (string) $queryBuilder->expr()->in($entityAlias.'.'.$this->getPropertyName(), $values);
+        return (string) $queryBuilder->expr()->in($entityAlias.'.'.$this->getQueryParameterName(), $values);
     }
 
     /**
-     * @param EntityRepository $repository
+     * @param EntityManager $entityManager
      *
      * @return array
      */
-    protected function createOptions(EntityRepository $repository): array
+    protected function createOptions(EntityManager $entityManager): array
     {
-        return array_merge(parent::createOptions($repository), [
+        return array_merge(parent::createOptions($entityManager), [
             'expanded' => true,
             'choice_value_false_label' => $this->falseValueLabel,
             'choice_value_true_label' => $this->trueValueLabel,

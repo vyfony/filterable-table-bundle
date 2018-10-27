@@ -38,8 +38,8 @@ final class NotNullCheckboxParameter extends AbstractFilterParameter implements 
      */
     public function buildWhereExpression(QueryBuilder $queryBuilder, array $formData, string $entityAlias): ?string
     {
-        if (true === $formData[$this->getPropertyName()]) {
-            return $queryBuilder->expr()->isNotNull($entityAlias.'.'.$this->getPropertyName());
+        if (true === $formData[$this->getQueryParameterName()]) {
+            return $queryBuilder->expr()->isNotNull($entityAlias.'.'.$this->getQueryParameterName());
         }
 
         return null;

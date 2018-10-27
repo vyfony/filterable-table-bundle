@@ -11,14 +11,14 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace Vyfony\Bundle\FilterableTableBundle\Filter\Configurator\Parameter;
+namespace Vyfony\Bundle\FilterableTableBundle\Filter\Configurator\Parameter\EntityChoice;
 
 use Doctrine\ORM\QueryBuilder;
 
 /**
  * @author Anton Dyshkant <vyshkant@gmail.com>
  */
-final class EntityChoiceParameter extends AbstractEntityChoiceParameter
+final class JoinedEntityChoiceParameter extends AbstractEntityChoiceParameter
 {
     /**
      * @var string
@@ -28,7 +28,7 @@ final class EntityChoiceParameter extends AbstractEntityChoiceParameter
     /**
      * @param string $class
      *
-     * @return EntityChoiceParameter
+     * @return JoinedEntityChoiceParameter
      */
     public function setClass(string $class): self
     {
@@ -46,17 +46,23 @@ final class EntityChoiceParameter extends AbstractEntityChoiceParameter
      */
     public function buildWhereExpression(QueryBuilder $queryBuilder, array $formData, string $entityAlias): ?string
     {
-        if (0 === \count($formData[$this->getPropertyName()])) {
+        if (0 === \count($formData[$this->getQueryParameterName()])) {
             return null;
         }
 
         $ids = [];
 
-        foreach ($formData[$this->getPropertyName()] as $entity) {
+        foreach ($formData[$this->getQueryParameterName()] as $entity) {
             $ids[] = $entity->getId();
         }
 
-        return (string) $queryBuilder->expr()->in($entityAlias.'.'.$this->getPropertyName(), $ids);
+        $joinedEntityAlias = 'joinedEntity';
+
+        $queryBuilder
+            ->innerJoin($entityAlias.'.'.$this->getQueryParameterName(), $joinedEntityAlias)
+        ;
+
+        return (string) $queryBuilder->expr()->in($joinedEntityAlias.'.id', $ids);
     }
 
     /**

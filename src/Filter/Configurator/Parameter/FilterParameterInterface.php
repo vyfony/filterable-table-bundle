@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Vyfony\Bundle\FilterableTableBundle\Filter\Configurator\Parameter;
 
-use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\EntityManager;
 
 /**
  * @author Anton Dyshkant <vyshkant@gmail.com>
@@ -23,7 +23,7 @@ interface FilterParameterInterface
     /**
      * @return string
      */
-    public function getPropertyName(): string;
+    public function getQueryParameterName(): string;
 
     /**
      * @return string
@@ -31,9 +31,9 @@ interface FilterParameterInterface
     public function getType(): string;
 
     /**
-     * @param EntityRepository $repository
+     * @param EntityManager $entityManager
      *
      * @return array
      */
-    public function getOptions(EntityRepository $repository): array;
+    public function getOptions(EntityManager $entityManager): array;
 }

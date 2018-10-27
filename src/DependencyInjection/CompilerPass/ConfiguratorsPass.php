@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Vyfony\Bundle\FilterableTableBundle\DependencyInjection\CompilerPass;
 
-use Symfony\Bridge\Doctrine\RegistryInterface;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Routing\RouterInterface;
@@ -58,8 +57,7 @@ final class ConfiguratorsPass implements CompilerPassInterface
         $container
             ->getDefinition('vyfony_filterable_table.form.type.filterable_table_type')
             ->setArgument('$filterConfigurator', $filterConfiguratorServiceDefinition)
-            ->setArgument('$doctrine', $container->findDefinition(RegistryInterface::class))
-            ->setArgument('$entityClass', $entityClass)
+            ->setArgument('$entityManager', $container->findDefinition('doctrine.orm.entity_manager'))
         ;
 
         $tableConfiguratorServiceDefinition

@@ -11,25 +11,27 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace Vyfony\Bundle\FilterableTableBundle\Filter\Configurator\Parameter\TableParameter;
+namespace Vyfony\Bundle\FilterableTableBundle\Filter\Configurator\Parameter\Table\RadioOption;
 
-use Vyfony\Bundle\FilterableTableBundle\Filter\Configurator\Parameter\FilterParameterInterface;
 use Vyfony\Bundle\FilterableTableBundle\Table\Metadata\Column\ColumnMetadataInterface;
 
 /**
  * @author Anton Dyshkant <vyshkant@gmail.com>
  */
-interface TableParameterInterface extends FilterParameterInterface
+interface RadioOptionInterface
 {
     /**
-     * @param array $queryParameters
-     *
-     * @return ColumnMetadataInterface[]
+     * @return string
      */
-    public function getColumnMetadataCollection(array $queryParameters): array;
+    public function getName(): string;
 
     /**
      * @return string
      */
-    public function getDefaultValue(): string;
+    public function getLabel(): string;
+
+    /**
+     * @return ColumnMetadataInterface
+     */
+    public function getColumnMetadata(): ColumnMetadataInterface;
 }

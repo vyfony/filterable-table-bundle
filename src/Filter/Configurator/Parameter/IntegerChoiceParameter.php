@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Vyfony\Bundle\FilterableTableBundle\Filter\Configurator\Parameter;
 
-use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
@@ -22,6 +22,23 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
  */
 final class IntegerChoiceParameter extends AbstractFilterParameter implements ExpressionBuilderInterface
 {
+    /**
+     * @var string
+     */
+    private $class;
+
+    /**
+     * @param string $class
+     *
+     * @return IntegerChoiceParameter
+     */
+    public function setClass(string $class): self
+    {
+        $this->class = $class;
+
+        return $this;
+    }
+
     /**
      * @return string
      */
@@ -39,40 +56,40 @@ final class IntegerChoiceParameter extends AbstractFilterParameter implements Ex
      */
     public function buildWhereExpression(QueryBuilder $queryBuilder, array $formData, string $entityAlias): ?string
     {
-        if (0 === \count($formData[$this->getPropertyName()])) {
+        if (0 === \count($formData[$this->getQueryParameterName()])) {
             return null;
         }
 
         $values = [];
 
-        foreach ($formData[$this->getPropertyName()] as $value) {
+        foreach ($formData[$this->getQueryParameterName()] as $value) {
             $values[] = $value;
         }
 
-        return (string) $queryBuilder->expr()->in($entityAlias.'.'.$this->getPropertyName(), $values);
+        return (string) $queryBuilder->expr()->in($entityAlias.'.'.$this->getQueryParameterName(), $values);
     }
 
     /**
-     * @param EntityRepository $repository
+     * @param EntityManager $entityManager
      *
      * @return array
      */
-    protected function createOptions(EntityRepository $repository): array
+    protected function createOptions(EntityManager $entityManager): array
     {
-        $entityCollection = $repository
+        $entityCollection = $entityManager->getRepository($this->class)
             ->createQueryBuilder('entity')
-            ->select('entity.'.$this->getPropertyName())
+            ->select('entity.'.$this->getQueryParameterName())
             ->distinct()
             ->getQuery()
             ->getResult();
 
         $convertEntityToPropertyValue = function (array $entity): int {
-            return $entity[$this->getPropertyName()];
+            return $entity[$this->getQueryParameterName()];
         };
 
         $properties = array_map($convertEntityToPropertyValue, $entityCollection);
 
-        return array_merge(parent::createOptions($repository), [
+        return array_merge(parent::createOptions($entityManager), [
             'expanded' => false,
             'multiple' => true,
             'choices' => array_combine($properties, $properties),
