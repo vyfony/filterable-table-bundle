@@ -14,6 +14,8 @@ declare(strict_types=1);
 namespace Vyfony\Bundle\FilterableTableBundle\Filter\Configurator\Parameter\EntityChoice;
 
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Vyfony\Bundle\FilterableTableBundle\Filter\Configurator\Parameter\AbstractFilterParameter;
 use Vyfony\Bundle\FilterableTableBundle\Filter\Configurator\Parameter\ExpressionBuilderInterface;
@@ -37,6 +39,11 @@ abstract class AbstractEntityChoiceParameter extends AbstractFilterParameter imp
      * @var callable
      */
     private $choiceLabel;
+
+    /**
+     * @var callable
+     */
+    private $sortValuesCallback;
 
     /**
      * @param bool $isMultiple
@@ -87,6 +94,37 @@ abstract class AbstractEntityChoiceParameter extends AbstractFilterParameter imp
     }
 
     /**
+     * @param callable $sortValuesCallback
+     *
+     * @return AbstractEntityChoiceParameter
+     */
+    final public function setSortValuesCallback(callable $sortValuesCallback): self
+    {
+        $this->sortValuesCallback = $sortValuesCallback;
+
+        return $this;
+    }
+
+    /**
+     * @param string $sortBy
+     * @param bool   $isAsc
+     *
+     * @return AbstractEntityChoiceParameter
+     */
+    final public function sortValues(string $sortBy, bool $isAsc = true): self
+    {
+        $this->sortValuesCallback = function (EntityRepository $repository) use ($sortBy, $isAsc): QueryBuilder {
+            $entityAlias = 'entity';
+
+            return $repository
+                ->createQueryBuilder($entityAlias)
+                ->orderBy($entityAlias.'.'.$sortBy, $isAsc ? 'ASC' : 'DESC');
+        };
+
+        return $this;
+    }
+
+    /**
      * @return string
      */
     final public function getType(): string
@@ -111,6 +149,7 @@ abstract class AbstractEntityChoiceParameter extends AbstractFilterParameter imp
             'choice_label' => $this->choiceLabel,
             'multiple' => $this->isMultiple,
             'expanded' => $this->isExpanded,
+            'query_builder' => $this->sortValuesCallback,
         ]);
     }
 }
