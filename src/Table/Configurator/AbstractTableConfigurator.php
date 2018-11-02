@@ -17,6 +17,7 @@ use Countable;
 use Doctrine\ORM\Tools\Pagination\Paginator as DoctrinePaginator;
 use Symfony\Component\Routing\RouterInterface;
 use Vyfony\Bundle\FilterableTableBundle\Filter\Configurator\FilterConfiguratorInterface;
+use Vyfony\Bundle\FilterableTableBundle\Table\Checkbox\CheckboxHandlerInterface;
 use Vyfony\Bundle\FilterableTableBundle\Table\Metadata\Column\ColumnMetadataInterface;
 use Vyfony\Bundle\FilterableTableBundle\Table\Metadata\TableMetadata;
 use Vyfony\Bundle\FilterableTableBundle\Table\Metadata\TableMetadataInterface;
@@ -119,6 +120,7 @@ abstract class AbstractTableConfigurator implements TableConfiguratorInterface
         array $queryParameters
     ): TableMetadataInterface {
         return (new TableMetadata())
+            ->setCheckboxHandlers($this->createCheckboxHandlers())
             ->setColumnMetadataCollection($this->getColumnMetadataCollection($queryParameters))
             ->setRowDataCollection($doctrinePaginator)
             ->setPaginator($this->createPaginator($doctrinePaginator, $queryParameters))
@@ -144,7 +146,12 @@ abstract class AbstractTableConfigurator implements TableConfiguratorInterface
     /**
      * @return ColumnMetadataInterface[]
      */
-    abstract protected function factoryColumnMetadataCollection(): array;
+    abstract protected function createColumnMetadataCollection(): array;
+
+    /**
+     * @return CheckboxHandlerInterface[]
+     */
+    abstract protected function createCheckboxHandlers(): array;
 
     /**
      * @param array $queryParameters
@@ -154,8 +161,8 @@ abstract class AbstractTableConfigurator implements TableConfiguratorInterface
     private function getColumnMetadataCollection(array $queryParameters): array
     {
         $columnMetadataCollection = array_merge(
-            $this->factoryColumnMetadataCollection(),
-            $this->getFilterDependentColumnMetadataCollection($queryParameters)
+            $this->createColumnMetadataCollection(),
+            $this->createFilterDependentColumnMetadataCollection($queryParameters)
         );
 
         $this->applySortParameters($columnMetadataCollection, $queryParameters);
@@ -168,7 +175,7 @@ abstract class AbstractTableConfigurator implements TableConfiguratorInterface
      *
      * @return ColumnMetadataInterface[]
      */
-    private function getFilterDependentColumnMetadataCollection(array $queryParameters): array
+    private function createFilterDependentColumnMetadataCollection(array $queryParameters): array
     {
         $filterDependentColumnMetadataCollection = [];
 

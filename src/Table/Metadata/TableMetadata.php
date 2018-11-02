@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Vyfony\Bundle\FilterableTableBundle\Table\Metadata;
 
+use Vyfony\Bundle\FilterableTableBundle\Table\Checkbox\CheckboxHandlerInterface;
 use Vyfony\Bundle\FilterableTableBundle\Table\Metadata\Column\ColumnMetadataInterface;
 use Vyfony\Bundle\FilterableTableBundle\Table\Paginator\PaginatorInterface;
 
@@ -21,6 +22,11 @@ use Vyfony\Bundle\FilterableTableBundle\Table\Paginator\PaginatorInterface;
  */
 final class TableMetadata implements TableMetadataInterface
 {
+    /**
+     * @var CheckboxHandlerInterface[]
+     */
+    private $checkboxHandlers;
+
     /**
      * @var ColumnMetadataInterface[]
      */
@@ -55,6 +61,34 @@ final class TableMetadata implements TableMetadataInterface
      * @var PaginatorInterface
      */
     private $paginator;
+
+    /**
+     * @return bool
+     */
+    public function hasCheckboxColumn(): bool
+    {
+        return \count($this->checkboxHandlers) > 0;
+    }
+
+    /**
+     * @return CheckboxHandlerInterface[]
+     */
+    public function getCheckboxHandlers(): array
+    {
+        return $this->checkboxHandlers;
+    }
+
+    /**
+     * @param CheckboxHandlerInterface[] $checkboxHandlers
+     *
+     * @return TableMetadata
+     */
+    public function setCheckboxHandlers(array $checkboxHandlers): self
+    {
+        $this->checkboxHandlers = $checkboxHandlers;
+
+        return $this;
+    }
 
     /**
      * @return ColumnMetadataInterface[]

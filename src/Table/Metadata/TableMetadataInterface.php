@@ -22,6 +22,16 @@ use Vyfony\Bundle\FilterableTableBundle\Table\Paginator\PaginatorInterface;
 interface TableMetadataInterface
 {
     /**
+     * @return bool
+     */
+    public function hasCheckboxColumn(): bool;
+
+    /**
+     * @return string[]
+     */
+    public function getCheckboxHandlers(): array;
+
+    /**
      * @return ColumnMetadataInterface[]
      */
     public function getColumnMetadataCollection(): array;
