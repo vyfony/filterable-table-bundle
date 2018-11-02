@@ -13,8 +13,6 @@ declare(strict_types=1);
 
 namespace Vyfony\Bundle\FilterableTableBundle\DataCollector;
 
-use Doctrine\ORM\Tools\Pagination\Paginator as DoctrinePaginator;
-
 /**
  * @author Anton Dyshkant <vyshkant@gmail.com>
  */
@@ -24,7 +22,7 @@ interface DataCollectorInterface
      * @param array  $formData
      * @param string $entityClass
      *
-     * @return DoctrinePaginator
+     * @return iterable
      */
-    public function getRowDataPaginator(array $formData, string $entityClass): DoctrinePaginator;
+    public function getRowDataCollection(array $formData, string $entityClass): iterable;
 }

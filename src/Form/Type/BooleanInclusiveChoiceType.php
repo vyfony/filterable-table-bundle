@@ -22,7 +22,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 /**
  * @author Anton Dyshkant <vyshkant@gmail.com>
  */
-final class BooleanExclusiveChoiceType extends AbstractType
+final class BooleanInclusiveChoiceType extends AbstractType
 {
     /**
      * @param FormBuilderInterface $builder
@@ -39,6 +39,7 @@ final class BooleanExclusiveChoiceType extends AbstractType
     {
         $resolver->setDefaults([
             'multiple' => true,
+            'expanded' => true,
             'choice_value_false_label' => null,
             'choice_value_true_label' => null,
         ]);
@@ -67,6 +68,6 @@ final class BooleanExclusiveChoiceType extends AbstractType
      */
     public function getBlockPrefix(): string
     {
-        return 'boolean_exclusive';
+        return 'boolean_inclusive';
     }
 }

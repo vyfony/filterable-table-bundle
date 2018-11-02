@@ -34,6 +34,7 @@ final class QueryParametersTransformer implements QueryParametersTransformerInte
 
     /**
      * @param array $formData
+     * @param array $requestParameters
      *
      * @return array
      */

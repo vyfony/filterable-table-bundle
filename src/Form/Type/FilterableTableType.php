@@ -15,6 +15,7 @@ namespace Vyfony\Bundle\FilterableTableBundle\Form\Type;
 
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\ResetType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -79,10 +80,11 @@ final class FilterableTableType extends AbstractType
         }
 
         $builder
+            ->add('disablePagination', CheckboxType::class, [
+                'label' => $this->filterConfigurator->getDisablePaginationLabel(),
+                'required' => false,
+            ])
             ->add('submit', SubmitType::class, $this->filterConfigurator->createSubmitButtonOptions())
-        ;
-
-        $builder
             ->add('reset', ResetType::class, $this->filterConfigurator->createResetButtonOptions())
         ;
     }

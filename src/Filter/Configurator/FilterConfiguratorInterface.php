@@ -56,4 +56,9 @@ interface FilterConfiguratorInterface
      * @return array
      */
     public function getDefaultTableParameters(): array;
+
+    /**
+     * @return string
+     */
+    public function getDisablePaginationLabel(): string;
 }

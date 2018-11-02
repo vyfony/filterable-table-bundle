@@ -63,6 +63,36 @@ final class TableMetadata implements TableMetadataInterface
     private $paginator;
 
     /**
+     * @param CheckboxHandlerInterface[] $checkboxHandlers
+     * @param ColumnMetadataInterface[]  $columnMetadataCollection
+     * @param iterable                   $rowDataCollection
+     * @param string                     $listRoute
+     * @param string                     $showRoute
+     * @param array                      $showRouteParameters
+     * @param array                      $queryParameters
+     * @param PaginatorInterface|null    $paginator
+     */
+    public function __construct(
+        array $checkboxHandlers,
+        array $columnMetadataCollection,
+        iterable $rowDataCollection,
+        string $listRoute,
+        string $showRoute,
+        array $showRouteParameters,
+        array $queryParameters,
+        ?PaginatorInterface $paginator
+    ) {
+        $this->checkboxHandlers = $checkboxHandlers;
+        $this->columnMetadataCollection = $columnMetadataCollection;
+        $this->rowDataCollection = $rowDataCollection;
+        $this->listRoute = $listRoute;
+        $this->showRoute = $showRoute;
+        $this->showRouteParameters = $showRouteParameters;
+        $this->queryParameters = $queryParameters;
+        $this->paginator = $paginator;
+    }
+
+    /**
      * @return bool
      */
     public function hasCheckboxColumn(): bool
@@ -79,35 +109,11 @@ final class TableMetadata implements TableMetadataInterface
     }
 
     /**
-     * @param CheckboxHandlerInterface[] $checkboxHandlers
-     *
-     * @return TableMetadata
-     */
-    public function setCheckboxHandlers(array $checkboxHandlers): self
-    {
-        $this->checkboxHandlers = $checkboxHandlers;
-
-        return $this;
-    }
-
-    /**
      * @return ColumnMetadataInterface[]
      */
     public function getColumnMetadataCollection(): array
     {
         return $this->columnMetadataCollection;
-    }
-
-    /**
-     * @param ColumnMetadataInterface[] $columnMetadataCollection
-     *
-     * @return TableMetadata
-     */
-    public function setColumnMetadataCollection(array $columnMetadataCollection): self
-    {
-        $this->columnMetadataCollection = $columnMetadataCollection;
-
-        return $this;
     }
 
     /**
@@ -119,15 +125,11 @@ final class TableMetadata implements TableMetadataInterface
     }
 
     /**
-     * @param iterable $rowDataCollection
-     *
-     * @return TableMetadata
+     * @return bool
      */
-    public function setRowDataCollection(iterable $rowDataCollection): self
+    public function hasPaginator(): bool
     {
-        $this->rowDataCollection = $rowDataCollection;
-
-        return $this;
+        return null !== $this->paginator;
     }
 
     /**
@@ -139,35 +141,11 @@ final class TableMetadata implements TableMetadataInterface
     }
 
     /**
-     * @param PaginatorInterface $paginator
-     *
-     * @return TableMetadata
-     */
-    public function setPaginator(PaginatorInterface $paginator): self
-    {
-        $this->paginator = $paginator;
-
-        return $this;
-    }
-
-    /**
      * @return string
      */
     public function getListRoute(): string
     {
         return $this->listRoute;
-    }
-
-    /**
-     * @param string $listRoute
-     *
-     * @return TableMetadata
-     */
-    public function setListRoute(string $listRoute): self
-    {
-        $this->listRoute = $listRoute;
-
-        return $this;
     }
 
     /**
@@ -179,18 +157,6 @@ final class TableMetadata implements TableMetadataInterface
     }
 
     /**
-     * @param string $showRoute
-     *
-     * @return TableMetadata
-     */
-    public function setShowRoute(string $showRoute): self
-    {
-        $this->showRoute = $showRoute;
-
-        return $this;
-    }
-
-    /**
      * @return array
      */
     public function getShowRouteParameters(): array
@@ -199,34 +165,10 @@ final class TableMetadata implements TableMetadataInterface
     }
 
     /**
-     * @param array $showRouteParameters
-     *
-     * @return TableMetadata
-     */
-    public function setShowRouteParameters(array $showRouteParameters): self
-    {
-        $this->showRouteParameters = $showRouteParameters;
-
-        return $this;
-    }
-
-    /**
      * @return array
      */
     public function getQueryParameters(): array
     {
         return $this->queryParameters;
-    }
-
-    /**
-     * @param array $queryParameters
-     *
-     * @return TableMetadata
-     */
-    public function setQueryParameters(array $queryParameters): self
-    {
-        $this->queryParameters = $queryParameters;
-
-        return $this;
     }
 }

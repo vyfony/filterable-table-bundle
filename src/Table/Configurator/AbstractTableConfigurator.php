@@ -110,25 +110,27 @@ abstract class AbstractTableConfigurator implements TableConfiguratorInterface
     }
 
     /**
-     * @param DoctrinePaginator $doctrinePaginator
-     * @param array             $queryParameters
+     * @param iterable $rowDataCollection
+     * @param array    $queryParameters
      *
      * @return TableMetadataInterface
      */
     public function getTableMetadata(
-        DoctrinePaginator $doctrinePaginator,
+        iterable $rowDataCollection,
         array $queryParameters
     ): TableMetadataInterface {
-        return (new TableMetadata())
-            ->setCheckboxHandlers($this->createCheckboxHandlers())
-            ->setColumnMetadataCollection($this->getColumnMetadataCollection($queryParameters))
-            ->setRowDataCollection($doctrinePaginator)
-            ->setPaginator($this->createPaginator($doctrinePaginator, $queryParameters))
-            ->setListRoute($this->listRoute)
-            ->setShowRoute($this->showRoute)
-            ->setShowRouteParameters($this->showRouteParameters)
-            ->setQueryParameters($queryParameters)
-        ;
+        return new TableMetadata(
+            $this->createCheckboxHandlers(),
+            $this->getColumnMetadataCollection($queryParameters),
+            $rowDataCollection,
+            $this->listRoute,
+            $this->showRoute,
+            $this->showRouteParameters,
+            $queryParameters,
+            $rowDataCollection instanceof DoctrinePaginator
+                ? $this->createPaginator($rowDataCollection, $queryParameters)
+                : null
+        );
     }
 
     /**
@@ -139,7 +141,7 @@ abstract class AbstractTableConfigurator implements TableConfiguratorInterface
         return [
             'sortBy' => $this->defaultSortBy,
             'sortOrder' => $this->defaultSortOrder,
-            'page' => 1,
+            'page' => '1',
         ];
     }
 
@@ -249,7 +251,7 @@ abstract class AbstractTableConfigurator implements TableConfiguratorInterface
      */
     private function createPage(int $pageIndex, array $formData): PageInterface
     {
-        $formData['page'] = $pageIndex;
+        $formData['page'] = (string) $pageIndex;
 
         return new Page(
             $pageIndex,

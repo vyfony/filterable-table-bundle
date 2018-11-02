@@ -61,9 +61,9 @@ final class DataCollector implements DataCollectorInterface
      *
      * @throws RuntimeException
      *
-     * @return DoctrinePaginator
+     * @return iterable
      */
-    public function getRowDataPaginator(array $formData, string $entityClass): DoctrinePaginator
+    public function getRowDataCollection(array $formData, string $entityClass): iterable
     {
         $repository = $this->doctrine->getRepository($entityClass);
 
@@ -99,10 +99,17 @@ final class DataCollector implements DataCollectorInterface
 
         $queryBuilder
             ->orderBy($entityAlias.'.'.$formData['sortBy'], $formData['sortOrder'])
-            ->setFirstResult($this->pageSize * ($formData['page'] - 1))
+        ;
+
+        if ($formData['disablePagination']) {
+            return $queryBuilder->getQuery()->getResult();
+        }
+
+        $queryBuilder
+            ->setFirstResult($this->pageSize * ((int) $formData['page'] - 1))
             ->setMaxResults($this->pageSize)
         ;
 
-        return new DoctrinePaginator($queryBuilder->getQuery(), $fetchJoinCollection = true);
+        return new DoctrinePaginator($queryBuilder->getQuery(), true);
     }
 }

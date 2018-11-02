@@ -116,7 +116,7 @@ final class Table implements TableInterface
     public function getTableMetadata(): TableMetadataInterface
     {
         return $this->tableConfigurator->getTableMetadata(
-            $this->dataCollector->getRowDataPaginator(
+            $this->dataCollector->getRowDataCollection(
                 $this->queryParametersTransformer->transformFormDataForDataCollection(
                     $this->getForm()->getData(),
                     $this->request->query->all()

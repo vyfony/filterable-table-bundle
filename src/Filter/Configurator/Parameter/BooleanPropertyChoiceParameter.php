@@ -15,7 +15,7 @@ namespace Vyfony\Bundle\FilterableTableBundle\Filter\Configurator\Parameter;
 
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\QueryBuilder;
-use Vyfony\Bundle\FilterableTableBundle\Form\Type\BooleanExclusiveChoiceType;
+use Vyfony\Bundle\FilterableTableBundle\Form\Type\BooleanInclusiveChoiceType;
 
 /**
  * @author Anton Dyshkant <vyshkant@gmail.com>
@@ -61,7 +61,7 @@ final class BooleanPropertyChoiceParameter extends AbstractFilterParameter imple
      */
     public function getType(): string
     {
-        return BooleanExclusiveChoiceType::class;
+        return BooleanInclusiveChoiceType::class;
     }
 
     /**
@@ -94,7 +94,6 @@ final class BooleanPropertyChoiceParameter extends AbstractFilterParameter imple
     protected function createOptions(EntityManager $entityManager): array
     {
         return array_merge(parent::createOptions($entityManager), [
-            'expanded' => true,
             'choice_value_false_label' => $this->falseValueLabel,
             'choice_value_true_label' => $this->trueValueLabel,
         ]);

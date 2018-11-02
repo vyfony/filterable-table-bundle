@@ -42,6 +42,11 @@ interface TableMetadataInterface
     public function getRowDataCollection(): iterable;
 
     /**
+     * @return bool
+     */
+    public function hasPaginator(): bool;
+
+    /**
      * @return PaginatorInterface
      */
     public function getPaginator(): PaginatorInterface;

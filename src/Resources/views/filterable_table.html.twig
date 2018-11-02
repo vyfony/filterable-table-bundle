@@ -74,25 +74,27 @@
 {% endmacro %}
 
 {% macro render_paginator(table) %}
-    <ul class="pagination justify-content-center">
+    {% if table.hasPaginator %}
+        <ul class="pagination justify-content-center">
 
-        {% set lastRenderedPageIndex = null %}
+            {% set lastRenderedPageIndex = null %}
 
-        {% for page in table.paginator.visiblePages %}
+            {% for page in table.paginator.visiblePages %}
 
-            {% if lastRenderedPageIndex is not null and page.index is not same as(lastRenderedPageIndex + 1) %}
-                <li class="page-item disabled">
-                    <a class="page-link" href="#">..</a>
+                {% if lastRenderedPageIndex is not null and page.index is not same as(lastRenderedPageIndex + 1) %}
+                    <li class="page-item disabled">
+                        <a class="page-link" href="#">..</a>
+                    </li>
+                {% endif %}
+
+                <li class="page-item{% if table.paginator.isPageCurrent(page) %} active{% endif %}">
+                    <a class="page-link" href="{{ page.url }}">{{ page.index }}</a>
                 </li>
-            {% endif %}
 
-            <li class="page-item{% if table.paginator.isPageCurrent(page) %} active{% endif %}">
-                <a class="page-link" href="{{ page.url }}">{{ page.index }}</a>
-            </li>
-
-            {% set lastRenderedPageIndex = page.index %}
-        {% endfor %}
-    </ul>
+                {% set lastRenderedPageIndex = page.index %}
+            {% endfor %}
+        </ul>
+    {% endif %}
 {% endmacro %}
 
 {% macro render_checkbox_handlers(table) %}
