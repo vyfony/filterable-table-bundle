@@ -15,11 +15,8 @@ return [
     'files_list' => [
         '.phan.dist',
         '.php_cs.dist',
-        'config/bundles.php',
-        'public/index.php',
     ],
     'directory_list' => [
-        'bin',
         'src',
         'tests',
         'vendor',
