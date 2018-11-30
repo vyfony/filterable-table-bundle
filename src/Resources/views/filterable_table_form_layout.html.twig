@@ -1,5 +1,17 @@
 {% use "form_div_layout.html.twig" %}
 
+{%- block form_widget_simple -%}
+    {%- set type = type|default('text') -%}
+    {%- if type == 'range' or type == 'color' -%}
+        {# Attribute "required" is not supported #}
+        {%- set required = false -%}
+    {%- endif -%}
+    {%- if 'text' == type -%}
+        {% set attr = attr|merge({'class': (attr.class|default('') ~ ' form-control')|trim}) %}
+    {%- endif -%}
+    <input type="{{ type }}" {{ block('widget_attributes') }} {% if value is not empty %}value="{{ value }}" {% endif %}/>
+{%- endblock form_widget_simple -%}
+
 {% block radio_widget -%}
     <div class="custom-control custom-radio">
         {% set attr = attr|merge({'class': (attr.class|default('') ~ ' custom-control-input')|trim}) %}
