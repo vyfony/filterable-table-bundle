@@ -21,9 +21,7 @@ services:
 
   Vyfony\Bundle\FilterableTableBundle\Table\TableInterface: '@vyfony_filterable_table.table'
 
-  vyfony_filterable_table.table_interface:
-    public: true
-    alias: Vyfony\Bundle\FilterableTableBundle\Table\TableInterface
+  vyfony_filterable_table.table_interface: '@Vyfony\Bundle\FilterableTableBundle\Table\TableInterface'
 
   vyfony_filterable_table.form.transformer.query_parameters_transformer:
     class: Vyfony\Bundle\FilterableTableBundle\Form\Transformer\QueryParametersTransformer
