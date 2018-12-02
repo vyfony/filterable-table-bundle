@@ -56,7 +56,7 @@ final class JoinedEntityChoiceParameter extends AbstractEntityChoiceParameter
             $ids[] = $entity->getId();
         }
 
-        $joinedEntityAlias = 'joinedEntity';
+        $joinedEntityAlias = 'joinedEntity_'.$this->getQueryParameterName();
 
         $queryBuilder
             ->innerJoin($entityAlias.'.'.$this->getQueryParameterName(), $joinedEntityAlias)
