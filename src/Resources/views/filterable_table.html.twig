@@ -13,12 +13,12 @@
                 {% endif %}
                 {% for columnMetadata in table.columnMetadataCollection %}
                     <th
-                        {% if columnMetadata.isSortable -%}
-                            data-vyfony-filterable-table-sortable
-                        {%- endif %}
-                        {% if table.queryParameters.sortBy is same as(columnMetadata.name) -%}
-                            data-vyfony-filterable-table-sort-order="{{ table.queryParameters.sortOrder }}"
-                        {%- endif %}
+                            {% if columnMetadata.isSortable -%}
+                                data-vyfony-filterable-table-sortable
+                            {%- endif %}
+                            {% if table.queryParameters.sortBy is same as(columnMetadata.name) -%}
+                                data-vyfony-filterable-table-sort-order="{{ table.queryParameters.sortOrder }}"
+                            {%- endif %}
                     >
                         {% if columnMetadata.isSortable %}
                             <a href="{{ path(table.listRoute, columnMetadata.sortParameters) }}">
@@ -71,6 +71,57 @@
             {% endfor %}
         </tbody>
     </table>
+
+    <script type="text/javascript">
+        window.addEventListener('load', () => {
+            document.querySelectorAll('button[data-vyfony-filterable-table-reset-button]').forEach(
+                (resetButtonElement) => {
+
+                    resetButtonElement.addEventListener('click', (event) => {
+
+                        let form = resetButtonElement.closest('form');
+
+                        form
+                            .querySelectorAll(
+                                'input[type=radio][data-vyfony-filterable-table-filter-parameter], ' +
+                                'input[type=checkbox][data-vyfony-filterable-table-filter-parameter]'
+                            )
+                            .forEach((checkboxOrRadioFilterParameterElement) => {
+                                checkboxOrRadioFilterParameterElement.removeAttribute('checked');
+                            });
+
+                        form
+                            .querySelectorAll(
+                                'input[type=text][data-vyfony-filterable-table-filter-parameter]'
+                            )
+                            .forEach((textOrTextareaFilterParameterElement) => {
+                                textOrTextareaFilterParameterElement.setAttribute('value', '');
+                            });
+
+                        form
+                            .querySelectorAll(
+                                'textarea[data-vyfony-filterable-table-filter-parameter]'
+                            )
+                            .forEach((textOrTextareaFilterParameterElement) => {
+                                textOrTextareaFilterParameterElement.value = '';
+                            });
+
+                        form
+                            .querySelectorAll(
+                                'select[data-vyfony-filterable-table-filter-parameter]'
+                            )
+                            .forEach((textOrTextareaFilterParameterElement) => {
+                                for (let optionElement of textOrTextareaFilterParameterElement.options) {
+                                    optionElement.removeAttribute('selected');
+                                }
+                            });
+
+                        return false;
+                    })
+                }
+            );
+        });
+    </script>
 {% endmacro %}
 
 {% macro render_paginator(table) %}
@@ -110,7 +161,7 @@
         {% endfor %}
 
         <script type="text/javascript">
-            window.onload = function () {
+            window.addEventListener('load', () => {
 
                 const checkboxAttribute = 'data-vyfony-filterable-table-checkbox';
                 const checkboxHandlerButtonAttribute = 'data-vyfony-filterable-table-checkbox-handler-button';
@@ -153,9 +204,9 @@
                         searchParams.set('rowIdentifiers', JSON.stringify(rowIdentifiers));
 
                         window.location = `${actionUrl}?${searchParams.toString()}`;
-                    }
+                    };
                 });
-            };
+            });
         </script>
     {% endif %}
 {% endmacro %}

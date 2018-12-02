@@ -107,7 +107,10 @@ abstract class AbstractFilterParameter implements FilterParameterInterface
     {
         return [
             'label' => $this->label,
-            'attr' => ['class' => implode(' ', $this->cssClasses)],
+            'attr' => [
+                'class' => implode(' ', $this->cssClasses),
+                'data-vyfony-filterable-table-filter-parameter' => true,
+            ],
         ];
     }
 }

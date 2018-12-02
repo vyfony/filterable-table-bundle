@@ -15,9 +15,9 @@ namespace Vyfony\Bundle\FilterableTableBundle\Form\Type;
 
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ButtonType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
-use Symfony\Component\Form\Extension\Core\Type\ResetType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\Exception\AccessException;
@@ -79,13 +79,24 @@ final class FilterableTableType extends AbstractType
             );
         }
 
+        $resetButtonOptions = $this->filterConfigurator->createResetButtonOptions();
+
+        if (!array_key_exists('attr', $resetButtonOptions)) {
+            $resetButtonOptions['attr'] = [];
+        }
+
+        $resetButtonOptions['attr'] = array_merge(
+            $resetButtonOptions['attr'],
+            ['data-vyfony-filterable-table-reset-button' => true]
+        );
+
         $builder
             ->add('disablePagination', CheckboxType::class, [
                 'label' => $this->filterConfigurator->getDisablePaginationLabel(),
                 'required' => false,
             ])
             ->add('submit', SubmitType::class, $this->filterConfigurator->createSubmitButtonOptions())
-            ->add('reset', ResetType::class, $this->filterConfigurator->createResetButtonOptions())
+            ->add('reset', ButtonType::class, $resetButtonOptions)
         ;
     }
 
