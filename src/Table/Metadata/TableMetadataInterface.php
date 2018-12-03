@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Vyfony\Bundle\FilterableTableBundle\Table\Metadata;
 
+use Vyfony\Bundle\FilterableTableBundle\Table\Checkbox\CheckboxHandlerInterface;
 use Vyfony\Bundle\FilterableTableBundle\Table\Metadata\Column\ColumnMetadataInterface;
 use Vyfony\Bundle\FilterableTableBundle\Table\Paginator\PaginatorInterface;
 
@@ -22,14 +23,9 @@ use Vyfony\Bundle\FilterableTableBundle\Table\Paginator\PaginatorInterface;
 interface TableMetadataInterface
 {
     /**
-     * @return bool
+     * @return string
      */
-    public function hasCheckboxColumn(): bool;
-
-    /**
-     * @return string[]
-     */
-    public function getCheckboxHandlers(): array;
+    public function getResultsCountText(): string;
 
     /**
      * @return ColumnMetadataInterface[]
@@ -40,16 +36,6 @@ interface TableMetadataInterface
      * @return iterable
      */
     public function getRowDataCollection(): iterable;
-
-    /**
-     * @return bool
-     */
-    public function hasPaginator(): bool;
-
-    /**
-     * @return PaginatorInterface
-     */
-    public function getPaginator(): PaginatorInterface;
 
     /**
      * @return string
@@ -70,4 +56,24 @@ interface TableMetadataInterface
      * @return array
      */
     public function getQueryParameters(): array;
+
+    /**
+     * @return bool
+     */
+    public function hasCheckboxColumn(): bool;
+
+    /**
+     * @return CheckboxHandlerInterface[]
+     */
+    public function getCheckboxHandlers(): array;
+
+    /**
+     * @return bool
+     */
+    public function hasPaginator(): bool;
+
+    /**
+     * @return PaginatorInterface
+     */
+    public function getPaginator(): PaginatorInterface;
 }

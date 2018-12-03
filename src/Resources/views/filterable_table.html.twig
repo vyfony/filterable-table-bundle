@@ -1,11 +1,12 @@
 {% macro render_table(table) %}
+    <div>{{ table.resultsCountText|trans({count: table.rowDataCollection.count}) }}</div>
     <table class="table table-striped table-sm" data-vyfony-filterable-table>
         <thead>
             <tr>
                 {% if table.hasCheckboxColumn %}
                     <th>
                         <div class="custom-control custom-checkbox">
-                            {% set mainCheckboxId = 'data-vyfony-filterable-table-main-checkbox' %}
+                            {% set mainCheckboxId = 'vyfony-filterable-table-main-checkbox' %}
                             <input type="checkbox" id="{{ mainCheckboxId }}" class="custom-control-input"/>
                             <label class="custom-control-label" for="{{ mainCheckboxId }}">&#8203;</label>
                         </div>
@@ -79,39 +80,34 @@
 
                     resetButtonElement.addEventListener('click', (event) => {
 
-                        let form = resetButtonElement.closest('form');
+                        const form = resetButtonElement.closest('form');
+                        const filterParameterAttribute = 'data-vyfony-filterable-table-filter-parameter';
 
                         form
                             .querySelectorAll(
-                                'input[type=radio][data-vyfony-filterable-table-filter-parameter], ' +
-                                'input[type=checkbox][data-vyfony-filterable-table-filter-parameter]'
+                                `input[type=radio][${filterParameterAttribute}], ` +
+                                `input[type=checkbox][${filterParameterAttribute}]`
                             )
                             .forEach((checkboxOrRadioFilterParameterElement) => {
                                 checkboxOrRadioFilterParameterElement.removeAttribute('checked');
                             });
 
                         form
-                            .querySelectorAll(
-                                'input[type=text][data-vyfony-filterable-table-filter-parameter]'
-                            )
+                            .querySelectorAll(`input[type=text][${filterParameterAttribute}]`)
                             .forEach((textOrTextareaFilterParameterElement) => {
                                 textOrTextareaFilterParameterElement.setAttribute('value', '');
                             });
 
                         form
-                            .querySelectorAll(
-                                'textarea[data-vyfony-filterable-table-filter-parameter]'
-                            )
+                            .querySelectorAll(`textarea[${filterParameterAttribute}]`)
                             .forEach((textOrTextareaFilterParameterElement) => {
                                 textOrTextareaFilterParameterElement.value = '';
                             });
 
                         form
-                            .querySelectorAll(
-                                'select[data-vyfony-filterable-table-filter-parameter]'
-                            )
+                            .querySelectorAll('select[data-vyfony-filterable-table-filter-parameter]')
                             .forEach((textOrTextareaFilterParameterElement) => {
-                                for (let optionElement of textOrTextareaFilterParameterElement.options) {
+                                for (const optionElement of textOrTextareaFilterParameterElement.options) {
                                     optionElement.removeAttribute('selected');
                                 }
                             });
@@ -155,6 +151,7 @@
             <button type="button"
                     class="btn btn-default"
                     data-vyfony-filterable-table-checkbox-handler-button="{{ path(checkboxHandler.routeName) }}"
+                    data-vyfony-filterable-table-checkbox-handler-empty-selection-error-text="{{ checkboxHandler.emptySelectionErrorText|trans }}"
             >
                 {{ checkboxHandler.label|trans }}
             </button>
@@ -166,19 +163,25 @@
                 const checkboxAttribute = 'data-vyfony-filterable-table-checkbox';
                 const checkboxHandlerButtonAttribute = 'data-vyfony-filterable-table-checkbox-handler-button';
 
-                const mainCheckboxElement = document.querySelector('#data-vyfony-filterable-table-main-checkbox');
+                const mainCheckboxElement = document.querySelector('#vyfony-filterable-table-main-checkbox');
+
                 const rowCheckboxElements = Object.values(
                     document.querySelectorAll(`input[type="checkbox"][${checkboxAttribute}]`)
                 );
 
-                mainCheckboxElement.onclick = () => {
+                mainCheckboxElement.addEventListener('click', () => {
+
                     rowCheckboxElements.forEach(rowCheckboxElement => {
                         rowCheckboxElement.checked = mainCheckboxElement.checked
                     });
-                };
+
+                    return false;
+                });
 
                 rowCheckboxElements.forEach(rowCheckboxElement => {
-                    rowCheckboxElement.onclick = () => {
+
+                    rowCheckboxElement.addEventListener('click', () => {
+
                         mainCheckboxElement.checked = rowCheckboxElements.every(oneOfRowCheckboxElements => {
                             return true === oneOfRowCheckboxElements.checked;
                         });
@@ -186,11 +189,14 @@
                         mainCheckboxElement.indeterminate = !rowCheckboxElements.every(oneOfRowCheckboxElements => {
                             return rowCheckboxElements[0].checked === oneOfRowCheckboxElements.checked;
                         });
-                    }
+
+                        return false;
+                    });
                 });
 
                 document.querySelectorAll(`[${checkboxHandlerButtonAttribute}]`).forEach(buttonElement => {
-                    buttonElement.onclick = () => {
+
+                    buttonElement.addEventListener('click', () => {
 
                         const rowIdentifiers = rowCheckboxElements
                             .filter(checkboxElement => checkboxElement.checked)
@@ -201,10 +207,18 @@
 
                         const searchParams = new URLSearchParams();
 
-                        searchParams.set('rowIdentifiers', JSON.stringify(rowIdentifiers));
+                        if (rowIdentifiers.length > 0) {
+                            searchParams.set('rowIdentifiers', JSON.stringify(rowIdentifiers));
 
-                        window.location = `${actionUrl}?${searchParams.toString()}`;
-                    };
+                            window.location = `${actionUrl}?${searchParams.toString()}`;
+                        } else {
+                            alert(
+                                buttonElement.attributes['data-vyfony-filterable-table-checkbox-handler-empty-selection-error-text'].value
+                            );
+                        }
+
+                        return false;
+                    });
                 });
             });
         </script>

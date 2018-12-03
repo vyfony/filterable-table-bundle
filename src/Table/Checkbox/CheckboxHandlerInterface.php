@@ -27,4 +27,9 @@ interface CheckboxHandlerInterface
      * @return string
      */
     public function getLabel(): string;
+
+    /**
+     * @return string
+     */
+    public function getEmptySelectionErrorText(): string;
 }

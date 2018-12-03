@@ -23,9 +23,9 @@ use Vyfony\Bundle\FilterableTableBundle\Table\Paginator\PaginatorInterface;
 final class TableMetadata implements TableMetadataInterface
 {
     /**
-     * @var CheckboxHandlerInterface[]
+     * @var string
      */
-    private $checkboxHandlers;
+    private $resultsCountText;
 
     /**
      * @var ColumnMetadataInterface[]
@@ -58,54 +58,54 @@ final class TableMetadata implements TableMetadataInterface
     private $queryParameters;
 
     /**
+     * @var CheckboxHandlerInterface[]
+     */
+    private $checkboxHandlers;
+
+    /**
      * @var PaginatorInterface
      */
     private $paginator;
 
     /**
-     * @param CheckboxHandlerInterface[] $checkboxHandlers
+     * @param string                     $resultsCountText
      * @param ColumnMetadataInterface[]  $columnMetadataCollection
      * @param iterable                   $rowDataCollection
      * @param string                     $listRoute
      * @param string                     $showRoute
      * @param array                      $showRouteParameters
      * @param array                      $queryParameters
+     * @param CheckboxHandlerInterface[] $checkboxHandlers
      * @param PaginatorInterface|null    $paginator
      */
     public function __construct(
-        array $checkboxHandlers,
+        string $resultsCountText,
         array $columnMetadataCollection,
         iterable $rowDataCollection,
         string $listRoute,
         string $showRoute,
         array $showRouteParameters,
         array $queryParameters,
+        array $checkboxHandlers,
         ?PaginatorInterface $paginator
     ) {
-        $this->checkboxHandlers = $checkboxHandlers;
+        $this->resultsCountText = $resultsCountText;
         $this->columnMetadataCollection = $columnMetadataCollection;
         $this->rowDataCollection = $rowDataCollection;
         $this->listRoute = $listRoute;
         $this->showRoute = $showRoute;
         $this->showRouteParameters = $showRouteParameters;
         $this->queryParameters = $queryParameters;
+        $this->checkboxHandlers = $checkboxHandlers;
         $this->paginator = $paginator;
     }
 
     /**
-     * @return bool
+     * @return string
      */
-    public function hasCheckboxColumn(): bool
+    public function getResultsCountText(): string
     {
-        return \count($this->checkboxHandlers) > 0;
-    }
-
-    /**
-     * @return CheckboxHandlerInterface[]
-     */
-    public function getCheckboxHandlers(): array
-    {
-        return $this->checkboxHandlers;
+        return $this->resultsCountText;
     }
 
     /**
@@ -122,22 +122,6 @@ final class TableMetadata implements TableMetadataInterface
     public function getRowDataCollection(): iterable
     {
         return $this->rowDataCollection;
-    }
-
-    /**
-     * @return bool
-     */
-    public function hasPaginator(): bool
-    {
-        return null !== $this->paginator;
-    }
-
-    /**
-     * @return PaginatorInterface
-     */
-    public function getPaginator(): PaginatorInterface
-    {
-        return $this->paginator;
     }
 
     /**
@@ -170,5 +154,37 @@ final class TableMetadata implements TableMetadataInterface
     public function getQueryParameters(): array
     {
         return $this->queryParameters;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasCheckboxColumn(): bool
+    {
+        return \count($this->checkboxHandlers) > 0;
+    }
+
+    /**
+     * @return CheckboxHandlerInterface[]
+     */
+    public function getCheckboxHandlers(): array
+    {
+        return $this->checkboxHandlers;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasPaginator(): bool
+    {
+        return null !== $this->paginator;
+    }
+
+    /**
+     * @return PaginatorInterface
+     */
+    public function getPaginator(): PaginatorInterface
+    {
+        return $this->paginator;
     }
 }

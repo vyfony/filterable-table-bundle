@@ -120,13 +120,14 @@ abstract class AbstractTableConfigurator implements TableConfiguratorInterface
         array $queryParameters
     ): TableMetadataInterface {
         return new TableMetadata(
-            $this->createCheckboxHandlers(),
+            $this->getResultsCountText(),
             $this->getColumnMetadataCollection($queryParameters),
             $rowDataCollection,
             $this->listRoute,
             $this->showRoute,
             $this->showRouteParameters,
             $queryParameters,
+            $this->createCheckboxHandlers(),
             $rowDataCollection instanceof DoctrinePaginator
                 ? $this->createPaginator($rowDataCollection, $queryParameters)
                 : null
@@ -144,6 +145,11 @@ abstract class AbstractTableConfigurator implements TableConfiguratorInterface
             'page' => '1',
         ];
     }
+
+    /**
+     * @return string
+     */
+    abstract protected function getResultsCountText(): string;
 
     /**
      * @return ColumnMetadataInterface[]
