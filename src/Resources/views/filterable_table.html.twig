@@ -1,5 +1,5 @@
 {% macro render_table(table) %}
-    <div>{{ table.resultsCountText|trans({count: table.rowDataCollection.count}) }}</div>
+    <div>{{ table.resultsCountText|trans({count: table.rowDataCollection|length}) }}</div>
     <table class="table table-striped table-sm" data-vyfony-filterable-table>
         <thead>
             <tr>
