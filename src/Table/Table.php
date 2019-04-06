@@ -16,12 +16,10 @@ namespace Vyfony\Bundle\FilterableTableBundle\Table;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\OptionsResolver\Exception\InvalidOptionsException;
 use Vyfony\Bundle\FilterableTableBundle\DataCollector\DataCollectorInterface;
 use Vyfony\Bundle\FilterableTableBundle\Filter\Configurator\FilterConfiguratorInterface;
-use Vyfony\Bundle\FilterableTableBundle\Form\Transformer\QueryParametersTransformerInterface;
+use Vyfony\Bundle\FilterableTableBundle\Form\Data\FormDataInterface;
 use Vyfony\Bundle\FilterableTableBundle\Form\Type\FilterableTableType;
 use Vyfony\Bundle\FilterableTableBundle\Table\Configurator\TableConfiguratorInterface;
 use Vyfony\Bundle\FilterableTableBundle\Table\Metadata\TableMetadataInterface;
@@ -31,11 +29,6 @@ use Vyfony\Bundle\FilterableTableBundle\Table\Metadata\TableMetadataInterface;
  */
 final class Table implements TableInterface
 {
-    /**
-     * @var Request
-     */
-    private $request;
-
     /**
      * @var DataCollectorInterface
      */
@@ -47,9 +40,9 @@ final class Table implements TableInterface
     private $formFactory;
 
     /**
-     * @var QueryParametersTransformerInterface
+     * @var FormDataInterface
      */
-    private $queryParametersTransformer;
+    private $formData;
 
     /**
      * @var TableConfiguratorInterface
@@ -72,27 +65,24 @@ final class Table implements TableInterface
     private $form;
 
     /**
-     * @param RequestStack                        $requestStack
-     * @param DataCollectorInterface              $dataCollector
-     * @param FormFactoryInterface                $formFactory
-     * @param QueryParametersTransformerInterface $queryParametersTransformer
-     * @param TableConfiguratorInterface          $tableConfigurator
-     * @param FilterConfiguratorInterface         $filterConfigurator
-     * @param string                              $entityClass
+     * @param DataCollectorInterface      $dataCollector
+     * @param FormFactoryInterface        $formFactory
+     * @param FormDataInterface           $formData
+     * @param TableConfiguratorInterface  $tableConfigurator
+     * @param FilterConfiguratorInterface $filterConfigurator
+     * @param string                      $entityClass
      */
     public function __construct(
-        RequestStack $requestStack,
         DataCollectorInterface $dataCollector,
         FormFactoryInterface $formFactory,
-        QueryParametersTransformerInterface $queryParametersTransformer,
+        FormDataInterface $formData,
         TableConfiguratorInterface $tableConfigurator,
         FilterConfiguratorInterface $filterConfigurator,
         string $entityClass
     ) {
-        $this->request = $requestStack->getCurrentRequest();
         $this->dataCollector = $dataCollector;
         $this->formFactory = $formFactory;
-        $this->queryParametersTransformer = $queryParametersTransformer;
+        $this->formData = $formData;
         $this->tableConfigurator = $tableConfigurator;
         $this->filterConfigurator = $filterConfigurator;
         $this->entityClass = $entityClass;
@@ -117,13 +107,10 @@ final class Table implements TableInterface
     {
         return $this->tableConfigurator->getTableMetadata(
             $this->dataCollector->getRowDataCollection(
-                $this->queryParametersTransformer->transformFormDataForDataCollection(
-                    $this->getForm()->getData(),
-                    $this->request->query->all()
-                ),
+                $this->formData->getForDataCollection($this->getForm()),
                 $this->entityClass
             ),
-            $this->getQueryParameters()
+            $this->formData->getQueryParameters($this->tableConfigurator, $this->filterConfigurator)
         );
     }
 
@@ -136,34 +123,14 @@ final class Table implements TableInterface
     {
         if (null === $this->form) {
             $this->form = $this->formFactory
-                ->create(FilterableTableType::class, $this->getDefaultQueryParameters())
-                ->submit(
-                    $this->queryParametersTransformer->transformQueryParametersForFormSubmission(
-                        $this->getQueryParameters(),
-                        $this->getDefaultQueryParameters()
-                    )
-                );
+                ->create(
+                    FilterableTableType::class,
+                    $this->formData->getDefaultQueryParameters($this->tableConfigurator, $this->filterConfigurator)
+                )
+                ->submit($this->formData->getForSubmission($this->tableConfigurator, $this->filterConfigurator))
+            ;
         }
 
         return $this->form;
-    }
-
-    /**
-     * @return array
-     */
-    private function getQueryParameters(): array
-    {
-        return array_merge($this->getDefaultQueryParameters(), $this->request->query->all());
-    }
-
-    /**
-     * @return array
-     */
-    private function getDefaultQueryParameters(): array
-    {
-        return array_merge(
-            $this->tableConfigurator->getDefaultTableParameters(),
-            $this->filterConfigurator->getDefaultTableParameters()
-        );
     }
 }

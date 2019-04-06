@@ -33,7 +33,7 @@ final class BooleanPropertyFilterRestriction extends AbstractFilterRestriction
      */
     public function buildWhereExpression(Expr $expressionBuilder, string $entityAlias): string
     {
-        return $expressionBuilder->eq($entityAlias.'.'.$this->getName(), $this->value);
+        return (string) $expressionBuilder->eq($entityAlias.'.'.$this->getName(), $this->value);
     }
 
     /**

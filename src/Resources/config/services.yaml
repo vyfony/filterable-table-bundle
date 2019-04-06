@@ -8,13 +8,20 @@ services:
 
   Vyfony\Bundle\FilterableTableBundle\DataCollector\DataCollectorInterface: '@vyfony_filterable_table.data_collector'
 
+  vyfony_filterable_table.form.data:
+    class: Vyfony\Bundle\FilterableTableBundle\Form\Data\FormData
+    arguments:
+      - '@request_stack'
+      - '@Vyfony\Bundle\FilterableTableBundle\Form\Transformer\QueryParametersTransformerInterface'
+
+  Vyfony\Bundle\FilterableTableBundle\Form\Data\FormDataInterface: '@vyfony_filterable_table.form.data'
+
   vyfony_filterable_table.table:
     class: Vyfony\Bundle\FilterableTableBundle\Table\Table
     arguments:
-      - '@request_stack'
       - '@Vyfony\Bundle\FilterableTableBundle\DataCollector\DataCollectorInterface'
       - '@form.factory'
-      - '@Vyfony\Bundle\FilterableTableBundle\Form\Transformer\QueryParametersTransformerInterface'
+      - '@Vyfony\Bundle\FilterableTableBundle\Form\Data\FormDataInterface'
       - ~
       - ~
       - ~

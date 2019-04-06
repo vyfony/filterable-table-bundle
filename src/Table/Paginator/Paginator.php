@@ -15,6 +15,9 @@ namespace Vyfony\Bundle\FilterableTableBundle\Table\Paginator;
 
 use Vyfony\Bundle\FilterableTableBundle\Table\Paginator\Page\PageInterface;
 
+/**
+ * @author Anton Dyshkant <vyshkant@gmail.com>
+ */
 final class Paginator implements PaginatorInterface
 {
     /**

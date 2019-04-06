@@ -81,7 +81,7 @@ final class FilterableTableType extends AbstractType
 
         $resetButtonOptions = $this->filterConfigurator->createResetButtonOptions();
 
-        if (!array_key_exists('attr', $resetButtonOptions)) {
+        if (!\array_key_exists('attr', $resetButtonOptions)) {
             $resetButtonOptions['attr'] = [];
         }
 

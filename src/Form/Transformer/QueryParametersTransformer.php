@@ -13,6 +13,9 @@ declare(strict_types=1);
 
 namespace Vyfony\Bundle\FilterableTableBundle\Form\Transformer;
 
+/**
+ * @author Anton Dyshkant <vyshkant@gmail.com>
+ */
 final class QueryParametersTransformer implements QueryParametersTransformerInterface
 {
     /**
@@ -25,7 +28,7 @@ final class QueryParametersTransformer implements QueryParametersTransformerInte
         array $queryParameters,
         array $defaultQueryParameters
     ): array {
-        if (array_key_exists('page', $defaultQueryParameters)) {
+        if (\array_key_exists('page', $defaultQueryParameters)) {
             $queryParameters['page'] = $defaultQueryParameters['page'];
         }
 
@@ -40,7 +43,7 @@ final class QueryParametersTransformer implements QueryParametersTransformerInte
      */
     public function transformFormDataForDataCollection(array $formData, array $requestParameters): array
     {
-        if (array_key_exists('page', $requestParameters)) {
+        if (\array_key_exists('page', $requestParameters)) {
             $formData['page'] = $requestParameters['page'];
         }
 

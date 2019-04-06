@@ -22,10 +22,10 @@ interface ExpressionBuilderInterface
 {
     /**
      * @param QueryBuilder $queryBuilder
-     * @param array        $formData
+     * @param mixed        $formData
      * @param string       $entityAlias
      *
      * @return string|null
      */
-    public function buildWhereExpression(QueryBuilder $queryBuilder, array $formData, string $entityAlias): ?string;
+    public function buildWhereExpression(QueryBuilder $queryBuilder, $formData, string $entityAlias): ?string;
 }

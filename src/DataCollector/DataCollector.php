@@ -83,9 +83,13 @@ final class DataCollector implements DataCollectorInterface
 
         foreach ($this->filterConfigurator->getFilterParameters() as $filterParameter) {
             if ($filterParameter instanceof ExpressionBuilderInterface
-                && array_key_exists($filterParameter->getQueryParameterName(), $formData)
+                && \array_key_exists($filterParameter->getQueryParameterName(), $formData)
             ) {
-                $whereArgument = $filterParameter->buildWhereExpression($queryBuilder, $formData, $entityAlias);
+                $whereArgument = $filterParameter->buildWhereExpression(
+                    $queryBuilder,
+                    $formData[$filterParameter->getQueryParameterName()],
+                    $entityAlias
+                );
 
                 if (null !== $whereArgument) {
                     $whereArguments[] = $whereArgument;
