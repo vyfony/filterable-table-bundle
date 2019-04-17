@@ -61,6 +61,7 @@ final class FilterableTableType extends AbstractType
             ->add('sortBy', HiddenType::class)
             ->add('sortOrder', HiddenType::class)
             ->add('page', HiddenType::class)
+            ->add('requestId', HiddenType::class, ['attr' => ['data-vyfony-filterable-table-request-id-input' => true]])
         ;
 
         foreach ($this->filterConfigurator->getFilterParameters() as $filterParameter) {
@@ -79,24 +80,14 @@ final class FilterableTableType extends AbstractType
             );
         }
 
-        $resetButtonOptions = $this->filterConfigurator->createResetButtonOptions();
-
-        if (!\array_key_exists('attr', $resetButtonOptions)) {
-            $resetButtonOptions['attr'] = [];
-        }
-
-        $resetButtonOptions['attr'] = array_merge(
-            $resetButtonOptions['attr'],
-            ['data-vyfony-filterable-table-reset-button' => true]
-        );
-
         $builder
             ->add('disablePagination', CheckboxType::class, [
                 'label' => $this->filterConfigurator->getDisablePaginationLabel(),
                 'required' => false,
             ])
             ->add('submit', SubmitType::class, $this->filterConfigurator->createSubmitButtonOptions())
-            ->add('reset', ButtonType::class, $resetButtonOptions)
+            ->add('reset', ButtonType::class, $this->getResetButtonOptions())
+            ->add('searchInFound', SubmitType::class, $this->getSearchInFoundButtonOptions())
         ;
     }
 
@@ -116,5 +107,46 @@ final class FilterableTableType extends AbstractType
     public function getBlockPrefix(): string
     {
         return '';
+    }
+
+    /**
+     * @return array
+     */
+    private function getResetButtonOptions(): array
+    {
+        $resetButtonOptions = $this->filterConfigurator->createResetButtonOptions();
+
+        if (!\array_key_exists('attr', $resetButtonOptions)) {
+            $resetButtonOptions['attr'] = [];
+        }
+
+        $resetButtonOptions['attr'] = array_merge(
+            $resetButtonOptions['attr'],
+            ['data-vyfony-filterable-table-reset-button' => true]
+        );
+
+        return $resetButtonOptions;
+    }
+
+    /**
+     * @return array
+     */
+    private function getSearchInFoundButtonOptions(): array
+    {
+        $searchInFoundButtonOptions = $this->filterConfigurator->createSearchInFoundButtonOptions();
+
+        if (!\array_key_exists('attr', $searchInFoundButtonOptions)) {
+            $searchInFoundButtonOptions['attr'] = [];
+        }
+
+        $searchInFoundButtonOptions['attr'] = array_merge(
+            $searchInFoundButtonOptions['attr'],
+            [
+                'style' => 'display: none',
+                'data-vyfony-filterable-table-search-in-found-button' => true,
+            ]
+        );
+
+        return $searchInFoundButtonOptions;
     }
 }

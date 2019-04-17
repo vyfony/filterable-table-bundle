@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Vyfony\Bundle\FilterableTableBundle\Table\Metadata;
 
+use Vyfony\Bundle\FilterableTableBundle\DataCollection\Result\DataCollectionResultInterface;
 use Vyfony\Bundle\FilterableTableBundle\Table\Checkbox\CheckboxHandlerInterface;
 use Vyfony\Bundle\FilterableTableBundle\Table\Metadata\Column\ColumnMetadataInterface;
 use Vyfony\Bundle\FilterableTableBundle\Table\Paginator\PaginatorInterface;
@@ -33,7 +34,7 @@ final class TableMetadata implements TableMetadataInterface
     private $columnMetadataCollection;
 
     /**
-     * @var iterable
+     * @var DataCollectionResultInterface
      */
     private $rowDataCollection;
 
@@ -68,20 +69,20 @@ final class TableMetadata implements TableMetadataInterface
     private $paginator;
 
     /**
-     * @param string                     $resultsCountText
-     * @param ColumnMetadataInterface[]  $columnMetadataCollection
-     * @param iterable                   $rowDataCollection
-     * @param string                     $listRoute
-     * @param string                     $showRoute
-     * @param array                      $showRouteParameters
-     * @param array                      $queryParameters
-     * @param CheckboxHandlerInterface[] $checkboxHandlers
-     * @param PaginatorInterface|null    $paginator
+     * @param string                        $resultsCountText
+     * @param ColumnMetadataInterface[]     $columnMetadataCollection
+     * @param DataCollectionResultInterface $rowDataCollection
+     * @param string                        $listRoute
+     * @param string                        $showRoute
+     * @param array                         $showRouteParameters
+     * @param array                         $queryParameters
+     * @param CheckboxHandlerInterface[]    $checkboxHandlers
+     * @param PaginatorInterface|null       $paginator
      */
     public function __construct(
         string $resultsCountText,
         array $columnMetadataCollection,
-        iterable $rowDataCollection,
+        DataCollectionResultInterface $rowDataCollection,
         string $listRoute,
         string $showRoute,
         array $showRouteParameters,
@@ -117,9 +118,9 @@ final class TableMetadata implements TableMetadataInterface
     }
 
     /**
-     * @return iterable
+     * @return DataCollectionResultInterface
      */
-    public function getRowDataCollection(): iterable
+    public function getRowDataCollection(): DataCollectionResultInterface
     {
         return $this->rowDataCollection;
     }

@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Vyfony\Bundle\FilterableTableBundle\Table\Metadata;
 
+use Vyfony\Bundle\FilterableTableBundle\DataCollection\Result\DataCollectionResultInterface;
 use Vyfony\Bundle\FilterableTableBundle\Table\Checkbox\CheckboxHandlerInterface;
 use Vyfony\Bundle\FilterableTableBundle\Table\Metadata\Column\ColumnMetadataInterface;
 use Vyfony\Bundle\FilterableTableBundle\Table\Paginator\PaginatorInterface;
@@ -33,9 +34,9 @@ interface TableMetadataInterface
     public function getColumnMetadataCollection(): array;
 
     /**
-     * @return iterable
+     * @return DataCollectionResultInterface
      */
-    public function getRowDataCollection(): iterable;
+    public function getRowDataCollection(): DataCollectionResultInterface;
 
     /**
      * @return string

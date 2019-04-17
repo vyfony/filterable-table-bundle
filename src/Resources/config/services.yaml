@@ -1,12 +1,16 @@
 services:
-  vyfony_filterable_table.data_collector:
-    class: Vyfony\Bundle\FilterableTableBundle\DataCollector\DataCollector
+  vyfony_filterable_table.cache:
+    class: Symfony\Component\Cache\Simple\FilesystemCache
+
+  vyfony_filterable_table.data_collection.data_collector:
+    class: Vyfony\Bundle\FilterableTableBundle\DataCollection\DataCollector
     arguments:
       - '@doctrine'
+      - '@vyfony_filterable_table.cache'
       - ~
       - ~
 
-  Vyfony\Bundle\FilterableTableBundle\DataCollector\DataCollectorInterface: '@vyfony_filterable_table.data_collector'
+  Vyfony\Bundle\FilterableTableBundle\DataCollection\DataCollectorInterface: '@vyfony_filterable_table.data_collection.data_collector'
 
   vyfony_filterable_table.form.data:
     class: Vyfony\Bundle\FilterableTableBundle\Form\Data\FormData
@@ -19,7 +23,7 @@ services:
   vyfony_filterable_table.table:
     class: Vyfony\Bundle\FilterableTableBundle\Table\Table
     arguments:
-      - '@Vyfony\Bundle\FilterableTableBundle\DataCollector\DataCollectorInterface'
+      - '@Vyfony\Bundle\FilterableTableBundle\DataCollection\DataCollectorInterface'
       - '@form.factory'
       - '@Vyfony\Bundle\FilterableTableBundle\Form\Data\FormDataInterface'
       - ~

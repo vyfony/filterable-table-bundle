@@ -49,7 +49,7 @@ final class ConfiguratorsPass implements CompilerPassInterface
         ;
 
         $container
-            ->getDefinition('vyfony_filterable_table.data_collector')
+            ->getDefinition('vyfony_filterable_table.data_collection.data_collector')
             ->setArgument('$filterConfigurator', $filterConfiguratorServiceDefinition)
             ->setArgument('$pageSize', $pageSize)
         ;

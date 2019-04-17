@@ -50,6 +50,11 @@ interface FilterConfiguratorInterface
     /**
      * @return array
      */
+    public function createSearchInFoundButtonOptions(): array;
+
+    /**
+     * @return array
+     */
     public function createDefaults(): array;
 
     /**
@@ -61,4 +66,11 @@ interface FilterConfiguratorInterface
      * @return string
      */
     public function getDisablePaginationLabel(): string;
+
+    /**
+     * @param mixed $entity
+     *
+     * @return mixed
+     */
+    public function getEntityId($entity);
 }

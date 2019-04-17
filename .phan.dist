@@ -83,7 +83,7 @@ return [
         'PhanTypeInvalidThrowsNonObject',
         'PhanTypeInvalidThrowsNonThrowable',
         'PhanTypeInvalidThrowsIsTrait',
-        'PhanTypeInvalidThrowsIsInterface',
+//        'PhanTypeInvalidThrowsIsInterface',
         'PhanTypeMagicVoidWithReturn',
         'PhanTypeMismatchArgument',
         'PhanTypeMismatchArgumentInternal',

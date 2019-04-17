@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Vyfony\Bundle\FilterableTableBundle\Table\Configurator;
 
+use Vyfony\Bundle\FilterableTableBundle\DataCollection\Result\DataCollectionResultInterface;
 use Vyfony\Bundle\FilterableTableBundle\Table\Metadata\TableMetadataInterface;
 
 /**
@@ -21,13 +22,13 @@ use Vyfony\Bundle\FilterableTableBundle\Table\Metadata\TableMetadataInterface;
 interface TableConfiguratorInterface
 {
     /**
-     * @param iterable $rowDataCollection
-     * @param array    $queryParameters
+     * @param DataCollectionResultInterface $dataCollectionResult
+     * @param array                         $queryParameters
      *
      * @return TableMetadataInterface
      */
     public function getTableMetadata(
-        iterable $rowDataCollection,
+        DataCollectionResultInterface $dataCollectionResult,
         array $queryParameters
     ): TableMetadataInterface;
 

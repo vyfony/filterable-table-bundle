@@ -13,9 +13,8 @@ declare(strict_types=1);
 
 namespace Vyfony\Bundle\FilterableTableBundle\Table\Configurator;
 
-use Countable;
-use Doctrine\ORM\Tools\Pagination\Paginator as DoctrinePaginator;
 use Symfony\Component\Routing\RouterInterface;
+use Vyfony\Bundle\FilterableTableBundle\DataCollection\Result\DataCollectionResultInterface;
 use Vyfony\Bundle\FilterableTableBundle\Filter\Configurator\FilterConfiguratorInterface;
 use Vyfony\Bundle\FilterableTableBundle\Table\Checkbox\CheckboxHandlerInterface;
 use Vyfony\Bundle\FilterableTableBundle\Table\Metadata\Column\ColumnMetadataInterface;
@@ -110,26 +109,26 @@ abstract class AbstractTableConfigurator implements TableConfiguratorInterface
     }
 
     /**
-     * @param iterable $rowDataCollection
-     * @param array    $queryParameters
+     * @param DataCollectionResultInterface $dataCollectionResult
+     * @param array                         $queryParameters
      *
      * @return TableMetadataInterface
      */
     public function getTableMetadata(
-        iterable $rowDataCollection,
+        DataCollectionResultInterface $dataCollectionResult,
         array $queryParameters
     ): TableMetadataInterface {
         return new TableMetadata(
             $this->getResultsCountText(),
             $this->getColumnMetadataCollection($queryParameters),
-            $rowDataCollection,
+            $dataCollectionResult,
             $this->listRoute,
             $this->showRoute,
             $this->showRouteParameters,
             $queryParameters,
             $this->createCheckboxHandlers(),
-            $rowDataCollection instanceof DoctrinePaginator
-                ? $this->createPaginator($rowDataCollection, $queryParameters)
+            $dataCollectionResult->getHasPagination()
+                ? $this->createPaginator($dataCollectionResult->getDataCount(), $queryParameters)
                 : null
         );
     }
@@ -231,14 +230,14 @@ abstract class AbstractTableConfigurator implements TableConfiguratorInterface
     }
 
     /**
-     * @param Countable $rows
-     * @param array     $queryParameters
+     * @param int   $totalRowsCount
+     * @param array $queryParameters
      *
      * @return PaginatorInterface
      */
-    private function createPaginator(Countable $rows, array $queryParameters): PaginatorInterface
+    private function createPaginator(int $totalRowsCount, array $queryParameters): PaginatorInterface
     {
-        $pagesCount = (int) ceil(\count($rows) / $this->pageSize);
+        $pagesCount = (int) ceil($totalRowsCount / $this->pageSize);
 
         $pages = array_fill(1, $pagesCount, null);
 
