@@ -86,7 +86,7 @@ abstract class AbstractTableConfigurator implements TableConfiguratorInterface
      * @param int                         $pageSize
      * @param int                         $paginatorTailLength
      */
-    final public function __construct(
+    public function __construct(
         RouterInterface $router,
         FilterConfiguratorInterface $filterConfigurator,
         string $defaultSortBy,
