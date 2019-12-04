@@ -13,13 +13,13 @@ declare(strict_types=1);
 
 namespace Vyfony\Bundle\FilterableTableBundle\DataCollection;
 
+use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Tools\Pagination\Paginator as DoctrinePaginator;
 use Psr\SimpleCache\CacheInterface;
 use Psr\SimpleCache\InvalidArgumentException;
 use RuntimeException;
-use Symfony\Bridge\Doctrine\RegistryInterface;
 use Vyfony\Bundle\FilterableTableBundle\DataCollection\Result\DataCollectionResult;
 use Vyfony\Bundle\FilterableTableBundle\DataCollection\Result\DataCollectionResultInterface;
 use Vyfony\Bundle\FilterableTableBundle\Filter\Configurator\FilterConfiguratorInterface;
@@ -31,7 +31,7 @@ use Vyfony\Bundle\FilterableTableBundle\Filter\Configurator\Parameter\Expression
 final class DataCollector implements DataCollectorInterface
 {
     /**
-     * @var RegistryInterface
+     * @var ManagerRegistry
      */
     private $doctrine;
 
@@ -51,7 +51,7 @@ final class DataCollector implements DataCollectorInterface
     private $pageSize;
 
     public function __construct(
-        RegistryInterface $registry,
+        ManagerRegistry $registry,
         CacheInterface $cache,
         FilterConfiguratorInterface $filterConfigurator,
         int $pageSize
