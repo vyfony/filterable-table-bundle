@@ -21,13 +21,7 @@ use Vyfony\Bundle\FilterableTableBundle\Table\Metadata\TableMetadataInterface;
  */
 interface TableInterface
 {
-    /**
-     * @return FormView
-     */
     public function getFormView(): FormView;
 
-    /**
-     * @return TableMetadataInterface
-     */
     public function getTableMetadata(): TableMetadataInterface;
 }

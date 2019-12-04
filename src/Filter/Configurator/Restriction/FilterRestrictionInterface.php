@@ -20,16 +20,7 @@ use Doctrine\ORM\Query\Expr;
  */
 interface FilterRestrictionInterface
 {
-    /**
-     * @return string
-     */
     public function getName(): string;
 
-    /**
-     * @param Expr   $expressionBuilder
-     * @param string $entityAlias
-     *
-     * @return string
-     */
     public function buildWhereExpression(Expr $expressionBuilder, string $entityAlias): string;
 }

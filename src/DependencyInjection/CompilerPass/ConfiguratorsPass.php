@@ -22,9 +22,6 @@ use Symfony\Component\Routing\RouterInterface;
  */
 final class ConfiguratorsPass implements CompilerPassInterface
 {
-    /**
-     * @param ContainerBuilder $container
-     */
     public function process(ContainerBuilder $container): void
     {
         $filterConfiguratorServiceId = $container->getParameter('vyfony_filterable_table.filter_configurator');

@@ -20,20 +20,9 @@ use Doctrine\ORM\EntityManager;
  */
 interface FilterParameterInterface
 {
-    /**
-     * @return string
-     */
     public function getQueryParameterName(): string;
 
-    /**
-     * @return string
-     */
     public function getType(): string;
 
-    /**
-     * @param EntityManager $entityManager
-     *
-     * @return array
-     */
     public function getOptions(EntityManager $entityManager): array;
 }

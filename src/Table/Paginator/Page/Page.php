@@ -28,27 +28,17 @@ final class Page implements PageInterface
      */
     private $url;
 
-    /**
-     * @param int    $index
-     * @param string $url
-     */
     public function __construct(int $index, string $url)
     {
         $this->index = $index;
         $this->url = $url;
     }
 
-    /**
-     * @return int
-     */
     public function getIndex(): int
     {
         return $this->index;
     }
 
-    /**
-     * @return string
-     */
     public function getUrl(): string
     {
         return $this->url;

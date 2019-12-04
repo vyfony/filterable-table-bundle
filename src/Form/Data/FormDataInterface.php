@@ -22,41 +22,18 @@ use Vyfony\Bundle\FilterableTableBundle\Table\Configurator\TableConfiguratorInte
  */
 interface FormDataInterface
 {
-    /**
-     * @param TableConfiguratorInterface  $tableConfigurator
-     * @param FilterConfiguratorInterface $filterConfigurator
-     *
-     * @return array
-     */
     public function getForSubmission(
         TableConfiguratorInterface $tableConfigurator,
         FilterConfiguratorInterface $filterConfigurator
     ): array;
 
-    /**
-     * @param FormInterface $form
-     *
-     * @return array
-     */
     public function getForDataCollection(FormInterface $form): array;
 
-    /**
-     * @param TableConfiguratorInterface  $tableConfigurator
-     * @param FilterConfiguratorInterface $filterConfigurator
-     *
-     * @return array
-     */
     public function getQueryParameters(
         TableConfiguratorInterface $tableConfigurator,
         FilterConfiguratorInterface $filterConfigurator
     ): array;
 
-    /**
-     * @param TableConfiguratorInterface  $tableConfigurator
-     * @param FilterConfiguratorInterface $filterConfigurator
-     *
-     * @return array
-     */
     public function getDefaultQueryParameters(
         TableConfiguratorInterface $tableConfigurator,
         FilterConfiguratorInterface $filterConfigurator

@@ -24,8 +24,6 @@ abstract class AbstractFilterRestriction implements FilterRestrictionInterface
     private $name;
 
     /**
-     * @param string $name
-     *
      * @return AbstractFilterRestriction
      */
     public function setName(string $name): self
@@ -35,9 +33,6 @@ abstract class AbstractFilterRestriction implements FilterRestrictionInterface
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getName(): string
     {
         return $this->name;

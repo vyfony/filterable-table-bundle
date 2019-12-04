@@ -73,9 +73,6 @@ abstract class AbstractFilterConfigurator implements FilterConfiguratorInterface
         return $this->tableParameters;
     }
 
-    /**
-     * @return array
-     */
     final public function getDefaultTableParameters(): array
     {
         $defaultTableParameters = [];

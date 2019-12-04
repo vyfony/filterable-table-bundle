@@ -20,18 +20,9 @@ use Vyfony\Bundle\FilterableTableBundle\Table\Metadata\Column\ColumnMetadataInte
  */
 interface RadioOptionInterface
 {
-    /**
-     * @return string
-     */
     public function getName(): string;
 
-    /**
-     * @return string
-     */
     public function getLabel(): string;
 
-    /**
-     * @return ColumnMetadataInterface
-     */
     public function getColumnMetadata(): ColumnMetadataInterface;
 }

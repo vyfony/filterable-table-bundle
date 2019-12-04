@@ -20,13 +20,6 @@ use Vyfony\Bundle\FilterableTableBundle\DataCollection\Result\DataCollectionResu
  */
 interface DataCollectorInterface
 {
-    /**
-     * @param array    $formData
-     * @param string   $entityClass
-     * @param callable $entityIdGetter
-     *
-     * @return DataCollectionResultInterface
-     */
     public function getRowDataCollection(
         array $formData,
         string $entityClass,

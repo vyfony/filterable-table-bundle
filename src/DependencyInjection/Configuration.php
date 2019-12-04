@@ -21,15 +21,12 @@ use Symfony\Component\Config\Definition\ConfigurationInterface;
  */
 final class Configuration implements ConfigurationInterface
 {
-    /**
-     * @return TreeBuilder
-     */
     public function getConfigTreeBuilder(): TreeBuilder
     {
-        $treeBuilder = new TreeBuilder();
+        $treeBuilder = new TreeBuilder('vyfony_filterable_table');
 
         $treeBuilder
-            ->root('vyfony_filterable_table')
+            ->getRootNode()
                 ->children()
                     ->scalarNode('table_configurator')->isRequired()->cannotBeEmpty()->end()
                     ->scalarNode('filter_configurator')->isRequired()->cannotBeEmpty()->end()

@@ -22,14 +22,9 @@ use Vyfony\Bundle\FilterableTableBundle\Table\Metadata\Column\ColumnMetadataInte
 interface TableParameterInterface extends FilterParameterInterface
 {
     /**
-     * @param array $queryParameters
-     *
      * @return ColumnMetadataInterface[]
      */
     public function getColumnMetadataCollection(array $queryParameters): array;
 
-    /**
-     * @return string
-     */
     public function getDefaultValue(): string;
 }

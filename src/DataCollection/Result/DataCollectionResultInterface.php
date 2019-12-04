@@ -18,23 +18,11 @@ namespace Vyfony\Bundle\FilterableTableBundle\DataCollection\Result;
  */
 interface DataCollectionResultInterface
 {
-    /**
-     * @return iterable
-     */
     public function getData(): iterable;
 
-    /**
-     * @return int
-     */
     public function getDataCount(): int;
 
-    /**
-     * @return bool
-     */
     public function getHasPagination(): bool;
 
-    /**
-     * @return string
-     */
     public function getRequestId(): string;
 }

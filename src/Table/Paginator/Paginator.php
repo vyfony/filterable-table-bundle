@@ -36,8 +36,6 @@ final class Paginator implements PaginatorInterface
     private $pages;
 
     /**
-     * @param int                   $tailLength
-     * @param int                   $currentPageIndex
      * @param array|PageInterface[] $pages
      */
     public function __construct(
@@ -50,9 +48,6 @@ final class Paginator implements PaginatorInterface
         $this->pages = $pages;
     }
 
-    /**
-     * @return int
-     */
     public function getCurrentPageIndex(): int
     {
         return $this->currentPageIndex;
@@ -86,11 +81,6 @@ final class Paginator implements PaginatorInterface
         });
     }
 
-    /**
-     * @param PageInterface $page
-     *
-     * @return bool
-     */
     public function isPageCurrent(PageInterface $page): bool
     {
         return $page->getIndex() === $this->currentPageIndex;

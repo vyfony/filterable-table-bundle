@@ -18,18 +18,9 @@ namespace Vyfony\Bundle\FilterableTableBundle\Table\Checkbox;
  */
 interface CheckboxHandlerInterface
 {
-    /**
-     * @return string
-     */
     public function getRouteName(): string;
 
-    /**
-     * @return string
-     */
     public function getLabel(): string;
 
-    /**
-     * @return string
-     */
     public function getEmptySelectionErrorText(): string;
 }

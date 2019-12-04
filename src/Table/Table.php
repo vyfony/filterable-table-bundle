@@ -64,14 +64,6 @@ final class Table implements TableInterface
      */
     private $form;
 
-    /**
-     * @param DataCollectorInterface      $dataCollector
-     * @param FormFactoryInterface        $formFactory
-     * @param FormDataInterface           $formData
-     * @param TableConfiguratorInterface  $tableConfigurator
-     * @param FilterConfiguratorInterface $filterConfigurator
-     * @param string                      $entityClass
-     */
     public function __construct(
         DataCollectorInterface $dataCollector,
         FormFactoryInterface $formFactory,
@@ -90,8 +82,6 @@ final class Table implements TableInterface
 
     /**
      * @throws InvalidOptionsException
-     *
-     * @return FormView
      */
     public function getFormView(): FormView
     {
@@ -100,8 +90,6 @@ final class Table implements TableInterface
 
     /**
      * @throws InvalidOptionsException
-     *
-     * @return TableMetadataInterface
      */
     public function getTableMetadata(): TableMetadataInterface
     {
@@ -121,8 +109,6 @@ final class Table implements TableInterface
 
     /**
      * @throws InvalidOptionsException
-     *
-     * @return FormInterface
      */
     private function getForm(): FormInterface
     {

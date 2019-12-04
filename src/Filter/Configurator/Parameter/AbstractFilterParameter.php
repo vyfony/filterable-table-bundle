@@ -40,19 +40,11 @@ abstract class AbstractFilterParameter implements FilterParameterInterface
      */
     private $cssClasses = [];
 
-    /**
-     * @return string
-     */
     final public function getQueryParameterName(): string
     {
         return $this->queryParameterName;
     }
 
-    /**
-     * @param EntityManager $entityManager
-     *
-     * @return array
-     */
     final public function getOptions(EntityManager $entityManager): array
     {
         if (null === $this->options) {
@@ -63,8 +55,6 @@ abstract class AbstractFilterParameter implements FilterParameterInterface
     }
 
     /**
-     * @param string $queryParameterName
-     *
      * @return AbstractFilterParameter
      */
     final public function setQueryParameterName(string $queryParameterName): self
@@ -75,8 +65,6 @@ abstract class AbstractFilterParameter implements FilterParameterInterface
     }
 
     /**
-     * @param string $label
-     *
      * @return AbstractFilterParameter
      */
     final public function setLabel(string $label): self
@@ -87,8 +75,6 @@ abstract class AbstractFilterParameter implements FilterParameterInterface
     }
 
     /**
-     * @param string $cssClass
-     *
      * @return AbstractFilterParameter
      */
     final public function addCssClass(string $cssClass): self
@@ -98,11 +84,6 @@ abstract class AbstractFilterParameter implements FilterParameterInterface
         return $this;
     }
 
-    /**
-     * @param EntityManager $entityManager
-     *
-     * @return array
-     */
     protected function createOptions(EntityManager $entityManager): array
     {
         return [

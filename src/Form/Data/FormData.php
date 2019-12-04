@@ -34,10 +34,6 @@ final class FormData implements FormDataInterface
      */
     private $queryParametersTransformer;
 
-    /**
-     * @param RequestStack                        $requestStack
-     * @param QueryParametersTransformerInterface $queryParametersTransformer
-     */
     public function __construct(
         RequestStack $requestStack,
         QueryParametersTransformerInterface $queryParametersTransformer
@@ -46,12 +42,6 @@ final class FormData implements FormDataInterface
         $this->queryParametersTransformer = $queryParametersTransformer;
     }
 
-    /**
-     * @param TableConfiguratorInterface  $tableConfigurator
-     * @param FilterConfiguratorInterface $filterConfigurator
-     *
-     * @return array
-     */
     public function getForSubmission(
         TableConfiguratorInterface $tableConfigurator,
         FilterConfiguratorInterface $filterConfigurator
@@ -62,11 +52,6 @@ final class FormData implements FormDataInterface
         );
     }
 
-    /**
-     * @param FormInterface $form
-     *
-     * @return array
-     */
     public function getForDataCollection(FormInterface $form): array
     {
         return $this->queryParametersTransformer->transformFormDataForDataCollection(
@@ -75,12 +60,6 @@ final class FormData implements FormDataInterface
         );
     }
 
-    /**
-     * @param TableConfiguratorInterface  $tableConfigurator
-     * @param FilterConfiguratorInterface $filterConfigurator
-     *
-     * @return array
-     */
     public function getQueryParameters(
         TableConfiguratorInterface $tableConfigurator,
         FilterConfiguratorInterface $filterConfigurator
@@ -91,12 +70,6 @@ final class FormData implements FormDataInterface
         );
     }
 
-    /**
-     * @param TableConfiguratorInterface  $tableConfigurator
-     * @param FilterConfiguratorInterface $filterConfigurator
-     *
-     * @return array
-     */
     public function getDefaultQueryParameters(
         TableConfiguratorInterface $tableConfigurator,
         FilterConfiguratorInterface $filterConfigurator
