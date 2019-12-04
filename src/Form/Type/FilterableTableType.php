@@ -39,10 +39,6 @@ final class FilterableTableType extends AbstractType
      */
     private $entityManager;
 
-    /**
-     * @param FilterConfiguratorInterface $filterConfigurator
-     * @param EntityManager               $entityManager
-     */
     public function __construct(
         FilterConfiguratorInterface $filterConfigurator,
         EntityManager $entityManager
@@ -51,10 +47,6 @@ final class FilterableTableType extends AbstractType
         $this->entityManager = $entityManager;
     }
 
-    /**
-     * @param FormBuilderInterface $builder
-     * @param array                $options
-     */
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
@@ -92,8 +84,6 @@ final class FilterableTableType extends AbstractType
     }
 
     /**
-     * @param OptionsResolver $resolver
-     *
      * @throws AccessException
      */
     public function configureOptions(OptionsResolver $resolver): void
@@ -101,17 +91,11 @@ final class FilterableTableType extends AbstractType
         $resolver->setDefaults($this->filterConfigurator->createDefaults());
     }
 
-    /**
-     * @return string
-     */
     public function getBlockPrefix(): string
     {
         return '';
     }
 
-    /**
-     * @return array
-     */
     private function getResetButtonOptions(): array
     {
         $resetButtonOptions = $this->filterConfigurator->createResetButtonOptions();
@@ -128,9 +112,6 @@ final class FilterableTableType extends AbstractType
         return $resetButtonOptions;
     }
 
-    /**
-     * @return array
-     */
     private function getSearchInFoundButtonOptions(): array
     {
         $searchInFoundButtonOptions = $this->filterConfigurator->createSearchInFoundButtonOptions();

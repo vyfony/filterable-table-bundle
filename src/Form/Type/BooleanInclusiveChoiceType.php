@@ -24,17 +24,10 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 final class BooleanInclusiveChoiceType extends AbstractType
 {
-    /**
-     * @param FormBuilderInterface $builder
-     * @param array                $options
-     */
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
     }
 
-    /**
-     * @param OptionsResolver $resolver
-     */
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
@@ -55,17 +48,11 @@ final class BooleanInclusiveChoiceType extends AbstractType
         });
     }
 
-    /**
-     * @return string
-     */
     public function getParent(): string
     {
         return ChoiceType::class;
     }
 
-    /**
-     * @return string
-     */
     public function getBlockPrefix(): string
     {
         return 'boolean_inclusive';

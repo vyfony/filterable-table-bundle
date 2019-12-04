@@ -21,11 +21,6 @@ use Vyfony\Bundle\FilterableTableBundle\Filter\Configurator\Parameter\AbstractFi
  */
 abstract class AbstractTableParameter extends AbstractFilterParameter implements TableParameterInterface
 {
-    /**
-     * @param EntityManager $entityManager
-     *
-     * @return array
-     */
     protected function createOptions(EntityManager $entityManager): array
     {
         return array_merge(parent::createOptions($entityManager), [

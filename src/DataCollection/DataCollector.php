@@ -50,12 +50,6 @@ final class DataCollector implements DataCollectorInterface
      */
     private $pageSize;
 
-    /**
-     * @param RegistryInterface           $registry
-     * @param CacheInterface              $cache
-     * @param FilterConfiguratorInterface $filterConfigurator
-     * @param int                         $pageSize
-     */
     public function __construct(
         RegistryInterface $registry,
         CacheInterface $cache,
@@ -69,13 +63,7 @@ final class DataCollector implements DataCollectorInterface
     }
 
     /**
-     * @param array    $formData
-     * @param string   $entityClass
-     * @param callable $entityIdGetter
-     *
      * @throws InvalidArgumentException
-     *
-     * @return DataCollectionResultInterface
      */
     public function getRowDataCollection(
         array $formData,
@@ -148,6 +136,7 @@ final class DataCollector implements DataCollectorInterface
 
         return new DataCollectionResult(
             $matchingEntitiesPaginator,
+            // todo this call is REALLY expensive
             \count($matchingEntitiesPaginator),
             true,
             $requestId
@@ -155,11 +144,7 @@ final class DataCollector implements DataCollectorInterface
     }
 
     /**
-     * @param array $formData
-     *
      * @throws InvalidArgumentException
-     *
-     * @return string
      */
     private function saveFormDataToCache(array $formData): string
     {
@@ -174,8 +159,6 @@ final class DataCollector implements DataCollectorInterface
      * @param $requestId
      *
      * @throws InvalidArgumentException
-     *
-     * @return array
      */
     private function getFormDataFromCache(string $requestId): array
     {
@@ -183,11 +166,6 @@ final class DataCollector implements DataCollectorInterface
     }
 
     /**
-     * @param array        $formData
-     * @param QueryBuilder $queryBuilder
-     * @param string       $entityAlias
-     * @param array        $filterParametersByQueryParameterName
-     *
      * @return string[]
      */
     private function handleFromData(
@@ -220,11 +198,7 @@ final class DataCollector implements DataCollectorInterface
     }
 
     /**
-     * @param array $formData
-     *
      * @throws InvalidArgumentException
-     *
-     * @return array|null
      */
     private function getPreviousRequestFormData(array $formData): ?array
     {
@@ -236,8 +210,6 @@ final class DataCollector implements DataCollectorInterface
     }
 
     /**
-     * @param array $formData
-     *
      * @throws InvalidArgumentException
      *
      * @return array[]

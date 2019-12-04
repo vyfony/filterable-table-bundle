@@ -29,8 +29,6 @@ final class RadioColumnChoiceTableParameter extends AbstractTableParameter
     private $radioOptions = [];
 
     /**
-     * @param RadioOptionInterface $radioOption
-     *
      * @return RadioColumnChoiceTableParameter
      */
     public function addRadioOption(RadioOptionInterface $radioOption): self
@@ -40,17 +38,12 @@ final class RadioColumnChoiceTableParameter extends AbstractTableParameter
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getType(): string
     {
         return ChoiceType::class;
     }
 
     /**
-     * @param array $queryParameters
-     *
      * @return ColumnMetadataInterface[]
      */
     public function getColumnMetadataCollection(array $queryParameters): array
@@ -58,9 +51,6 @@ final class RadioColumnChoiceTableParameter extends AbstractTableParameter
         return [$this->radioOptions[$queryParameters[$this->getQueryParameterName()]]->getColumnMetadata()];
     }
 
-    /**
-     * @return string
-     */
     public function getDefaultValue(): string
     {
         reset($this->radioOptions);
@@ -68,11 +58,6 @@ final class RadioColumnChoiceTableParameter extends AbstractTableParameter
         return key($this->radioOptions);
     }
 
-    /**
-     * @param EntityManager $entityManager
-     *
-     * @return array
-     */
     protected function createOptions(EntityManager $entityManager): array
     {
         $choices = [];

@@ -23,9 +23,6 @@ use Vyfony\Bundle\FilterableTableBundle\Table\Paginator\PaginatorInterface;
  */
 interface TableMetadataInterface
 {
-    /**
-     * @return string
-     */
     public function getResultsCountText(): string;
 
     /**
@@ -33,34 +30,16 @@ interface TableMetadataInterface
      */
     public function getColumnMetadataCollection(): array;
 
-    /**
-     * @return DataCollectionResultInterface
-     */
     public function getRowDataCollection(): DataCollectionResultInterface;
 
-    /**
-     * @return string
-     */
     public function getListRoute(): string;
 
-    /**
-     * @return string
-     */
     public function getShowRoute(): string;
 
-    /**
-     * @return array
-     */
     public function getShowRouteParameters(): array;
 
-    /**
-     * @return array
-     */
     public function getQueryParameters(): array;
 
-    /**
-     * @return bool
-     */
     public function hasCheckboxColumn(): bool;
 
     /**
@@ -68,13 +47,7 @@ interface TableMetadataInterface
      */
     public function getCheckboxHandlers(): array;
 
-    /**
-     * @return bool
-     */
     public function hasPaginator(): bool;
 
-    /**
-     * @return PaginatorInterface
-     */
-    public function getPaginator(): PaginatorInterface;
+    public function getPaginator(): ?PaginatorInterface;
 }

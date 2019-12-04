@@ -75,17 +75,6 @@ abstract class AbstractTableConfigurator implements TableConfiguratorInterface
      */
     private $paginatorTailLength;
 
-    /**
-     * @param RouterInterface             $router
-     * @param FilterConfiguratorInterface $filterConfigurator
-     * @param string                      $defaultSortBy
-     * @param string                      $defaultSortOrder
-     * @param string                      $listRoute
-     * @param string                      $showRoute
-     * @param array                       $showRouteParameters
-     * @param int                         $pageSize
-     * @param int                         $paginatorTailLength
-     */
     public function __construct(
         RouterInterface $router,
         FilterConfiguratorInterface $filterConfigurator,
@@ -108,12 +97,6 @@ abstract class AbstractTableConfigurator implements TableConfiguratorInterface
         $this->paginatorTailLength = $paginatorTailLength;
     }
 
-    /**
-     * @param DataCollectionResultInterface $dataCollectionResult
-     * @param array                         $queryParameters
-     *
-     * @return TableMetadataInterface
-     */
     public function getTableMetadata(
         DataCollectionResultInterface $dataCollectionResult,
         array $queryParameters
@@ -133,9 +116,6 @@ abstract class AbstractTableConfigurator implements TableConfiguratorInterface
         );
     }
 
-    /**
-     * @return array
-     */
     public function getDefaultTableParameters(): array
     {
         return [
@@ -145,9 +125,6 @@ abstract class AbstractTableConfigurator implements TableConfiguratorInterface
         ];
     }
 
-    /**
-     * @return string
-     */
     abstract protected function getResultsCountText(): string;
 
     /**
@@ -161,8 +138,6 @@ abstract class AbstractTableConfigurator implements TableConfiguratorInterface
     abstract protected function createCheckboxHandlers(): array;
 
     /**
-     * @param array $queryParameters
-     *
      * @return ColumnMetadataInterface[]
      */
     private function getColumnMetadataCollection(array $queryParameters): array
@@ -178,8 +153,6 @@ abstract class AbstractTableConfigurator implements TableConfiguratorInterface
     }
 
     /**
-     * @param array $queryParameters
-     *
      * @return ColumnMetadataInterface[]
      */
     private function createFilterDependentColumnMetadataCollection(array $queryParameters): array
@@ -199,7 +172,6 @@ abstract class AbstractTableConfigurator implements TableConfiguratorInterface
 
     /**
      * @param ColumnMetadataInterface[] $columnMetadataCollection
-     * @param array                     $queryParameters
      */
     private function applySortParameters(array $columnMetadataCollection, array $queryParameters): void
     {
@@ -212,12 +184,6 @@ abstract class AbstractTableConfigurator implements TableConfiguratorInterface
         }
     }
 
-    /**
-     * @param string $columnName
-     * @param array  $formData
-     *
-     * @return array
-     */
     private function createSortParametersForColumn(string $columnName, array $formData): array
     {
         $sortBy = $columnName;
@@ -229,12 +195,6 @@ abstract class AbstractTableConfigurator implements TableConfiguratorInterface
         return $formData;
     }
 
-    /**
-     * @param int   $totalRowsCount
-     * @param array $queryParameters
-     *
-     * @return PaginatorInterface
-     */
     private function createPaginator(int $totalRowsCount, array $queryParameters): PaginatorInterface
     {
         $pagesCount = (int) ceil($totalRowsCount / $this->pageSize);
@@ -248,12 +208,6 @@ abstract class AbstractTableConfigurator implements TableConfiguratorInterface
         return new Paginator($this->paginatorTailLength, (int) $queryParameters['page'], $pages);
     }
 
-    /**
-     * @param int   $pageIndex
-     * @param array $formData
-     *
-     * @return PageInterface
-     */
     private function createPage(int $pageIndex, array $formData): PageInterface
     {
         $formData['page'] = (string) $pageIndex;

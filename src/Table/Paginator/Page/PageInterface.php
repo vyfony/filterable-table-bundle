@@ -18,13 +18,7 @@ namespace Vyfony\Bundle\FilterableTableBundle\Table\Paginator\Page;
  */
 interface PageInterface
 {
-    /**
-     * @return int
-     */
     public function getIndex(): int;
 
-    /**
-     * @return string
-     */
     public function getUrl(): string;
 }

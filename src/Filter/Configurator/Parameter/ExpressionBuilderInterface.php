@@ -21,11 +21,7 @@ use Doctrine\ORM\QueryBuilder;
 interface ExpressionBuilderInterface
 {
     /**
-     * @param QueryBuilder $queryBuilder
-     * @param mixed        $formData
-     * @param string       $entityAlias
-     *
-     * @return string|null
+     * @param mixed $formData
      */
     public function buildWhereExpression(QueryBuilder $queryBuilder, $formData, string $entityAlias): ?string;
 }

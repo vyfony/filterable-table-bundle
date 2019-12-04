@@ -20,9 +20,6 @@ use Vyfony\Bundle\FilterableTableBundle\Table\Paginator\Page\PageInterface;
  */
 interface PaginatorInterface
 {
-    /**
-     * @return int
-     */
     public function getCurrentPageIndex(): int;
 
     /**
@@ -35,10 +32,5 @@ interface PaginatorInterface
      */
     public function getVisiblePages(): array;
 
-    /**
-     * @param PageInterface $page
-     *
-     * @return bool
-     */
     public function isPageCurrent(PageInterface $page): bool;
 }

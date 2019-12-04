@@ -21,19 +21,10 @@ use Vyfony\Bundle\FilterableTableBundle\Table\Metadata\TableMetadataInterface;
  */
 interface TableConfiguratorInterface
 {
-    /**
-     * @param DataCollectionResultInterface $dataCollectionResult
-     * @param array                         $queryParameters
-     *
-     * @return TableMetadataInterface
-     */
     public function getTableMetadata(
         DataCollectionResultInterface $dataCollectionResult,
         array $queryParameters
     ): TableMetadataInterface;
 
-    /**
-     * @return array
-     */
     public function getDefaultTableParameters(): array;
 }

@@ -25,9 +25,6 @@ use Symfony\Component\HttpKernel\DependencyInjection\ConfigurableExtension;
 final class VyfonyFilterableTableExtension extends ConfigurableExtension
 {
     /**
-     * @param array            $mergedConfig
-     * @param ContainerBuilder $container
-     *
      * @throws Exception
      */
     protected function loadInternal(array $mergedConfig, ContainerBuilder $container): void

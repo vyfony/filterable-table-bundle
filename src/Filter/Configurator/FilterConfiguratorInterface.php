@@ -37,34 +37,16 @@ interface FilterConfiguratorInterface
      */
     public function getTableParameters(): array;
 
-    /**
-     * @return array
-     */
     public function createSubmitButtonOptions(): array;
 
-    /**
-     * @return array
-     */
     public function createResetButtonOptions(): array;
 
-    /**
-     * @return array
-     */
     public function createSearchInFoundButtonOptions(): array;
 
-    /**
-     * @return array
-     */
     public function createDefaults(): array;
 
-    /**
-     * @return array
-     */
     public function getDefaultTableParameters(): array;
 
-    /**
-     * @return string
-     */
     public function getDisablePaginationLabel(): string;
 
     /**

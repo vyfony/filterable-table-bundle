@@ -64,20 +64,13 @@ final class TableMetadata implements TableMetadataInterface
     private $checkboxHandlers;
 
     /**
-     * @var PaginatorInterface
+     * @var PaginatorInterface|null
      */
     private $paginator;
 
     /**
-     * @param string                        $resultsCountText
-     * @param ColumnMetadataInterface[]     $columnMetadataCollection
-     * @param DataCollectionResultInterface $rowDataCollection
-     * @param string                        $listRoute
-     * @param string                        $showRoute
-     * @param array                         $showRouteParameters
-     * @param array                         $queryParameters
-     * @param CheckboxHandlerInterface[]    $checkboxHandlers
-     * @param PaginatorInterface|null       $paginator
+     * @param ColumnMetadataInterface[]  $columnMetadataCollection
+     * @param CheckboxHandlerInterface[] $checkboxHandlers
      */
     public function __construct(
         string $resultsCountText,
@@ -101,9 +94,6 @@ final class TableMetadata implements TableMetadataInterface
         $this->paginator = $paginator;
     }
 
-    /**
-     * @return string
-     */
     public function getResultsCountText(): string
     {
         return $this->resultsCountText;
@@ -117,49 +107,31 @@ final class TableMetadata implements TableMetadataInterface
         return $this->columnMetadataCollection;
     }
 
-    /**
-     * @return DataCollectionResultInterface
-     */
     public function getRowDataCollection(): DataCollectionResultInterface
     {
         return $this->rowDataCollection;
     }
 
-    /**
-     * @return string
-     */
     public function getListRoute(): string
     {
         return $this->listRoute;
     }
 
-    /**
-     * @return string
-     */
     public function getShowRoute(): string
     {
         return $this->showRoute;
     }
 
-    /**
-     * @return array
-     */
     public function getShowRouteParameters(): array
     {
         return $this->showRouteParameters;
     }
 
-    /**
-     * @return array
-     */
     public function getQueryParameters(): array
     {
         return $this->queryParameters;
     }
 
-    /**
-     * @return bool
-     */
     public function hasCheckboxColumn(): bool
     {
         return \count($this->checkboxHandlers) > 0;
@@ -173,18 +145,12 @@ final class TableMetadata implements TableMetadataInterface
         return $this->checkboxHandlers;
     }
 
-    /**
-     * @return bool
-     */
     public function hasPaginator(): bool
     {
         return null !== $this->paginator;
     }
 
-    /**
-     * @return PaginatorInterface
-     */
-    public function getPaginator(): PaginatorInterface
+    public function getPaginator(): ?PaginatorInterface
     {
         return $this->paginator;
     }

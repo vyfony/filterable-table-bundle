@@ -18,22 +18,10 @@ namespace Vyfony\Bundle\FilterableTableBundle\Form\Transformer;
  */
 interface QueryParametersTransformerInterface
 {
-    /**
-     * @param array $queryParameters
-     * @param array $defaultQueryParameters
-     *
-     * @return array
-     */
     public function transformQueryParametersForFormSubmission(
         array $queryParameters,
         array $defaultQueryParameters
     ): array;
 
-    /**
-     * @param array $formData
-     * @param array $requestParameters
-     *
-     * @return array
-     */
     public function transformFormDataForDataCollection(array $formData, array $requestParameters): array;
 }

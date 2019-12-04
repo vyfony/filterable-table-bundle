@@ -38,12 +38,6 @@ final class DataCollectionResult implements DataCollectionResultInterface
      */
     private $requestId;
 
-    /**
-     * @param iterable $data
-     * @param int      $dataCount
-     * @param bool     $hasPagination
-     * @param string   $requestId
-     */
     public function __construct(iterable $data, int $dataCount, bool $hasPagination, string $requestId)
     {
         $this->data = $data;
@@ -52,33 +46,21 @@ final class DataCollectionResult implements DataCollectionResultInterface
         $this->requestId = $requestId;
     }
 
-    /**
-     * @return iterable
-     */
     public function getData(): iterable
     {
         return $this->data;
     }
 
-    /**
-     * @return int
-     */
     public function getDataCount(): int
     {
         return $this->dataCount;
     }
 
-    /**
-     * @return bool
-     */
     public function getHasPagination(): bool
     {
         return $this->hasPagination;
     }
 
-    /**
-     * @return string
-     */
     public function getRequestId(): string
     {
         return $this->requestId;

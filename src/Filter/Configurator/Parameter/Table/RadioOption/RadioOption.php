@@ -35,17 +35,12 @@ final class RadioOption implements RadioOptionInterface
      */
     private $columnMetadata;
 
-    /**
-     * @return string
-     */
     public function getName(): string
     {
         return $this->name;
     }
 
     /**
-     * @param string $name
-     *
      * @return RadioOption
      */
     public function setName(string $name): self
@@ -55,17 +50,12 @@ final class RadioOption implements RadioOptionInterface
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getLabel(): string
     {
         return $this->label;
     }
 
     /**
-     * @param string $label
-     *
      * @return RadioOption
      */
     public function setLabel(string $label): self
@@ -75,17 +65,12 @@ final class RadioOption implements RadioOptionInterface
         return $this;
     }
 
-    /**
-     * @return ColumnMetadataInterface
-     */
     public function getColumnMetadata(): ColumnMetadataInterface
     {
         return $this->columnMetadata;
     }
 
     /**
-     * @param ColumnMetadataInterface $columnMetadata
-     *
      * @return RadioOption
      */
     public function setColumnMetadata(ColumnMetadataInterface $columnMetadata): self

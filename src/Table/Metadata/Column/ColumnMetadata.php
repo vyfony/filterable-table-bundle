@@ -52,8 +52,6 @@ final class ColumnMetadata implements ColumnMetadataInterface
     private $sortParameters;
 
     /**
-     * @param string $name
-     *
      * @return ColumnMetadata
      */
     public function setName(string $name): self
@@ -63,17 +61,12 @@ final class ColumnMetadata implements ColumnMetadataInterface
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getName(): string
     {
         return $this->name;
     }
 
     /**
-     * @param callable $valueExtractor
-     *
      * @return ColumnMetadata
      */
     public function setValueExtractor(callable $valueExtractor): self
@@ -85,8 +78,6 @@ final class ColumnMetadata implements ColumnMetadataInterface
 
     /**
      * @param $rowData
-     *
-     * @return string
      */
     public function getValue(object $rowData): string
     {
@@ -99,17 +90,12 @@ final class ColumnMetadata implements ColumnMetadataInterface
         return \call_user_func($this->valueExtractor, $rowData);
     }
 
-    /**
-     * @return string
-     */
     public function getLabel(): string
     {
         return $this->label;
     }
 
     /**
-     * @param string $label
-     *
      * @return ColumnMetadata
      */
     public function setLabel(string $label): self
@@ -120,8 +106,6 @@ final class ColumnMetadata implements ColumnMetadataInterface
     }
 
     /**
-     * @param bool $isIdentifier
-     *
      * @return ColumnMetadata
      */
     public function setIsIdentifier(bool $isIdentifier): self
@@ -131,17 +115,12 @@ final class ColumnMetadata implements ColumnMetadataInterface
         return $this;
     }
 
-    /**
-     * @return bool
-     */
     public function getIsIdentifier(): bool
     {
         return $this->isIdentifier;
     }
 
     /**
-     * @param bool $isSortable
-     *
      * @return ColumnMetadata
      */
     public function setIsSortable(bool $isSortable): self
@@ -151,19 +130,11 @@ final class ColumnMetadata implements ColumnMetadataInterface
         return $this;
     }
 
-    /**
-     * @return bool
-     */
     public function getIsSortable(): bool
     {
         return $this->isSortable;
     }
 
-    /**
-     * @param array $sortParameters
-     *
-     * @return ColumnMetadataInterface
-     */
     public function setSortParameters(array $sortParameters): ColumnMetadataInterface
     {
         $newSortParameters = [];
@@ -186,9 +157,6 @@ final class ColumnMetadata implements ColumnMetadataInterface
         return $this;
     }
 
-    /**
-     * @return array|null
-     */
     public function getSortParameters(): ?array
     {
         return $this->sortParameters;

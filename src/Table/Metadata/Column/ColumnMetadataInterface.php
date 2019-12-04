@@ -18,37 +18,18 @@ namespace Vyfony\Bundle\FilterableTableBundle\Table\Metadata\Column;
  */
 interface ColumnMetadataInterface
 {
-    /**
-     * @return string
-     */
     public function getName(): string;
 
-    /**
-     * @return string
-     */
     public function getLabel(): string;
 
-    /**
-     * @return bool
-     */
     public function getIsSortable(): bool;
 
     /**
-     * @param array $sortParameters
-     *
      * @return ColumnMetadataInterface
      */
     public function setSortParameters(array $sortParameters): self;
 
-    /**
-     * @return array|null
-     */
     public function getSortParameters(): ?array;
 
-    /**
-     * @param object $rowData
-     *
-     * @return string
-     */
     public function getValue(object $rowData): string;
 }
