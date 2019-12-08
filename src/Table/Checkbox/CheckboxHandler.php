@@ -33,11 +33,20 @@ class CheckboxHandler implements CheckboxHandlerInterface
      */
     private $emptySelectionErrorText;
 
-    public function __construct(string $routeName, string $label, string $emptySelectionErrorText)
+    /**
+     * @var string[]
+     */
+    private $classes;
+
+    /**
+     * @param string[] $classes
+     */
+    public function __construct(string $routeName, string $label, string $emptySelectionErrorText, array $classes)
     {
         $this->routeName = $routeName;
         $this->label = $label;
         $this->emptySelectionErrorText = $emptySelectionErrorText;
+        $this->classes = $classes;
     }
 
     public function getRouteName(): string
@@ -53,5 +62,13 @@ class CheckboxHandler implements CheckboxHandlerInterface
     public function getEmptySelectionErrorText(): string
     {
         return $this->emptySelectionErrorText;
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getClasses(): array
+    {
+        return $this->classes;
     }
 }

@@ -168,7 +168,7 @@
 
         {% for checkboxHandler in table.checkboxHandlers %}
             <button type="button"
-                    class="btn btn-default"
+                    class="{{ checkboxHandler.classes|join(' ') }}"
                     data-vyfony-filterable-table-checkbox-handler-button="{{ path(checkboxHandler.routeName) }}"
                     data-vyfony-filterable-table-checkbox-handler-empty-selection-error-text="{{ checkboxHandler.emptySelectionErrorText|trans }}"
             >
