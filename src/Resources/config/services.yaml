@@ -45,3 +45,17 @@ services:
       - ~
       - ~
     tags: ['form.type']
+
+  vyfony_filterable_table.persistence.query_builder.alias.alias_factory:
+    class: Vyfony\Bundle\FilterableTableBundle\Persistence\QueryBuilder\Alias\AliasFactory
+
+  Vyfony\Bundle\FilterableTableBundle\Persistence\QueryBuilder\Alias\AliasFactoryInterface:
+    alias: vyfony_filterable_table.persistence.query_builder.alias.alias_factory
+    public: true
+
+  vyfony_filterable_table.persistence.query_builder.parameter.parameter_factory:
+    class: Vyfony\Bundle\FilterableTableBundle\Persistence\QueryBuilder\Parameter\ParameterFactory
+
+  Vyfony\Bundle\FilterableTableBundle\Persistence\QueryBuilder\Parameter\ParameterFactoryInterface:
+    alias: vyfony_filterable_table.persistence.query_builder.parameter.parameter_factory
+    public: true
