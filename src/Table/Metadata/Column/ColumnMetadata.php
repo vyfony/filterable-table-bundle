@@ -52,6 +52,11 @@ final class ColumnMetadata implements ColumnMetadataInterface
     private $sortParameters;
 
     /**
+     * @var array
+     */
+    private $attributes = [];
+
+    /**
      * @return ColumnMetadata
      */
     public function setName(string $name): self
@@ -160,5 +165,17 @@ final class ColumnMetadata implements ColumnMetadataInterface
     public function getSortParameters(): ?array
     {
         return $this->sortParameters;
+    }
+
+    public function setAttributes(array $attributes): self
+    {
+        $this->attributes = $attributes;
+
+        return $this;
+    }
+
+    public function getAttributes(): array
+    {
+        return $this->attributes;
     }
 }

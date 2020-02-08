@@ -1,4 +1,6 @@
 {% macro render_table(table) %}
+    {% import _self as self %}
+
     <div data-vyfony-filterable-table-request-id="{{ table.rowDataCollection.requestId }}">{{ table.resultsCountText|trans({count: table.rowDataCollection.data|length}) }}</div>
     <table class="table table-striped table-sm" data-vyfony-filterable-table>
         <thead>
@@ -58,8 +60,8 @@
                     {% for columnMetadata in table.columnMetadataCollection %}
                         {% if columnMetadata.isIdentifier %}
                             <th scope="row">
-                                <a href="{{ path(table.showRoute, routeParameters) }}">
-                                    {{ attribute(rowData, columnMetadata.name) }}
+                                <a href="{{ path(table.showRoute, routeParameters) }}"{{ self.render_attributes(columnMetadata.attributes) }}>
+                                    {{- attribute(rowData, columnMetadata.name) -}}
                                 </a>
                             </th>
                         {% else %}
@@ -248,3 +250,16 @@
     {% form_theme filterForm '@VyfonyFilterableTable/filterable_table_form_layout.html.twig' %}
     {{ form(filterForm) }}
 {% endmacro %}
+
+{%- macro render_attributes(attributes) -%}
+    {%- for name, value in attributes -%}
+        {{- " " -}}
+        {%- if name in ['placeholder', 'title'] -%}
+            {{- name }}="{{ translation_domain is same as(false) ? value : value|trans(attr_translation_parameters, translation_domain) }}"
+        {%- elseif value is same as(true) -%}
+            {{- name }}="{{ name }}"
+        {%- elseif value is not same as(false) -%}
+            {{- name }}="{{ value }}"
+        {%- endif -%}
+    {%- endfor -%}
+{%- endmacro -%}

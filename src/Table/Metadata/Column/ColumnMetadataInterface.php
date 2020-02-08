@@ -24,12 +24,11 @@ interface ColumnMetadataInterface
 
     public function getIsSortable(): bool;
 
-    /**
-     * @return ColumnMetadataInterface
-     */
     public function setSortParameters(array $sortParameters): self;
 
     public function getSortParameters(): ?array;
 
     public function getValue(object $rowData): string;
+
+    public function getAttributes(): array;
 }
