@@ -66,7 +66,7 @@
                             </th>
                         {% else %}
                             <td>
-                                <span>{{ columnMetadata.getValue(rowData) }}</span>
+                                <span>{{ columnMetadata.getValue(rowData)|nl2br }}</span>
                             </td>
                         {% endif %}
                     {% endfor %}
