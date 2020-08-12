@@ -1,6 +1,8 @@
 services:
   vyfony_filterable_table.cache:
-    class: Symfony\Component\Cache\Simple\FilesystemCache
+    class: Symfony\Component\Cache\Psr16Cache
+    arguments:
+      - '@cache.app'
 
   vyfony_filterable_table.data_collection.data_collector:
     class: Vyfony\Bundle\FilterableTableBundle\DataCollection\DataCollector
