@@ -16,7 +16,6 @@ namespace Vyfony\Bundle\FilterableTableBundle\Table;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
-use Symfony\Component\OptionsResolver\Exception\InvalidOptionsException;
 use Vyfony\Bundle\FilterableTableBundle\DataCollection\DataCollectorInterface;
 use Vyfony\Bundle\FilterableTableBundle\Filter\Configurator\FilterConfiguratorInterface;
 use Vyfony\Bundle\FilterableTableBundle\Form\Data\FormDataInterface;
@@ -80,17 +79,11 @@ final class Table implements TableInterface
         $this->entityClass = $entityClass;
     }
 
-    /**
-     * @throws InvalidOptionsException
-     */
     public function getFormView(): FormView
     {
         return $this->getForm()->createView();
     }
 
-    /**
-     * @throws InvalidOptionsException
-     */
     public function getTableMetadata(): TableMetadataInterface
     {
         $dataCollectionResult = $this->dataCollector->getRowDataCollection(
@@ -107,13 +100,11 @@ final class Table implements TableInterface
         );
     }
 
-    /**
-     * @throws InvalidOptionsException
-     */
     private function getForm(): FormInterface
     {
         if (null === $this->form) {
-            $this->form = $this->formFactory
+            $this->form = $this
+                ->formFactory
                 ->create(
                     FilterableTableType::class,
                     $this->formData->getDefaultQueryParameters($this->tableConfigurator, $this->filterConfigurator)

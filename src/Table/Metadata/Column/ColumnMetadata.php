@@ -57,6 +57,18 @@ final class ColumnMetadata implements ColumnMetadataInterface
     private $attributes = [];
 
     /**
+     * @var bool
+     */
+    private $isRaw = false;
+
+    public function __construct()
+    {
+        $this->valueExtractor = function ($rowData) {
+            return (new PropertyAccessor())->getValue($rowData, $this->name);
+        };
+    }
+
+    /**
      * @return ColumnMetadata
      */
     public function setName(string $name): self
@@ -86,12 +98,6 @@ final class ColumnMetadata implements ColumnMetadataInterface
      */
     public function getValue(object $rowData): string
     {
-        if (null === $this->valueExtractor) {
-            $this->valueExtractor = function ($rowData) {
-                return (new PropertyAccessor())->getValue($rowData, $this->name);
-            };
-        }
-
         return \call_user_func($this->valueExtractor, $rowData);
     }
 
@@ -177,5 +183,17 @@ final class ColumnMetadata implements ColumnMetadataInterface
     public function getAttributes(): array
     {
         return $this->attributes;
+    }
+
+    public function setIsRaw(bool $isRaw): ColumnMetadataInterface
+    {
+        $this->isRaw = $isRaw;
+
+        return $this;
+    }
+
+    public function getIsRaw(): bool
+    {
+        return $this->isRaw;
     }
 }

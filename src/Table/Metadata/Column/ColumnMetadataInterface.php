@@ -31,4 +31,6 @@ interface ColumnMetadataInterface
     public function getValue(object $rowData): string;
 
     public function getAttributes(): array;
+
+    public function getIsRaw(): bool;
 }

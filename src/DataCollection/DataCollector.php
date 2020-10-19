@@ -62,9 +62,6 @@ final class DataCollector implements DataCollectorInterface
         $this->pageSize = $pageSize;
     }
 
-    /**
-     * @throws InvalidArgumentException
-     */
     public function getRowDataCollection(
         array $formData,
         string $entityClass,
