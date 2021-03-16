@@ -36,12 +36,14 @@
         </thead>
         <tbody>
             {% for rowData in table.rowDataCollection.data %}
+                {% set showRoute = table.showRoute(rowData) %}
+
                 <tr>
                     {% if table.hasCheckboxColumn %}
                         <td>
                             <div class="custom-control custom-checkbox">
 
-                                {% set identifier = table.showRoute.parameters|json_encode %}
+                                {% set identifier = showRoute.parameters|json_encode %}
                                 {% set checkboxId = 'data-vyfony-filterable-table-checkbox-' ~ identifier %}
 
                                 <input type="checkbox"
@@ -56,7 +58,7 @@
                     {% for columnMetadata in table.columnMetadataCollection %}
                         {% if columnMetadata.isIdentifier %}
                             <th scope="row">
-                                <a href="{{ path(table.showRoute.name, table.showRoute.parameters) }}"{{ self.render_attributes(columnMetadata.attributes) }}>
+                                <a href="{{ path(showRoute.name, showRoute.parameters) }}"{{ self.render_attributes(columnMetadata.attributes) }}>
                                     {{ self.render_value(columnMetadata, rowData) }}
                                 </a>
                             </th>

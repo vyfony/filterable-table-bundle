@@ -47,40 +47,5 @@ final class VyfonyFilterableTableExtension extends ConfigurableExtension
             'vyfony_filterable_table.entity_class',
             $mergedConfig['entity_class']
         );
-
-        $container->setParameter(
-            'vyfony_filterable_table.default_sort_by',
-            $mergedConfig['default_sort_by']
-        );
-
-        $container->setParameter(
-            'vyfony_filterable_table.default_sort_order',
-            $mergedConfig['default_sort_order']
-        );
-
-        $container->setParameter(
-            'vyfony_filterable_table.list_route',
-            $mergedConfig['list_route']
-        );
-
-        $container->setParameter(
-            'vyfony_filterable_table.show_route',
-            $mergedConfig['show_route']
-        );
-
-        $container->setParameter(
-            'vyfony_filterable_table.show_route_parameters',
-            $mergedConfig['show_route_parameters']
-        );
-
-        $container->setParameter(
-            'vyfony_filterable_table.page_size',
-            $mergedConfig['page_size']
-        );
-
-        $container->setParameter(
-            'vyfony_filterable_table.paginator_tail_length',
-            $mergedConfig['paginator_tail_length']
-        );
     }
 }

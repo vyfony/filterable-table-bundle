@@ -35,7 +35,7 @@ interface TableMetadataInterface
 
     public function getListRoute(): RouteConfiguration;
 
-    public function getShowRoute(): RouteConfiguration;
+    public function getShowRoute($entity): RouteConfiguration;
 
     public function getQueryParameters(): array;
 

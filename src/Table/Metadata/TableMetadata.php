@@ -45,9 +45,9 @@ final class TableMetadata implements TableMetadataInterface
     private $listRoute;
 
     /**
-     * @var RouteConfiguration
+     * @var callable
      */
-    private $showRoute;
+    private $showRouteGetter;
 
     /**
      * @var array
@@ -73,7 +73,7 @@ final class TableMetadata implements TableMetadataInterface
         array $columnMetadataCollection,
         DataCollectionResultInterface $rowDataCollection,
         RouteConfiguration $listRoute,
-        RouteConfiguration $showRoute,
+        callable $showRouteGetter,
         array $queryParameters,
         array $checkboxHandlers,
         ?PaginatorInterface $paginator
@@ -82,7 +82,7 @@ final class TableMetadata implements TableMetadataInterface
         $this->columnMetadataCollection = $columnMetadataCollection;
         $this->rowDataCollection = $rowDataCollection;
         $this->listRoute = $listRoute;
-        $this->showRoute = $showRoute;
+        $this->showRouteGetter = $showRouteGetter;
         $this->queryParameters = $queryParameters;
         $this->checkboxHandlers = $checkboxHandlers;
         $this->paginator = $paginator;
@@ -111,9 +111,9 @@ final class TableMetadata implements TableMetadataInterface
         return $this->listRoute;
     }
 
-    public function getShowRoute(): RouteConfiguration
+    public function getShowRoute($entity): RouteConfiguration
     {
-        return $this->showRoute;
+        return \call_user_func_array($this->showRouteGetter, [$entity]);
     }
 
     public function getQueryParameters(): array

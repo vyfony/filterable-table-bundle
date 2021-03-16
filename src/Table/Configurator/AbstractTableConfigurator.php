@@ -58,7 +58,9 @@ abstract class AbstractTableConfigurator implements TableConfiguratorInterface
             $this->getColumnMetadataCollection($queryParameters),
             $dataCollectionResult,
             $this->getListRoute(),
-            $this->getShowRoute(),
+            function ($entity): RouteConfiguration {
+                return $this->getShowRoute($entity);
+            },
             $queryParameters,
             $this->createCheckboxHandlers(),
             $dataCollectionResult->getHasPagination()
@@ -78,7 +80,10 @@ abstract class AbstractTableConfigurator implements TableConfiguratorInterface
 
     abstract protected function getListRoute(): RouteConfiguration;
 
-    abstract protected function getShowRoute(): RouteConfiguration;
+    /**
+     * @param mixed $entity
+     */
+    abstract protected function getShowRoute($entity): RouteConfiguration;
 
     abstract protected function getSortBy(): string;
 
