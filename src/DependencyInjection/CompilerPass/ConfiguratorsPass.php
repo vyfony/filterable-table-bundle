@@ -24,16 +24,9 @@ final class ConfiguratorsPass implements CompilerPassInterface
 {
     public function process(ContainerBuilder $container): void
     {
-        $filterConfiguratorServiceId = $container->getParameter('vyfony_filterable_table.filter_configurator');
         $tableConfiguratorServiceId = $container->getParameter('vyfony_filterable_table.table_configurator');
+        $filterConfiguratorServiceId = $container->getParameter('vyfony_filterable_table.filter_configurator');
         $entityClass = $container->getParameter('vyfony_filterable_table.entity_class');
-        $defaultSortBy = $container->getParameter('vyfony_filterable_table.default_sort_by');
-        $defaultSortOrder = $container->getParameter('vyfony_filterable_table.default_sort_order');
-        $listRoute = $container->getParameter('vyfony_filterable_table.list_route');
-        $showRoute = $container->getParameter('vyfony_filterable_table.show_route');
-        $showRouteParameters = $container->getParameter('vyfony_filterable_table.show_route_parameters');
-        $pageSize = $container->getParameter('vyfony_filterable_table.page_size');
-        $paginatorTailLength = $container->getParameter('vyfony_filterable_table.paginator_tail_length');
 
         $tableConfiguratorServiceDefinition = $container->findDefinition($tableConfiguratorServiceId);
         $filterConfiguratorServiceDefinition = $container->findDefinition($filterConfiguratorServiceId);
@@ -48,7 +41,6 @@ final class ConfiguratorsPass implements CompilerPassInterface
         $container
             ->getDefinition('vyfony_filterable_table.data_collection.data_collector')
             ->setArgument('$filterConfigurator', $filterConfiguratorServiceDefinition)
-            ->setArgument('$pageSize', $pageSize)
         ;
 
         $container
@@ -60,13 +52,6 @@ final class ConfiguratorsPass implements CompilerPassInterface
         $tableConfiguratorServiceDefinition
             ->setArgument('$router', $container->findDefinition(RouterInterface::class))
             ->setArgument('$filterConfigurator', $filterConfiguratorServiceDefinition)
-            ->setArgument('$defaultSortBy', $defaultSortBy)
-            ->setArgument('$defaultSortOrder', $defaultSortOrder)
-            ->setArgument('$listRoute', $listRoute)
-            ->setArgument('$showRoute', $showRoute)
-            ->setArgument('$showRouteParameters', $showRouteParameters)
-            ->setArgument('$pageSize', $pageSize)
-            ->setArgument('$paginatorTailLength', $paginatorTailLength)
         ;
     }
 }

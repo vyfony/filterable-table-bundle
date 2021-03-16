@@ -55,4 +55,6 @@ interface FilterConfiguratorInterface
      * @return mixed
      */
     public function getEntityId($entity);
+
+    public function getPageSize(): int;
 }

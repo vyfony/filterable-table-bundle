@@ -36,16 +36,12 @@
         </thead>
         <tbody>
             {% for rowData in table.rowDataCollection.data %}
-                {% set routeParameters = {} %}
-                {% for parameterName, attributeName in table.showRouteParameters %}
-                    {% set routeParameters = routeParameters|merge({(parameterName): attribute(rowData, attributeName)}) %}
-                {% endfor %}
                 <tr>
                     {% if table.hasCheckboxColumn %}
                         <td>
                             <div class="custom-control custom-checkbox">
 
-                                {% set identifier = routeParameters|json_encode %}
+                                {% set identifier = table.showRoute.parameters|json_encode %}
                                 {% set checkboxId = 'data-vyfony-filterable-table-checkbox-' ~ identifier %}
 
                                 <input type="checkbox"
@@ -60,17 +56,13 @@
                     {% for columnMetadata in table.columnMetadataCollection %}
                         {% if columnMetadata.isIdentifier %}
                             <th scope="row">
-                                <a href="{{ path(table.showRoute, routeParameters) }}"{{ self.render_attributes(columnMetadata.attributes) }}>
-                                    {{- attribute(rowData, columnMetadata.name) -}}
+                                <a href="{{ path(table.showRoute.name, table.showRoute.parameters) }}"{{ self.render_attributes(columnMetadata.attributes) }}>
+                                    {{ self.render_value(columnMetadata, rowData) }}
                                 </a>
                             </th>
                         {% else %}
                             <td>
-                                {%- if columnMetadata.isRaw() -%}
-                                    {{- columnMetadata.getValue(rowData)|raw  -}}
-                                {%- else -%}
-                                    <span>{{- columnMetadata.getValue(rowData) -}}</span>
-                                {%- endif -%}
+                                {{ self.render_value(columnMetadata, rowData) }}
                             </td>
                         {% endif %}
                     {% endfor %}
@@ -82,9 +74,9 @@
     <script type="text/javascript">
         window.addEventListener('load', () => {
 
-            const requestId = document.querySelector('[data-vyfony-filterable-table-request-id]').getAttribute(
-                'data-vyfony-filterable-table-request-id'
-            );
+            const requestId = document
+                .querySelector('[data-vyfony-filterable-table-request-id]')
+                .getAttribute('data-vyfony-filterable-table-request-id');
 
             const requestIdInputElement = document.querySelector('input[data-vyfony-filterable-table-request-id-input]');
 
@@ -92,9 +84,8 @@
 
                 requestIdInputElement.value = '';
 
-                const searchInFoundButton = document.querySelector(
-                    'button[data-vyfony-filterable-table-search-in-found-button]'
-                );
+                const searchInFoundButton = document
+                    .querySelector('button[data-vyfony-filterable-table-search-in-found-button]');
 
                 searchInFoundButton.style.display = 'block';
 
@@ -248,6 +239,14 @@
             });
         </script>
     {% endif %}
+{% endmacro %}
+
+{% macro render_value(columnMetadata, rowData) %}
+    {%- if columnMetadata.isRaw() -%}
+        {{- columnMetadata.getValue(rowData)|raw  -}}
+    {%- else -%}
+        <span>{{- columnMetadata.getValue(rowData) -}}</span>
+    {%- endif -%}
 {% endmacro %}
 
 {% macro render_filter(filterForm) %}

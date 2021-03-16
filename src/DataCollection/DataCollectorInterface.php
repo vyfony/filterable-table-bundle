@@ -23,6 +23,7 @@ interface DataCollectorInterface
     public function getRowDataCollection(
         array $formData,
         string $entityClass,
+        int $pageSize,
         callable $entityIdGetter
     ): DataCollectionResultInterface;
 }

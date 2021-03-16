@@ -1,12 +1,9 @@
-parameters:
+grumphp:
   hide_circumvention_tip: true
   process_timeout: null
-  ascii:
-    failed: ~
-    succeeded: ~
   tasks:
     phpversion:
-      project: '7.2'
+      project: '7.4'
       metadata:
         priority: 0
     git_blacklist:
@@ -34,24 +31,25 @@ parameters:
       triggered_by: ['php']
       metadata:
         priority: -70
-    phpmnd:
-      exclude_path: ['vendor']
-      metadata:
-        priority: -80
     phpcsfixer2:
       config: .php_cs.dist
       metadata:
         priority: -90
     phpcs:
       standard: PSR2
-      ignore_patterns: ['/vendor/*']
+      ignore_patterns:
+        - '/node_modules/*'
+        - '/tests/*'
+        - '/vendor/*'
       metadata:
         priority: -100
     phpunit:
       always_execute: true
       metadata:
         priority: -110
-    securitychecker:
+    securitychecker_enlightn:
+      lockfile: ./composer.lock
+      run_always: true
       metadata:
         priority: -120
     phan:

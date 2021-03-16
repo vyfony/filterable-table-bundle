@@ -89,6 +89,7 @@ final class Table implements TableInterface
         $dataCollectionResult = $this->dataCollector->getRowDataCollection(
             $this->formData->getForDataCollection($this->getForm()),
             $this->entityClass,
+            $this->filterConfigurator->getPageSize(),
             function ($entity) {
                 return $this->filterConfigurator->getEntityId($entity);
             }

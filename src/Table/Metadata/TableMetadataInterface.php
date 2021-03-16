@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Vyfony\Bundle\FilterableTableBundle\Table\Metadata;
 
 use Vyfony\Bundle\FilterableTableBundle\DataCollection\Result\DataCollectionResultInterface;
+use Vyfony\Bundle\FilterableTableBundle\Filter\Configurator\RouteConfiguration;
 use Vyfony\Bundle\FilterableTableBundle\Table\Checkbox\CheckboxHandlerInterface;
 use Vyfony\Bundle\FilterableTableBundle\Table\Metadata\Column\ColumnMetadataInterface;
 use Vyfony\Bundle\FilterableTableBundle\Table\Paginator\PaginatorInterface;
@@ -32,11 +33,9 @@ interface TableMetadataInterface
 
     public function getRowDataCollection(): DataCollectionResultInterface;
 
-    public function getListRoute(): string;
+    public function getListRoute(): RouteConfiguration;
 
-    public function getShowRoute(): string;
-
-    public function getShowRouteParameters(): array;
+    public function getShowRoute(): RouteConfiguration;
 
     public function getQueryParameters(): array;
 

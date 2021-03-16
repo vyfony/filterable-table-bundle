@@ -45,26 +45,20 @@ final class DataCollector implements DataCollectorInterface
      */
     private $filterConfigurator;
 
-    /**
-     * @var int
-     */
-    private $pageSize;
-
     public function __construct(
         ManagerRegistry $registry,
         CacheInterface $cache,
-        FilterConfiguratorInterface $filterConfigurator,
-        int $pageSize
+        FilterConfiguratorInterface $filterConfigurator
     ) {
         $this->doctrine = $registry;
         $this->cache = $cache;
         $this->filterConfigurator = $filterConfigurator;
-        $this->pageSize = $pageSize;
     }
 
     public function getRowDataCollection(
         array $formData,
         string $entityClass,
+        int $pageSize,
         callable $entityIdGetter
     ): DataCollectionResultInterface {
         $repository = $this->doctrine->getRepository($entityClass);
@@ -125,8 +119,8 @@ final class DataCollector implements DataCollectorInterface
         }
 
         $queryBuilder
-            ->setFirstResult($this->pageSize * ((int) $formData['page'] - 1))
-            ->setMaxResults($this->pageSize)
+            ->setFirstResult($pageSize * ((int) $formData['page'] - 1))
+            ->setMaxResults($pageSize)
         ;
 
         $matchingEntitiesPaginator = new DoctrinePaginator($queryBuilder->getQuery(), true);
@@ -152,11 +146,6 @@ final class DataCollector implements DataCollectorInterface
         return $requestId;
     }
 
-    /**
-     * @param $requestId
-     *
-     * @throws InvalidArgumentException
-     */
     private function getFormDataFromCache(string $requestId): array
     {
         return $this->cache->get($requestId);
@@ -194,9 +183,6 @@ final class DataCollector implements DataCollectorInterface
         return $whereArguments;
     }
 
-    /**
-     * @throws InvalidArgumentException
-     */
     private function getPreviousRequestFormData(array $formData): ?array
     {
         if (\array_key_exists('requestId', $formData) && null !== $formData['requestId']) {
@@ -206,11 +192,6 @@ final class DataCollector implements DataCollectorInterface
         return null;
     }
 
-    /**
-     * @throws InvalidArgumentException
-     *
-     * @return array[]
-     */
     private function getAllFormDataCollection(array $formData): array
     {
         $collection = [];

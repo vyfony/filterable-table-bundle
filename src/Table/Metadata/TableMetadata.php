@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Vyfony\Bundle\FilterableTableBundle\Table\Metadata;
 
 use Vyfony\Bundle\FilterableTableBundle\DataCollection\Result\DataCollectionResultInterface;
+use Vyfony\Bundle\FilterableTableBundle\Filter\Configurator\RouteConfiguration;
 use Vyfony\Bundle\FilterableTableBundle\Table\Checkbox\CheckboxHandlerInterface;
 use Vyfony\Bundle\FilterableTableBundle\Table\Metadata\Column\ColumnMetadataInterface;
 use Vyfony\Bundle\FilterableTableBundle\Table\Paginator\PaginatorInterface;
@@ -39,19 +40,14 @@ final class TableMetadata implements TableMetadataInterface
     private $rowDataCollection;
 
     /**
-     * @var string
+     * @var RouteConfiguration
      */
     private $listRoute;
 
     /**
-     * @var string
+     * @var RouteConfiguration
      */
     private $showRoute;
-
-    /**
-     * @var array
-     */
-    private $showRouteParameters;
 
     /**
      * @var array
@@ -76,9 +72,8 @@ final class TableMetadata implements TableMetadataInterface
         string $resultsCountText,
         array $columnMetadataCollection,
         DataCollectionResultInterface $rowDataCollection,
-        string $listRoute,
-        string $showRoute,
-        array $showRouteParameters,
+        RouteConfiguration $listRoute,
+        RouteConfiguration $showRoute,
         array $queryParameters,
         array $checkboxHandlers,
         ?PaginatorInterface $paginator
@@ -88,7 +83,6 @@ final class TableMetadata implements TableMetadataInterface
         $this->rowDataCollection = $rowDataCollection;
         $this->listRoute = $listRoute;
         $this->showRoute = $showRoute;
-        $this->showRouteParameters = $showRouteParameters;
         $this->queryParameters = $queryParameters;
         $this->checkboxHandlers = $checkboxHandlers;
         $this->paginator = $paginator;
@@ -112,19 +106,14 @@ final class TableMetadata implements TableMetadataInterface
         return $this->rowDataCollection;
     }
 
-    public function getListRoute(): string
+    public function getListRoute(): RouteConfiguration
     {
         return $this->listRoute;
     }
 
-    public function getShowRoute(): string
+    public function getShowRoute(): RouteConfiguration
     {
         return $this->showRoute;
-    }
-
-    public function getShowRouteParameters(): array
-    {
-        return $this->showRouteParameters;
     }
 
     public function getQueryParameters(): array

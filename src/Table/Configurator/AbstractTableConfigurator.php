@@ -16,6 +16,7 @@ namespace Vyfony\Bundle\FilterableTableBundle\Table\Configurator;
 use Symfony\Component\Routing\RouterInterface;
 use Vyfony\Bundle\FilterableTableBundle\DataCollection\Result\DataCollectionResultInterface;
 use Vyfony\Bundle\FilterableTableBundle\Filter\Configurator\FilterConfiguratorInterface;
+use Vyfony\Bundle\FilterableTableBundle\Filter\Configurator\RouteConfiguration;
 use Vyfony\Bundle\FilterableTableBundle\Table\Checkbox\CheckboxHandlerInterface;
 use Vyfony\Bundle\FilterableTableBundle\Table\Metadata\Column\ColumnMetadataInterface;
 use Vyfony\Bundle\FilterableTableBundle\Table\Metadata\TableMetadata;
@@ -40,61 +41,12 @@ abstract class AbstractTableConfigurator implements TableConfiguratorInterface
      */
     private $filterConfigurator;
 
-    /**
-     * @var string
-     */
-    private $defaultSortBy;
-
-    /**
-     * @var string
-     */
-    private $defaultSortOrder;
-
-    /**
-     * @var string
-     */
-    private $listRoute;
-
-    /**
-     * @var string
-     */
-    private $showRoute;
-
-    /**
-     * @var array
-     */
-    private $showRouteParameters;
-
-    /**
-     * @var int
-     */
-    private $pageSize;
-
-    /**
-     * @var int
-     */
-    private $paginatorTailLength;
-
     public function __construct(
         RouterInterface $router,
-        FilterConfiguratorInterface $filterConfigurator,
-        string $defaultSortBy,
-        string $defaultSortOrder,
-        string $listRoute,
-        string $showRoute,
-        array $showRouteParameters,
-        int $pageSize,
-        int $paginatorTailLength
+        FilterConfiguratorInterface $filterConfigurator
     ) {
         $this->router = $router;
         $this->filterConfigurator = $filterConfigurator;
-        $this->defaultSortBy = $defaultSortBy;
-        $this->defaultSortOrder = $defaultSortOrder;
-        $this->listRoute = $listRoute;
-        $this->showRoute = $showRoute;
-        $this->showRouteParameters = $showRouteParameters;
-        $this->pageSize = $pageSize;
-        $this->paginatorTailLength = $paginatorTailLength;
     }
 
     public function getTableMetadata(
@@ -105,9 +57,8 @@ abstract class AbstractTableConfigurator implements TableConfiguratorInterface
             $this->getResultsCountText(),
             $this->getColumnMetadataCollection($queryParameters),
             $dataCollectionResult,
-            $this->listRoute,
-            $this->showRoute,
-            $this->showRouteParameters,
+            $this->getListRoute(),
+            $this->getShowRoute(),
             $queryParameters,
             $this->createCheckboxHandlers(),
             $dataCollectionResult->getHasPagination()
@@ -119,11 +70,21 @@ abstract class AbstractTableConfigurator implements TableConfiguratorInterface
     public function getDefaultTableParameters(): array
     {
         return [
-            'sortBy' => $this->defaultSortBy,
-            'sortOrder' => $this->defaultSortOrder,
+            'sortBy' => $this->getSortBy(),
+            'sortOrder' => $this->getIsSortAsc() ? 'asc' : 'desc',
             'page' => '1',
         ];
     }
+
+    abstract protected function getListRoute(): RouteConfiguration;
+
+    abstract protected function getShowRoute(): RouteConfiguration;
+
+    abstract protected function getSortBy(): string;
+
+    abstract protected function getIsSortAsc(): bool;
+
+    abstract protected function getPaginatorTailLength(): int;
 
     abstract protected function getResultsCountText(): string;
 
@@ -197,7 +158,7 @@ abstract class AbstractTableConfigurator implements TableConfiguratorInterface
 
     private function createPaginator(int $totalRowsCount, array $queryParameters): PaginatorInterface
     {
-        $pagesCount = (int) ceil($totalRowsCount / $this->pageSize);
+        $pagesCount = (int) ceil($totalRowsCount / $this->filterConfigurator->getPageSize());
 
         $pages = array_fill(1, $pagesCount, null);
 
@@ -205,7 +166,7 @@ abstract class AbstractTableConfigurator implements TableConfiguratorInterface
             $page = $this->createPage($pageIndex, $queryParameters);
         }, $queryParameters);
 
-        return new Paginator($this->paginatorTailLength, (int) $queryParameters['page'], $pages);
+        return new Paginator($this->getPaginatorTailLength(), (int) $queryParameters['page'], $pages);
     }
 
     private function createPage(int $pageIndex, array $formData): PageInterface
@@ -214,7 +175,7 @@ abstract class AbstractTableConfigurator implements TableConfiguratorInterface
 
         return new Page(
             $pageIndex,
-            $this->router->generate($this->listRoute, $formData)
+            $this->router->generate($this->getListRoute()->getName(), $formData)
         );
     }
 }
