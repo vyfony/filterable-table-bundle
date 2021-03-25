@@ -15,9 +15,6 @@ namespace Vyfony\Bundle\FilterableTableBundle\Filter\Configurator\Parameter;
 
 use Doctrine\ORM\EntityManager;
 
-/**
- * @author Anton Dyshkant <vyshkant@gmail.com>
- */
 interface FilterParameterInterface
 {
     public function getQueryParameterName(): string;

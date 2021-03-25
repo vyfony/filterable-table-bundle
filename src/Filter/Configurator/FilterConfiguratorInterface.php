@@ -16,10 +16,8 @@ namespace Vyfony\Bundle\FilterableTableBundle\Filter\Configurator;
 use Vyfony\Bundle\FilterableTableBundle\Filter\Configurator\Parameter\FilterParameterInterface;
 use Vyfony\Bundle\FilterableTableBundle\Filter\Configurator\Parameter\Table\TableParameterInterface;
 use Vyfony\Bundle\FilterableTableBundle\Filter\Configurator\Restriction\FilterRestrictionInterface;
+use Vyfony\Bundle\FilterableTableBundle\Filter\Configurator\Sorting\SortConfigurationInterface;
 
-/**
- * @author Anton Dyshkant <vyshkant@gmail.com>
- */
 interface FilterConfiguratorInterface
 {
     /**
@@ -47,8 +45,6 @@ interface FilterConfiguratorInterface
 
     public function getDefaultTableParameters(): array;
 
-    public function getDisablePaginationLabel(): string;
-
     /**
      * @param mixed $entity
      *
@@ -56,5 +52,5 @@ interface FilterConfiguratorInterface
      */
     public function getEntityId($entity);
 
-    public function getPageSize(): int;
+    public function getSortConfiguration(): SortConfigurationInterface;
 }

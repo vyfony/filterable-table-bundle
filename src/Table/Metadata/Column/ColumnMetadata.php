@@ -16,9 +16,6 @@ namespace Vyfony\Bundle\FilterableTableBundle\Table\Metadata\Column;
 use Doctrine\Common\Collections\Collection;
 use Symfony\Component\PropertyAccess\PropertyAccessor;
 
-/**
- * @author Anton Dyshkant <vyshkant@gmail.com>
- */
 final class ColumnMetadata implements ColumnMetadataInterface
 {
     /**

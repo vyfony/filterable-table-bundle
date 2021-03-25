@@ -16,9 +16,6 @@ namespace Vyfony\Bundle\FilterableTableBundle\Table;
 use Symfony\Component\Form\FormView;
 use Vyfony\Bundle\FilterableTableBundle\Table\Metadata\TableMetadataInterface;
 
-/**
- * @author Anton Dyshkant <vyshkant@gmail.com>
- */
 interface TableInterface
 {
     public function getFormView(): FormView;

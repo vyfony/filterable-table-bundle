@@ -19,9 +19,6 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-/**
- * @author Anton Dyshkant <vyshkant@gmail.com>
- */
 final class BooleanInclusiveChoiceType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void

@@ -17,9 +17,6 @@ use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Routing\RouterInterface;
 
-/**
- * @author Anton Dyshkant <vyshkant@gmail.com>
- */
 final class ConfiguratorsPass implements CompilerPassInterface
 {
     public function process(ContainerBuilder $container): void

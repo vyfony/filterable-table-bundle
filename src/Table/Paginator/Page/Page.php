@@ -13,9 +13,6 @@ declare(strict_types=1);
 
 namespace Vyfony\Bundle\FilterableTableBundle\Table\Paginator\Page;
 
-/**
- * @author Anton Dyshkant <vyshkant@gmail.com>
- */
 final class Page implements PageInterface
 {
     /**

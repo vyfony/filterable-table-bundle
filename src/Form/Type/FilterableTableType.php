@@ -23,10 +23,8 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\Exception\AccessException;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Vyfony\Bundle\FilterableTableBundle\Filter\Configurator\FilterConfiguratorInterface;
+use Vyfony\Bundle\FilterableTableBundle\Filter\Configurator\Sorting\DbSortConfigurationInterface;
 
-/**
- * @author Anton Dyshkant <vyshkant@gmail.com>
- */
 final class FilterableTableType extends AbstractType
 {
     /**
@@ -49,10 +47,16 @@ final class FilterableTableType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+        $sortConfiguration = $this->filterConfigurator->getSortConfiguration();
+
+        if ($sortConfiguration instanceof DbSortConfigurationInterface) {
+            $builder
+                ->add('sortBy', HiddenType::class)
+                ->add('sortOrder', HiddenType::class)
+                ->add('page', HiddenType::class);
+        }
+
         $builder
-            ->add('sortBy', HiddenType::class)
-            ->add('sortOrder', HiddenType::class)
-            ->add('page', HiddenType::class)
             ->add('requestId', HiddenType::class, ['attr' => ['data-vyfony-filterable-table-request-id-input' => true]])
         ;
 
@@ -72,11 +76,18 @@ final class FilterableTableType extends AbstractType
             );
         }
 
+        if ($sortConfiguration instanceof DbSortConfigurationInterface) {
+            $builder->add(
+                'disablePagination',
+                CheckboxType::class,
+                [
+                    'label' => $sortConfiguration->getDisablePaginationLabel(),
+                    'required' => false,
+                ]
+            );
+        }
+
         $builder
-            ->add('disablePagination', CheckboxType::class, [
-                'label' => $this->filterConfigurator->getDisablePaginationLabel(),
-                'required' => false,
-            ])
             ->add('submit', SubmitType::class, $this->filterConfigurator->createSubmitButtonOptions())
             ->add('reset', ButtonType::class, $this->getResetButtonOptions())
             ->add('searchInFound', SubmitType::class, $this->getSearchInFoundButtonOptions())

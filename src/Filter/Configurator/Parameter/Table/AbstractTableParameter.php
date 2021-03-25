@@ -16,9 +16,6 @@ namespace Vyfony\Bundle\FilterableTableBundle\Filter\Configurator\Parameter\Tabl
 use Doctrine\ORM\EntityManager;
 use Vyfony\Bundle\FilterableTableBundle\Filter\Configurator\Parameter\AbstractFilterParameter;
 
-/**
- * @author Anton Dyshkant <vyshkant@gmail.com>
- */
 abstract class AbstractTableParameter extends AbstractFilterParameter implements TableParameterInterface
 {
     protected function createOptions(EntityManager $entityManager): array

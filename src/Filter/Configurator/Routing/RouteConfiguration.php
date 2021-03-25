@@ -11,7 +11,7 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace Vyfony\Bundle\FilterableTableBundle\Filter\Configurator;
+namespace Vyfony\Bundle\FilterableTableBundle\Filter\Configurator\Routing;
 
 final class RouteConfiguration
 {

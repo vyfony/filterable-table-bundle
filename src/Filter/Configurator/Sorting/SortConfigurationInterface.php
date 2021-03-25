@@ -11,9 +11,8 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace Vyfony\Bundle\FilterableTableBundle\Persistence\QueryBuilder\Parameter;
+namespace Vyfony\Bundle\FilterableTableBundle\Filter\Configurator\Sorting;
 
-interface ParameterFactoryInterface
+interface SortConfigurationInterface
 {
-    public function createParameter(string $fieldAlias, int $index): string;
 }

@@ -13,9 +13,6 @@ declare(strict_types=1);
 
 namespace Vyfony\Bundle\FilterableTableBundle\Table\Checkbox;
 
-/**
- * @author Anton Dyshkant <vyshkant@gmail.com>
- */
 interface CheckboxHandlerInterface
 {
     public function getRouteName(): string;

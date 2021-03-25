@@ -13,9 +13,6 @@ declare(strict_types=1);
 
 namespace Vyfony\Bundle\FilterableTableBundle\Table\Metadata\Column;
 
-/**
- * @author Anton Dyshkant <vyshkant@gmail.com>
- */
 interface ColumnMetadataInterface
 {
     public function getName(): string;

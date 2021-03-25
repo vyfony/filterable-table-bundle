@@ -15,9 +15,6 @@ namespace Vyfony\Bundle\FilterableTableBundle\Tests;
 
 use PHPUnit\Framework\TestCase;
 
-/**
- * @author Anton Dyshkant <vyshkant@gmail.com>
- */
 final class VyfonyFilterableTableBundleTest extends TestCase
 {
     public function testBundleClassExists(): void

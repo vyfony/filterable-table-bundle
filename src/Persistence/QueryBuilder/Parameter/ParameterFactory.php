@@ -13,9 +13,6 @@ declare(strict_types=1);
 
 namespace Vyfony\Bundle\FilterableTableBundle\Persistence\QueryBuilder\Parameter;
 
-/**
- * @author Anton Dyshkant <vyshkant@gmail.com>
- */
 final class ParameterFactory implements ParameterFactoryInterface
 {
     public function createParameter(string $fieldAlias, int $index): string

@@ -13,9 +13,6 @@ declare(strict_types=1);
 
 namespace Vyfony\Bundle\FilterableTableBundle\Filter\Configurator\Restriction;
 
-/**
- * @author Anton Dyshkant <vyshkant@gmail.com>
- */
 abstract class AbstractFilterRestriction implements FilterRestrictionInterface
 {
     /**

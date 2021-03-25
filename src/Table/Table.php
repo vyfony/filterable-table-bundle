@@ -23,9 +23,6 @@ use Vyfony\Bundle\FilterableTableBundle\Form\Type\FilterableTableType;
 use Vyfony\Bundle\FilterableTableBundle\Table\Configurator\TableConfiguratorInterface;
 use Vyfony\Bundle\FilterableTableBundle\Table\Metadata\TableMetadataInterface;
 
-/**
- * @author Anton Dyshkant <vyshkant@gmail.com>
- */
 final class Table implements TableInterface
 {
     /**
@@ -89,10 +86,8 @@ final class Table implements TableInterface
         $dataCollectionResult = $this->dataCollector->getRowDataCollection(
             $this->formData->getForDataCollection($this->getForm()),
             $this->entityClass,
-            $this->filterConfigurator->getPageSize(),
-            function ($entity) {
-                return $this->filterConfigurator->getEntityId($entity);
-            }
+            fn ($entity) => $this->filterConfigurator->getEntityId($entity),
+            $this->filterConfigurator->getSortConfiguration()
         );
 
         return $this->tableConfigurator->getTableMetadata(

@@ -15,9 +15,6 @@ namespace Vyfony\Bundle\FilterableTableBundle\Filter\Configurator\Parameter;
 
 use Doctrine\ORM\QueryBuilder;
 
-/**
- * @author Anton Dyshkant <vyshkant@gmail.com>
- */
 interface ExpressionBuilderInterface
 {
     /**

@@ -13,9 +13,6 @@ declare(strict_types=1);
 
 namespace Vyfony\Bundle\FilterableTableBundle\DataCollection\Result;
 
-/**
- * @author Anton Dyshkant <vyshkant@gmail.com>
- */
 interface DataCollectionResultInterface
 {
     public function getData(): iterable;

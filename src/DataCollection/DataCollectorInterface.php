@@ -14,16 +14,14 @@ declare(strict_types=1);
 namespace Vyfony\Bundle\FilterableTableBundle\DataCollection;
 
 use Vyfony\Bundle\FilterableTableBundle\DataCollection\Result\DataCollectionResultInterface;
+use Vyfony\Bundle\FilterableTableBundle\Filter\Configurator\Sorting\SortConfigurationInterface;
 
-/**
- * @author Anton Dyshkant <vyshkant@gmail.com>
- */
 interface DataCollectorInterface
 {
     public function getRowDataCollection(
         array $formData,
         string $entityClass,
-        int $pageSize,
-        callable $entityIdGetter
+        callable $entityIdGetter,
+        SortConfigurationInterface $sortConfiguration
     ): DataCollectionResultInterface;
 }

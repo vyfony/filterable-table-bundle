@@ -13,13 +13,15 @@ declare(strict_types=1);
 
 namespace Vyfony\Bundle\FilterableTableBundle\Filter\Configurator;
 
+use InvalidArgumentException;
 use Vyfony\Bundle\FilterableTableBundle\Filter\Configurator\Parameter\FilterParameterInterface;
 use Vyfony\Bundle\FilterableTableBundle\Filter\Configurator\Parameter\Table\TableParameterInterface;
 use Vyfony\Bundle\FilterableTableBundle\Filter\Configurator\Restriction\FilterRestrictionInterface;
+use Vyfony\Bundle\FilterableTableBundle\Filter\Configurator\Sorting\CustomSortConfigurationInterface;
+use Vyfony\Bundle\FilterableTableBundle\Filter\Configurator\Sorting\DbSortConfiguration;
+use Vyfony\Bundle\FilterableTableBundle\Filter\Configurator\Sorting\DbSortConfigurationInterface;
+use Vyfony\Bundle\FilterableTableBundle\Filter\Configurator\Sorting\SortConfigurationInterface;
 
-/**
- * @author Anton Dyshkant <vyshkant@gmail.com>
- */
 abstract class AbstractFilterConfigurator implements FilterConfiguratorInterface
 {
     /**
@@ -36,6 +38,16 @@ abstract class AbstractFilterConfigurator implements FilterConfiguratorInterface
      * @var TableParameterInterface[]
      */
     private $tableParameters;
+
+    /**
+     * @var DbSortConfiguration|null
+     */
+    private $dbSortConfiguration;
+
+    /**
+     * @var CustomSortConfigurationInterface|null
+     */
+    private $customSortConfiguration;
 
     /**
      * @return FilterRestrictionInterface[]
@@ -83,6 +95,29 @@ abstract class AbstractFilterConfigurator implements FilterConfiguratorInterface
         return $defaultTableParameters;
     }
 
+    public function getSortConfiguration(): SortConfigurationInterface
+    {
+        if (null === $this->dbSortConfiguration) {
+            $this->dbSortConfiguration = $this->createDbSortConfiguration();
+        }
+
+        if (null === $this->customSortConfiguration) {
+            $this->customSortConfiguration = $this->createCustomSortConfiguration();
+        }
+
+        if (null !== $this->dbSortConfiguration xor null !== $this->customSortConfiguration) {
+            return $this->dbSortConfiguration ?? $this->customSortConfiguration;
+        }
+
+        $errorMessage = sprintf(
+            'Either %s, or %s property should be set.',
+            'dbSortConfiguration',
+            'customSortConfiguration'
+        );
+
+        throw new InvalidArgumentException($errorMessage);
+    }
+
     /**
      * @return FilterRestrictionInterface[]
      */
@@ -97,4 +132,8 @@ abstract class AbstractFilterConfigurator implements FilterConfiguratorInterface
      * @return TableParameterInterface[]
      */
     abstract protected function createTableParameters(): array;
+
+    abstract protected function createDbSortConfiguration(): ?DbSortConfigurationInterface;
+
+    abstract protected function createCustomSortConfiguration(): ?CustomSortConfigurationInterface;
 }

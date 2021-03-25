@@ -13,9 +13,6 @@ declare(strict_types=1);
 
 namespace Vyfony\Bundle\FilterableTableBundle\Persistence\QueryBuilder\Alias;
 
-/**
- * @author Anton Dyshkant <vyshkant@gmail.com>
- */
 final class AliasFactory implements AliasFactoryInterface
 {
     public function createAlias(string $className, string $alias): string

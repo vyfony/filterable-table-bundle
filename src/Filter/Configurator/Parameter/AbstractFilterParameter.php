@@ -15,9 +15,6 @@ namespace Vyfony\Bundle\FilterableTableBundle\Filter\Configurator\Parameter;
 
 use Doctrine\ORM\EntityManager;
 
-/**
- * @author Anton Dyshkant <vyshkant@gmail.com>
- */
 abstract class AbstractFilterParameter implements FilterParameterInterface
 {
     /**

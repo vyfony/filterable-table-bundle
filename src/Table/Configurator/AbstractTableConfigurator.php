@@ -16,7 +16,8 @@ namespace Vyfony\Bundle\FilterableTableBundle\Table\Configurator;
 use Symfony\Component\Routing\RouterInterface;
 use Vyfony\Bundle\FilterableTableBundle\DataCollection\Result\DataCollectionResultInterface;
 use Vyfony\Bundle\FilterableTableBundle\Filter\Configurator\FilterConfiguratorInterface;
-use Vyfony\Bundle\FilterableTableBundle\Filter\Configurator\RouteConfiguration;
+use Vyfony\Bundle\FilterableTableBundle\Filter\Configurator\Routing\RouteConfiguration;
+use Vyfony\Bundle\FilterableTableBundle\Filter\Configurator\Sorting\DbSortConfigurationInterface;
 use Vyfony\Bundle\FilterableTableBundle\Table\Checkbox\CheckboxHandlerInterface;
 use Vyfony\Bundle\FilterableTableBundle\Table\Metadata\Column\ColumnMetadataInterface;
 use Vyfony\Bundle\FilterableTableBundle\Table\Metadata\TableMetadata;
@@ -26,9 +27,6 @@ use Vyfony\Bundle\FilterableTableBundle\Table\Paginator\Page\PageInterface;
 use Vyfony\Bundle\FilterableTableBundle\Table\Paginator\Paginator;
 use Vyfony\Bundle\FilterableTableBundle\Table\Paginator\PaginatorInterface;
 
-/**
- * @author Anton Dyshkant <vyshkant@gmail.com>
- */
 abstract class AbstractTableConfigurator implements TableConfiguratorInterface
 {
     /**
@@ -53,6 +51,8 @@ abstract class AbstractTableConfigurator implements TableConfiguratorInterface
         DataCollectionResultInterface $dataCollectionResult,
         array $queryParameters
     ): TableMetadataInterface {
+        $sortConfiguration = $this->filterConfigurator->getSortConfiguration();
+
         return new TableMetadata(
             $this->getResultsCountText(),
             $this->getColumnMetadataCollection($queryParameters),
@@ -63,19 +63,25 @@ abstract class AbstractTableConfigurator implements TableConfiguratorInterface
             },
             $queryParameters,
             $this->createCheckboxHandlers(),
-            $dataCollectionResult->getHasPagination()
-                ? $this->createPaginator($dataCollectionResult->getDataCount(), $queryParameters)
+            $sortConfiguration instanceof DbSortConfigurationInterface && $dataCollectionResult->getHasPagination()
+                ? $this->createPaginator($dataCollectionResult->getDataCount(), $queryParameters, $sortConfiguration)
                 : null
         );
     }
 
     public function getDefaultTableParameters(): array
     {
-        return [
-            'sortBy' => $this->getSortBy(),
-            'sortOrder' => $this->getIsSortAsc() ? 'asc' : 'desc',
-            'page' => '1',
-        ];
+        $sortConfiguration = $this->filterConfigurator->getSortConfiguration();
+
+        if ($sortConfiguration instanceof DbSortConfigurationInterface) {
+            return [
+                'sortBy' => $sortConfiguration->getDefaultSortBy(),
+                'sortOrder' => $sortConfiguration->getIsDefaultSortAsc() ? 'asc' : 'desc',
+                'page' => '1',
+            ];
+        }
+
+        return [];
     }
 
     abstract protected function getListRoute(): RouteConfiguration;
@@ -84,12 +90,6 @@ abstract class AbstractTableConfigurator implements TableConfiguratorInterface
      * @param mixed $entity
      */
     abstract protected function getShowRoute($entity): RouteConfiguration;
-
-    abstract protected function getSortBy(): string;
-
-    abstract protected function getIsSortAsc(): bool;
-
-    abstract protected function getPaginatorTailLength(): int;
 
     abstract protected function getResultsCountText(): string;
 
@@ -161,9 +161,12 @@ abstract class AbstractTableConfigurator implements TableConfiguratorInterface
         return $formData;
     }
 
-    private function createPaginator(int $totalRowsCount, array $queryParameters): PaginatorInterface
-    {
-        $pagesCount = (int) ceil($totalRowsCount / $this->filterConfigurator->getPageSize());
+    private function createPaginator(
+        int $totalRowsCount,
+        array $queryParameters,
+        DbSortConfigurationInterface $sortConfiguration
+    ): PaginatorInterface {
+        $pagesCount = (int) ceil($totalRowsCount / $sortConfiguration->getPageSize());
 
         $pages = array_fill(1, $pagesCount, null);
 
@@ -171,7 +174,7 @@ abstract class AbstractTableConfigurator implements TableConfiguratorInterface
             $page = $this->createPage($pageIndex, $queryParameters);
         }, $queryParameters);
 
-        return new Paginator($this->getPaginatorTailLength(), (int) $queryParameters['page'], $pages);
+        return new Paginator($sortConfiguration->getPaginatorTailLength(), (int) $queryParameters['page'], $pages);
     }
 
     private function createPage(int $pageIndex, array $formData): PageInterface

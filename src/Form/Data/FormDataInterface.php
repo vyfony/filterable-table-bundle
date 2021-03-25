@@ -17,9 +17,6 @@ use Symfony\Component\Form\FormInterface;
 use Vyfony\Bundle\FilterableTableBundle\Filter\Configurator\FilterConfiguratorInterface;
 use Vyfony\Bundle\FilterableTableBundle\Table\Configurator\TableConfiguratorInterface;
 
-/**
- * @author Anton Dyshkant <vyshkant@gmail.com>
- */
 interface FormDataInterface
 {
     public function getForSubmission(

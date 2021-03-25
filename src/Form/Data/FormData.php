@@ -19,9 +19,6 @@ use Vyfony\Bundle\FilterableTableBundle\Filter\Configurator\FilterConfiguratorIn
 use Vyfony\Bundle\FilterableTableBundle\Form\Transformer\QueryParametersTransformerInterface;
 use Vyfony\Bundle\FilterableTableBundle\Table\Configurator\TableConfiguratorInterface;
 
-/**
- * @author Anton Dyshkant <vyshkant@gmail.com>
- */
 final class FormData implements FormDataInterface
 {
     /**

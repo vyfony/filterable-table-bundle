@@ -13,9 +13,6 @@ declare(strict_types=1);
 
 namespace Vyfony\Bundle\FilterableTableBundle\DataCollection\Result;
 
-/**
- * @author Anton Dyshkant <vyshkant@gmail.com>
- */
 final class DataCollectionResult implements DataCollectionResultInterface
 {
     /**
@@ -38,10 +35,13 @@ final class DataCollectionResult implements DataCollectionResultInterface
      */
     private $requestId;
 
-    public function __construct(iterable $data, int $dataCount, bool $hasPagination, string $requestId)
+    /**
+     * @param \Countable|array $data
+     */
+    public function __construct($data, bool $hasPagination, string $requestId)
     {
         $this->data = $data;
-        $this->dataCount = $dataCount;
+        $this->dataCount = \count($data);
         $this->hasPagination = $hasPagination;
         $this->requestId = $requestId;
     }

@@ -15,9 +15,6 @@ namespace Vyfony\Bundle\FilterableTableBundle\Filter\Configurator\Restriction;
 
 use Doctrine\ORM\Query\Expr;
 
-/**
- * @author Anton Dyshkant <vyshkant@gmail.com>
- */
 interface FilterRestrictionInterface
 {
     public function getName(): string;

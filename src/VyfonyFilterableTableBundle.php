@@ -17,9 +17,6 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 use Vyfony\Bundle\FilterableTableBundle\DependencyInjection\CompilerPass\ConfiguratorsPass;
 
-/**
- * @author Anton Dyshkant <vyshkant@gmail.com>
- */
 final class VyfonyFilterableTableBundle extends Bundle
 {
     public function build(ContainerBuilder $container): void

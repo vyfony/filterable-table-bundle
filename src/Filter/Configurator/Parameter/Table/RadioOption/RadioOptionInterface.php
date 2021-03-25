@@ -15,9 +15,6 @@ namespace Vyfony\Bundle\FilterableTableBundle\Filter\Configurator\Parameter\Tabl
 
 use Vyfony\Bundle\FilterableTableBundle\Table\Metadata\Column\ColumnMetadataInterface;
 
-/**
- * @author Anton Dyshkant <vyshkant@gmail.com>
- */
 interface RadioOptionInterface
 {
     public function getName(): string;

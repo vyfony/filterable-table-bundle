@@ -16,9 +16,6 @@ namespace Vyfony\Bundle\FilterableTableBundle\Table\Configurator;
 use Vyfony\Bundle\FilterableTableBundle\DataCollection\Result\DataCollectionResultInterface;
 use Vyfony\Bundle\FilterableTableBundle\Table\Metadata\TableMetadataInterface;
 
-/**
- * @author Anton Dyshkant <vyshkant@gmail.com>
- */
 interface TableConfiguratorInterface
 {
     public function getTableMetadata(

@@ -18,16 +18,16 @@ use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Tools\Pagination\Paginator as DoctrinePaginator;
 use Psr\SimpleCache\CacheInterface;
-use Psr\SimpleCache\InvalidArgumentException;
 use RuntimeException;
 use Vyfony\Bundle\FilterableTableBundle\DataCollection\Result\DataCollectionResult;
 use Vyfony\Bundle\FilterableTableBundle\DataCollection\Result\DataCollectionResultInterface;
 use Vyfony\Bundle\FilterableTableBundle\Filter\Configurator\FilterConfiguratorInterface;
 use Vyfony\Bundle\FilterableTableBundle\Filter\Configurator\Parameter\ExpressionBuilderInterface;
+use Vyfony\Bundle\FilterableTableBundle\Filter\Configurator\Parameter\FilterParameterInterface;
+use Vyfony\Bundle\FilterableTableBundle\Filter\Configurator\Sorting\CustomSortConfigurationInterface;
+use Vyfony\Bundle\FilterableTableBundle\Filter\Configurator\Sorting\DbSortConfigurationInterface;
+use Vyfony\Bundle\FilterableTableBundle\Filter\Configurator\Sorting\SortConfigurationInterface;
 
-/**
- * @author Anton Dyshkant <vyshkant@gmail.com>
- */
 final class DataCollector implements DataCollectorInterface
 {
     /**
@@ -58,8 +58,8 @@ final class DataCollector implements DataCollectorInterface
     public function getRowDataCollection(
         array $formData,
         string $entityClass,
-        int $pageSize,
-        callable $entityIdGetter
+        callable $entityIdGetter,
+        SortConfigurationInterface $sortConfiguration
     ): DataCollectionResultInterface {
         $repository = $this->doctrine->getRepository($entityClass);
 
@@ -103,40 +103,42 @@ final class DataCollector implements DataCollectorInterface
 
         $requestId = $this->saveFormDataToCache($formData);
 
-        $queryBuilder
-            ->orderBy($entityAlias.'.'.$formData['sortBy'], $formData['sortOrder'])
-        ;
+        if ($sortConfiguration instanceof DbSortConfigurationInterface) {
+            $queryBuilder
+                ->orderBy($entityAlias.'.'.$formData['sortBy'], $formData['sortOrder'])
+            ;
 
-        if ($formData['disablePagination']) {
-            $matchingEntities = $queryBuilder->getQuery()->getResult();
+            if ($formData['disablePagination']) {
+                return new DataCollectionResult(
+                    $queryBuilder->getQuery()->getResult(),
+                    false,
+                    $requestId
+                );
+            }
+
+            $queryBuilder
+                ->setFirstResult($sortConfiguration->getPageSize() * ((int) $formData['page'] - 1))
+                ->setMaxResults($sortConfiguration->getPageSize())
+            ;
+
+            $matchingEntitiesPaginator = new DoctrinePaginator($queryBuilder->getQuery(), true);
 
             return new DataCollectionResult(
-                $matchingEntities,
-                \count($matchingEntities),
-                false,
+                $matchingEntitiesPaginator,
+                true,
                 $requestId
             );
         }
 
-        $queryBuilder
-            ->setFirstResult($pageSize * ((int) $formData['page'] - 1))
-            ->setMaxResults($pageSize)
-        ;
-
-        $matchingEntitiesPaginator = new DoctrinePaginator($queryBuilder->getQuery(), true);
+        $data = $queryBuilder->getQuery()->getResult();
 
         return new DataCollectionResult(
-            $matchingEntitiesPaginator,
-            // todo this call is REALLY expensive
-            \count($matchingEntitiesPaginator),
-            true,
+            $sortConfiguration instanceof CustomSortConfigurationInterface ? $sortConfiguration->sort($data) : $data,
+            false,
             $requestId
         );
     }
 
-    /**
-     * @throws InvalidArgumentException
-     */
     private function saveFormDataToCache(array $formData): string
     {
         $requestId = uniqid();
@@ -152,6 +154,8 @@ final class DataCollector implements DataCollectorInterface
     }
 
     /**
+     * @param $filterParametersByQueryParameterName FilterParameterInterface[]
+     *
      * @return string[]
      */
     private function handleFromData(
@@ -166,10 +170,12 @@ final class DataCollector implements DataCollectorInterface
             if (\array_key_exists($formDataItemKey, $filterParametersByQueryParameterName)) {
                 $filterParameter = $filterParametersByQueryParameterName[$formDataItemKey];
 
+                $queryParameterName = $filterParameter->getQueryParameterName();
+
                 if ($filterParameter instanceof ExpressionBuilderInterface) {
                     $whereArgument = $filterParameter->buildWhereExpression(
                         $queryBuilder,
-                        $formData[$filterParameter->getQueryParameterName()],
+                        $formData[$queryParameterName],
                         $entityAlias
                     );
 
