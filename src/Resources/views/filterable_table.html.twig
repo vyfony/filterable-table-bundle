@@ -19,7 +19,7 @@
                             {% if columnMetadata.isSortable -%}
                                 data-vyfony-filterable-table-sortable
                             {%- endif %}
-                            {% if table.queryParameters.sortBy is same as(columnMetadata.name) -%}
+                            {% if table.queryParameters.sortBy is defined and table.queryParameters.sortOrder is defined and table.queryParameters.sortBy is same as(columnMetadata.name) -%}
                                 data-vyfony-filterable-table-sort-order="{{ table.queryParameters.sortOrder }}"
                             {%- endif %}
                     >
@@ -184,7 +184,7 @@
                 const mainCheckboxElement = document.querySelector('#vyfony-filterable-table-main-checkbox');
 
                 const rowCheckboxElements = Object.values(
-                    document.querySelectorAll(`input[type="checkbox"][${checkboxAttribute}]`)
+                        document.querySelectorAll(`input[type="checkbox"][${checkboxAttribute}]`)
                 );
 
                 mainCheckboxElement.addEventListener('click', () => {
@@ -217,9 +217,9 @@
                     buttonElement.addEventListener('click', () => {
 
                         const rowIdentifiers = rowCheckboxElements
-                            .filter(checkboxElement => checkboxElement.checked)
-                            .map(checkboxElement => checkboxElement.attributes[checkboxAttribute].value)
-                            .map(formattedRowIdentifier => JSON.parse(formattedRowIdentifier));
+                                .filter(checkboxElement => checkboxElement.checked)
+                                .map(checkboxElement => checkboxElement.attributes[checkboxAttribute].value)
+                                .map(formattedRowIdentifier => JSON.parse(formattedRowIdentifier));
 
                         const actionUrl = buttonElement.attributes[checkboxHandlerButtonAttribute].value;
 
@@ -231,7 +231,7 @@
                             window.location = `${actionUrl}?${searchParams.toString()}`;
                         } else {
                             alert(
-                                buttonElement.attributes['data-vyfony-filterable-table-checkbox-handler-empty-selection-error-text'].value
+                                    buttonElement.attributes['data-vyfony-filterable-table-checkbox-handler-empty-selection-error-text'].value
                             );
                         }
 
