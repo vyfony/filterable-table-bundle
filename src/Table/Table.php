@@ -90,6 +90,7 @@ final class Table implements TableInterface
             $this->filterConfigurator->getSortConfiguration()
         );
 
+        // todo put the value of $dataCollectionResult->getRequestId() into a new form
         return $this->tableConfigurator->getTableMetadata(
             $dataCollectionResult,
             $this->formData->getQueryParameters($this->tableConfigurator, $this->filterConfigurator)
