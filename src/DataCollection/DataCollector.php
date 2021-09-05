@@ -13,10 +13,10 @@ declare(strict_types=1);
 
 namespace Vyfony\Bundle\FilterableTableBundle\DataCollection;
 
-use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Tools\Pagination\Paginator as DoctrinePaginator;
+use Doctrine\Persistence\ManagerRegistry;
 use Psr\SimpleCache\CacheInterface;
 use RuntimeException;
 use Vyfony\Bundle\FilterableTableBundle\DataCollection\Result\DataCollectionResult;
