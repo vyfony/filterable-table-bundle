@@ -17,8 +17,8 @@ use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Tools\Pagination\Paginator as DoctrinePaginator;
 use Doctrine\Persistence\ManagerRegistry;
-use Psr\SimpleCache\CacheInterface;
 use RuntimeException;
+use Symfony\Component\Cache\Adapter\AdapterInterface;
 use Vyfony\Bundle\FilterableTableBundle\DataCollection\Result\DataCollectionResult;
 use Vyfony\Bundle\FilterableTableBundle\DataCollection\Result\DataCollectionResultInterface;
 use Vyfony\Bundle\FilterableTableBundle\Filter\Configurator\FilterConfiguratorInterface;
@@ -36,7 +36,7 @@ final class DataCollector implements DataCollectorInterface
     private $doctrine;
 
     /**
-     * @var CacheInterface
+     * @var AdapterInterface
      */
     private $cache;
 
@@ -47,7 +47,7 @@ final class DataCollector implements DataCollectorInterface
 
     public function __construct(
         ManagerRegistry $registry,
-        CacheInterface $cache,
+        AdapterInterface $cache,
         FilterConfiguratorInterface $filterConfigurator
     ) {
         $this->doctrine = $registry;
@@ -143,14 +143,18 @@ final class DataCollector implements DataCollectorInterface
     {
         $requestId = uniqid();
 
-        $this->cache->set($requestId, $formData);
+        $cacheItem = $this->cache->getItem($requestId);
+
+        $cacheItem->set($formData);
+
+        $this->cache->save($cacheItem);
 
         return $requestId;
     }
 
     private function getFormDataFromCache(string $requestId): array
     {
-        return $this->cache->get($requestId);
+        return $this->cache->getItem($requestId)->get();
     }
 
     /**
