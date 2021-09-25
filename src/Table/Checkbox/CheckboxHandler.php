@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Vyfony\Bundle\FilterableTableBundle\Table\Checkbox;
 
-class CheckboxHandler implements CheckboxHandlerInterface
+final class CheckboxHandler implements CheckboxHandlerInterface
 {
     /**
      * @var string

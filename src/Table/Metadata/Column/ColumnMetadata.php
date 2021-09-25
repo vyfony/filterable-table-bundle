@@ -60,8 +60,8 @@ final class ColumnMetadata implements ColumnMetadataInterface
 
     public function __construct()
     {
-        $this->valueExtractor = function ($rowData) {
-            return (new PropertyAccessor())->getValue($rowData, $this->name);
+        $this->valueExtractor = function ($rowData): string {
+            return (string) (new PropertyAccessor())->getValue($rowData, $this->name);
         };
     }
 

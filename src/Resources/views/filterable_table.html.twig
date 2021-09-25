@@ -24,7 +24,7 @@
                             {%- endif %}
                     >
                         {% if columnMetadata.isSortable %}
-                            <a href="{{ path(table.listRoute, columnMetadata.sortParameters) }}">
+                            <a href="{{ path(table.listRoute.name, table.listRoute.parameters|merge(columnMetadata.sortParameters)) }}">
                                 {{ columnMetadata.label|trans }}
                             </a>
                         {% else %}
