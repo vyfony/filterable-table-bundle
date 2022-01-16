@@ -15,8 +15,13 @@ namespace Vyfony\Bundle\FilterableTableBundle\Persistence\QueryBuilder\Parameter
 
 final class ParameterFactory implements ParameterFactoryInterface
 {
-    public function createParameter(string $fieldAlias, int $index): string
+    public function createParameter(): string
     {
-        return ':'.str_replace('.', '_', $fieldAlias).'_'.uniqid().'_'.$index;
+        return $this->createNamedParameter(uniqid());
+    }
+
+    public function createNamedParameter(string $parameterName): string
+    {
+        return ':'.str_replace('.', '_', $parameterName).'_'.uniqid();
     }
 }

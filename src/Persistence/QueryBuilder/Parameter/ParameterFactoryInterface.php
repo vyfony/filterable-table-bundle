@@ -15,5 +15,6 @@ namespace Vyfony\Bundle\FilterableTableBundle\Persistence\QueryBuilder\Parameter
 
 interface ParameterFactoryInterface
 {
-    public function createParameter(string $fieldAlias, int $index): string;
+    public function createParameter(): string;
+    public function createNamedParameter(string $parameterName): string;
 }
